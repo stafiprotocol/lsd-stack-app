@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { TipBar } from 'components/common/TipBar';
 import { DeployReadyModal } from 'components/modal/DeployReadyModal';
+import { getFactoryContract } from 'config/contract';
 import { useDeployInfo } from 'hooks/useDeployInfo';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -52,6 +53,11 @@ const ReviewPage = () => {
 
               {!fetchLoading && deployInfo && (
                 <div className="mb-[.32rem] max-h-[3.6rem] overflow-y-auto px-[.3rem]">
+                  <DeployInfoItem
+                    name="LSD Factory address"
+                    value={getFactoryContract().address}
+                  />
+
                   <DeployInfoItem
                     name="Owner address"
                     value={deployInfo.ownerAddress}
