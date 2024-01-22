@@ -33,7 +33,8 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link=""
+                  link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#save-all-the-information-generated"
+                  isWarning
                 />
               </div>
 
@@ -102,7 +103,7 @@ const ReviewPage = () => {
                   onClick={() => setReadyModalOpened(true)}
                   disabled={!deployInfo}
                 >
-                  Submit
+                  Confirm
                 </CustomButton>
               </div>
             </div>
@@ -113,6 +114,7 @@ const ReviewPage = () => {
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
                 href="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/ethlsdapp.html"
+                target="_blank"
               >
                 How to deploy your own LSD APP
               </a>

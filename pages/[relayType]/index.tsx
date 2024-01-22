@@ -132,6 +132,7 @@ const ParameterPage = () => {
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
                 href="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#parameter-tips"
+                target="_blank"
               >
                 Parameter Tips
               </a>

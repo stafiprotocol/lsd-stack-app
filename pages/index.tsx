@@ -74,7 +74,7 @@ const RelayTypeSelector = ({ onChooseCustomize }: RelayTypeSelectorProps) => {
           <div className="flex justify-center gap-[.32rem] mt-[.32rem]">
             <RelayType
               title="Standard"
-              desc="Use the unified trust relay service (operated by Stafi Stack DAO)"
+              desc="Use the unified trust relay service (operated by StaFi Stack DAO)"
               onChoose={() => onChoose('standard')}
             />
             <RelayType
