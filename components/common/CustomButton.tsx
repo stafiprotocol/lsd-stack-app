@@ -72,7 +72,7 @@ export const CustomButton = (props: ButtonProps) => {
         borderTopRightRadius: props.trRaidus || props.radius || '.3rem',
         borderBottomLeftRadius: props.blRaidus || props.radius || '.3rem',
         borderBottomRightRadius: props.brRaidus || props.radius || '.3rem',
-        border: props.border || '',
+        ...(props.border ? { border: props.border } : {}),
       }}
       onClick={() => {
         if (!props.disabled && !props.loading) {
