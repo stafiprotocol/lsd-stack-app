@@ -10,6 +10,30 @@ import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
 import { useState } from 'react';
 
+export function getStaticProps() {
+  return { props: {} };
+}
+
+export function getStaticPaths() {
+  return {
+    paths: [
+      {
+        params: {
+          relayType: 'customize',
+          tokenType: 'customize',
+        },
+      },
+      {
+        params: {
+          relayType: 'customize',
+          tokenType: 'standard',
+        },
+      },
+    ],
+    fallback: false,
+  };
+}
+
 const ReviewPage = () => {
   const router = useRouter();
 
