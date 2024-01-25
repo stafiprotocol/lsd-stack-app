@@ -14,7 +14,7 @@ import ethereumLogo from 'public/images/ethereum.png';
 import { connectMetaMask, disconnectWallet } from 'redux/reducers/WalletSlice';
 import { RootState } from 'redux/store';
 import { getShortAddress } from 'utils/stringUtils';
-import { getEthereumChainId } from 'config/env';
+import { getEthereumChainId, getEthereumChainInfo } from 'config/env';
 import LogoTextImg from 'public/images/logo_text.svg';
 import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import { CreationStep } from 'components/common/CreationStep';
@@ -255,7 +255,7 @@ const ConnectButton = () => {
   const dispatch = useAppDispatch();
 
   const clickConnectWallet = () => {
-    dispatch(connectMetaMask(getEthereumChainId()));
+    dispatch(connectMetaMask(getEthereumChainInfo()));
   };
 
   return (

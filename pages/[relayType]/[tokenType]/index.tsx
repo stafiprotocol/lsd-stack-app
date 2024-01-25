@@ -3,7 +3,7 @@ import { CustomButton } from 'components/common/CustomButton';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
-import { getEthereumChainId } from 'config/env';
+import { getEthereumChainId, getEthereumChainInfo } from 'config/env';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
@@ -94,7 +94,7 @@ const ParameterPage = () => {
 
   const submit = () => {
     if (!metaMaskAccount || Number(metaMaskChainId) !== getEthereumChainId()) {
-      dispatch(connectMetaMask(getEthereumChainId()));
+      dispatch(connectMetaMask(getEthereumChainInfo()));
       return;
     }
 
@@ -308,9 +308,10 @@ const ParameterPage = () => {
                   loading={lsdTokenInWhiteListInfo.queryLoading}
                   onClick={submit}
                   type={
-                    Number(metaMaskChainId) === getEthereumChainId()
-                      ? 'primary'
-                      : 'secondary'
+                    metaMaskAccount &&
+                    Number(metaMaskChainId) !== getEthereumChainId()
+                      ? 'secondary'
+                      : 'primary'
                   }
                 >
                   {btnContent}

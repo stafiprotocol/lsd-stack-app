@@ -6,6 +6,7 @@ import {
   saveStorage,
 } from 'utils/storageUtils';
 import { AppThunk } from '../store';
+import { AddEthereumChainParameter } from '@web3-react/types';
 
 export interface WalletState {
   metaMaskAccount: string | undefined;
@@ -57,7 +58,10 @@ export default walletSlice.reducer;
  * connect to MetaMask.
  */
 export const connectMetaMask =
-  (targetChainId: number | undefined, cb?: Function): AppThunk =>
+  (
+    chainIdOrChaninParams: number | AddEthereumChainParameter,
+    cb?: Function
+  ): AppThunk =>
   async (dispatch, getState) => {
     try {
       const handleError = (err: any) => {
@@ -66,7 +70,7 @@ export const connectMetaMask =
       };
 
       metaMask
-        .activate(targetChainId)
+        .activate(chainIdOrChaninParams)
         .then(() => {
           cb && cb(true);
         })
