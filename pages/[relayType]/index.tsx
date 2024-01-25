@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
@@ -17,6 +18,29 @@ import { useMemo, useState } from 'react';
 import { setBackRoute } from 'redux/reducers/AppSlice';
 import { createLsdNetworkStandard } from 'redux/reducers/LsdSlice';
 import { connectMetaMask } from 'redux/reducers/WalletSlice';
+import Web3 from 'web3';
+
+export function getStaticProps() {
+  return { props: {} };
+}
+
+export function getStaticPaths() {
+  return {
+    paths: [
+      {
+        params: {
+          relayType: 'standard',
+        },
+      },
+      {
+        params: {
+          relayType: 'customize',
+        },
+      },
+    ],
+    fallback: false,
+  };
+}
 
 const ParameterPage = () => {
   const router = useRouter();
@@ -31,13 +55,32 @@ const ParameterPage = () => {
   const [confirmModalOpened, setConfirmModalOpened] = useState(false);
   const [paramList, setParamList] = useState<ParamItem[]>([]);
 
+  const isOwnerAddressValid = useMemo(() => {
+    return Web3.utils.isAddress(ownerAddress);
+  }, [ownerAddress]);
+
   const [submittable, btnContent] = useMemo(() => {
     if (!metaMaskAccount) return [true, 'Connect Wallet'];
     if (Number(metaMaskChainId) !== getEthereumChainId()) {
       return [true, 'Switch Network'];
     }
-    return [!!tokenName && !!symbol && !!ownerAddress, 'Submit'];
-  }, [tokenName, symbol, ownerAddress, metaMaskAccount, metaMaskChainId]);
+    return [
+      !!tokenName &&
+        tokenName.length <= 10 &&
+        !!symbol &&
+        symbol.length <= 10 &&
+        !!ownerAddress &&
+        isOwnerAddressValid,
+      'Submit',
+    ];
+  }, [
+    tokenName,
+    symbol,
+    ownerAddress,
+    metaMaskAccount,
+    metaMaskChainId,
+    isOwnerAddressValid,
+  ]);
 
   const submit = () => {
     if (!metaMaskAccount || Number(metaMaskChainId) !== getEthereumChainId()) {
@@ -81,18 +124,27 @@ const ParameterPage = () => {
                   onChange={(v) => setTokenName(v)}
                   placeholder="Example: StaFi rETH"
                 />
+                {tokenName.length > 10 && (
+                  <InputErrorTip msg="Token name must be less than 10 character" />
+                )}
                 <InputItem
                   label="Symbol"
                   value={symbol}
                   onChange={(v) => setSymbol(v)}
                   placeholder="Example: rETH"
                 />
+                {symbol.length > 10 && (
+                  <InputErrorTip msg="Symbol must be less than 10 character" />
+                )}
                 <InputItem
                   label="Owner Address"
                   value={ownerAddress}
                   onChange={(v) => setOwnerAddress(v)}
                   placeholder="control contract upgrades, parameter configuration"
                 />
+                {!!ownerAddress && !isOwnerAddressValid && (
+                  <InputErrorTip msg="Owner address is invalid" />
+                )}
               </div>
 
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">

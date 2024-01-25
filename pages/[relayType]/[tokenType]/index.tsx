@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
@@ -18,6 +19,32 @@ import {
   setLsdTokenInWhiteListInfo,
 } from 'redux/reducers/LsdSlice';
 import { connectMetaMask } from 'redux/reducers/WalletSlice';
+import { validateAddress } from 'utils/web3Utils';
+import Web3 from 'web3';
+
+export function getStaticProps() {
+  return { props: {} };
+}
+
+export function getStaticPaths() {
+  return {
+    paths: [
+      {
+        params: {
+          relayType: 'customize',
+          tokenType: 'customize',
+        },
+      },
+      {
+        params: {
+          relayType: 'customize',
+          tokenType: 'standard',
+        },
+      },
+    ],
+    fallback: false,
+  };
+}
 
 const ParameterPage = () => {
   const router = useRouter();
@@ -41,6 +68,10 @@ const ParameterPage = () => {
     return router.query.tokenType;
   }, [router]);
 
+  const isOwnerAddressValid = useMemo(() => {
+    return Web3.utils.isAddress(ownerAddress);
+  }, [ownerAddress]);
+
   const [submittable, btnContent] = useMemo(() => {
     if (!metaMaskAccount) return [true, 'Connect Wallet'];
     if (Number(metaMaskChainId) !== getEthereumChainId()) {
@@ -54,20 +85,39 @@ const ParameterPage = () => {
       if (tokenType === 'standard') {
         return [
           !!tokenName &&
+            tokenName.length <= 10 &&
             !!symbol &&
+            symbol.length <= 10 &&
             !!ownerAddress &&
+            validateAddress(ownerAddress) &&
             !!voteNumber &&
-            !!threshold,
+            Number(voteNumber) > 0 &&
+            !!threshold &&
+            Number(threshold) > 0 &&
+            Number(threshold) <= Number(voteNumber),
           'Submit',
         ];
       } else {
         return [
-          !!lsdTokenAddress && !!ownerAddress && !!voteNumber && !!threshold,
+          !!lsdTokenAddress &&
+            lsdTokenInWhiteListInfo.inWhiteList &&
+            !!ownerAddress &&
+            validateAddress(ownerAddress) &&
+            !!voteNumber &&
+            Number(voteNumber) > 0 &&
+            !!threshold &&
+            Number(threshold) > 0 &&
+            Number(threshold) <= Number(voteNumber),
           'Submit',
         ];
       }
     } else {
-      return [votersAddrs.find((addr) => !addr) !== '', 'Submit'];
+      for (let addr of votersAddrs) {
+        if (!addr || !validateAddress(addr)) {
+          return [false, 'Submit'];
+        }
+      }
+      return [true, 'Submit'];
     }
   }, [
     tokenName,
@@ -215,12 +265,18 @@ const ParameterPage = () => {
                         onChange={(v) => setTokenName(v)}
                         placeholder="Example: StaFi rETH"
                       />
+                      {tokenName.length > 10 && (
+                        <InputErrorTip msg="Token name must be less than 10 character" />
+                      )}
                       <InputItem
                         label="Symbol"
                         value={symbol}
                         onChange={(v) => setSymbol(v)}
                         placeholder="Example: rETH"
                       />
+                      {symbol.length > 10 && (
+                        <InputErrorTip msg="Symbol must be less than 10 character" />
+                      )}
                     </>
                   )}
 
@@ -233,10 +289,7 @@ const ParameterPage = () => {
                         placeholder="LSD Token Address"
                       />
                       {!lsdTokenInWhiteListInfo.inWhiteList && (
-                        <div className="text-[.12rem] text-[#FF2782] pl-[1.25rem]">
-                          Please contact StaFi stack team to whitelist your LSD
-                          token contract.
-                        </div>
+                        <InputErrorTip msg="Please contact StaFi stack team to whitelist your LSD token contract" />
                       )}
                     </>
                   )}
@@ -247,6 +300,9 @@ const ParameterPage = () => {
                     onChange={(v) => setOwnerAddress(v)}
                     placeholder="control contract upgrades, parameter configuration"
                   />
+                  {!!ownerAddress && !isOwnerAddressValid && (
+                    <InputErrorTip msg="Owner address is invalid" />
+                  )}
 
                   <InputItem
                     isNumber
@@ -255,13 +311,25 @@ const ParameterPage = () => {
                     onChange={(v) => setVoteNumber(v)}
                     placeholder="Suggest to set more than 8"
                   />
+                  {voteNumber !== '' && Number(voteNumber) === 0 && (
+                    <InputErrorTip msg="Vote number must be greater than 0" />
+                  )}
 
                   <InputItem
+                    isNumber
                     label="Threshold"
                     value={threshold}
                     onChange={(v) => setThreshold(v)}
                     placeholder="At least voters / 2, no more than all voters' number"
                   />
+                  {threshold !== '' && Number(threshold) === 0 && (
+                    <InputErrorTip msg="Threshold must be greater than 0" />
+                  )}
+                  {threshold !== '' &&
+                    voteNumber !== '' &&
+                    Number(threshold) > Number(voteNumber) && (
+                      <InputErrorTip msg="Threshold must be no more than vote number" />
+                    )}
                 </div>
               ) : (
                 <div className="px-[.26rem] mx-auto mt-[.32rem] gap-[.16rem] flex flex-col max-h-[3.6rem] overflow-y-auto">
@@ -274,13 +342,19 @@ const ParameterPage = () => {
                   />
 
                   {votersAddrs.map((item, index) => (
-                    <InputItem
-                      key={index}
-                      label={`Voter ${index + 1} Addr`}
-                      value={item}
-                      onChange={(v) => changeVotersAddrs(v, index)}
-                      placeholder="Example: 0x0000000000000000"
-                    />
+                    <div key={index} className="flex flex-col gap-[.16rem]">
+                      <InputItem
+                        label={`Voter ${index + 1} Addr`}
+                        value={item}
+                        onChange={(v) => changeVotersAddrs(v, index)}
+                        placeholder="Example: 0x0000000000000000"
+                      />
+                      {!!item && !validateAddress(item) && (
+                        <div className="pl-[.2rem]">
+                          <InputErrorTip msg="Voter address is invalid" />
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               )}

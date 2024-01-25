@@ -78,7 +78,7 @@ const RelayTypeSelector = ({ onChooseCustomize }: RelayTypeSelectorProps) => {
               onChoose={() => onChoose('standard')}
             />
             <RelayType
-              title="Customarize"
+              title="Customize"
               desc="Run the relay service on your own"
               onChoose={() => onChoose('customize')}
             />

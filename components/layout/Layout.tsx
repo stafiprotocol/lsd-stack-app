@@ -41,16 +41,14 @@ export const Layout = (props: React.PropsWithChildren) => {
           />
         </Head>
 
-        <HideOnScroll>
-          <AppBar
-            position="relative"
-            color="transparent"
-            elevation={0}
-            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          >
-            <Navbar />
-          </AppBar>
-        </HideOnScroll>
+        <AppBar
+          position="relative"
+          color="transparent"
+          elevation={0}
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <Navbar />
+        </AppBar>
 
         <main className="flex flex-col items-center">
           <div className="mb-[.2rem] w-full">{props.children}</div>

@@ -47,3 +47,7 @@ export async function getErc20AssetBalance(
     return undefined;
   }
 }
+
+export function validateAddress(address: string) {
+  return Web3.utils.isAddress(address);
+}
