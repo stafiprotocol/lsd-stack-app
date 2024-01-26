@@ -221,7 +221,10 @@ const ParameterPage = () => {
 
   useEffect(() => {
     if (!isNaN(Number(voteNumber)) && Number(voteNumber) > 0) {
-      let mid = Math.floor(Number(voteNumber) / 2);
+      let mid = Math.ceil(Number(voteNumber) / 2);
+      if (mid === Number(voteNumber) / 2) {
+        mid = Math.min(mid + 1, Number(voteNumber));
+      }
       if (mid <= 0) {
         mid = 1;
       }
@@ -262,7 +265,8 @@ const ParameterPage = () => {
             Number(voteNumber) > 0 &&
             !!threshold &&
             Number(threshold) > 0 &&
-            Number(threshold) <= Number(voteNumber)
+            Number(threshold) <= Number(voteNumber) &&
+            Number(threshold) > Number(voteNumber) / 2
         );
       } else {
         setSubmittable(
@@ -274,7 +278,8 @@ const ParameterPage = () => {
             Number(voteNumber) > 0 &&
             !!threshold &&
             Number(threshold) > 0 &&
-            Number(threshold) <= Number(voteNumber)
+            Number(threshold) <= Number(voteNumber) &&
+            Number(threshold) > Number(voteNumber) / 2
         );
       }
     } else {
@@ -377,9 +382,15 @@ const ParameterPage = () => {
                     onChange={(v) => setThreshold(v)}
                     placeholder="At least voters / 2, no more than all voters' number"
                   />
-                  {threshold !== '' && Number(threshold) === 0 && (
+                  {threshold !== '' && Number(threshold) <= 0 && (
                     <InputErrorTip msg="Threshold must be greater than 0" />
                   )}
+                  {threshold !== '' &&
+                    voteNumber !== '' &&
+                    Number(threshold) > 0 &&
+                    Number(threshold) <= Number(voteNumber) / 2 && (
+                      <InputErrorTip msg="Threshold must be greater than voters / 2" />
+                    )}
                   {threshold !== '' &&
                     voteNumber !== '' &&
                     Number(threshold) > Number(voteNumber) && (
