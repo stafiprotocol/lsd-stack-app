@@ -17,6 +17,7 @@ import {
   queryLsdTokenInWhiteList,
   setLsdTokenInWhiteListInfo,
 } from 'redux/reducers/LsdSlice';
+import snackbarUtil from 'utils/snackbarUtils';
 import { validateAddress } from 'utils/web3Utils';
 import { useAccount, useConnect, useSwitchChain } from 'wagmi';
 import Web3 from 'web3';
@@ -131,6 +132,11 @@ const ParameterPage = () => {
       setVotersAddrs(list);
       setVoterParamsOpened(true);
     } else {
+      const votersAddrsSet = new Set(votersAddrs);
+      if (votersAddrsSet.size !== votersAddrs.length) {
+        snackbarUtil.error('Voters addresses must be different');
+        return;
+      }
       if (tokenType === 'standard') {
         setParamList(
           [
