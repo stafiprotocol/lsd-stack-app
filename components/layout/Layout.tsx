@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationItem } from 'interfaces/common';
 import Head from 'next/head';
-import { HideOnScroll } from 'components/common/HideOnScroll';
 import { AppBar } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { useInit } from 'hooks/useInit';
 import classNames from 'classnames';
 import { roboto } from 'config/font';
 import { SubmitLoadingModal } from 'components/modal/SubmitLoadingModal';
+import { useAccount } from 'wagmi';
+import { useAppDispatch } from 'hooks/common';
+import {
+  setMetaMaskAccount,
+  setMetaMaskChainId,
+} from 'redux/reducers/WalletSlice';
 
 const Navbar = dynamic(() => import('./Navbar'), { ssr: false });
 
@@ -20,9 +25,21 @@ export const MyLayoutContext = React.createContext<{
 });
 
 export const Layout = (props: React.PropsWithChildren) => {
+  const dispatch = useAppDispatch();
   useInit();
 
+  const { address, chainId } = useAccount();
+
   const [navigation, setNavigation] = useState<NavigationItem[]>([]);
+
+  useEffect(() => {
+    if (address) {
+      dispatch(setMetaMaskAccount(address));
+    }
+    if (chainId) {
+      dispatch(setMetaMaskChainId(chainId + ''));
+    }
+  }, [address, dispatch, chainId]);
 
   return (
     <MyLayoutContext.Provider

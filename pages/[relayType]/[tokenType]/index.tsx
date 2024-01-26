@@ -4,9 +4,8 @@ import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
-import { getEthereumChainId, getEthereumChainInfo } from 'config/env';
+import { getEthereumChainId } from 'config/env';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
-import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
@@ -18,8 +17,8 @@ import {
   queryLsdTokenInWhiteList,
   setLsdTokenInWhiteListInfo,
 } from 'redux/reducers/LsdSlice';
-import { connectMetaMask } from 'redux/reducers/WalletSlice';
 import { validateAddress } from 'utils/web3Utils';
+import { useAccount, useConnect, useSwitchChain } from 'wagmi';
 import Web3 from 'web3';
 
 export function getStaticProps() {
@@ -50,8 +49,11 @@ const ParameterPage = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
-  const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
   const { lsdTokenInWhiteListInfo } = useAppSelector((state) => state.lsd);
+
+  const { connectors, connectAsync } = useConnect();
+  const { address, chainId } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
 
   const [voterParamsOpened, setVoterParamsOpened] = useState(false);
   const [tokenName, setTokenName] = useState('');
@@ -64,6 +66,11 @@ const ParameterPage = () => {
   const [confirmModalOpened, setConfirmModalOpened] = useState(false);
   const [paramList, setParamList] = useState<ParamItem[]>([]);
 
+  const [btnContent, setBtnContent] = useState<
+    'Connect Wallet' | 'Switch Network' | 'Submit'
+  >('Connect Wallet');
+  const [submittable, setSubmittable] = useState(false);
+
   const tokenType = useMemo(() => {
     return router.query.tokenType;
   }, [router]);
@@ -72,67 +79,12 @@ const ParameterPage = () => {
     return Web3.utils.isAddress(ownerAddress);
   }, [ownerAddress]);
 
-  const [submittable, btnContent] = useMemo(() => {
-    if (!metaMaskAccount) return [true, 'Connect Wallet'];
-    if (Number(metaMaskChainId) !== getEthereumChainId()) {
-      return [true, 'Switch Network'];
+  const btnType = useMemo(() => {
+    if (address && chainId !== getEthereumChainId()) {
+      return 'secondary';
     }
-
-    if (tokenType === 'customize' && !lsdTokenInWhiteListInfo.inWhiteList) {
-      return [false, 'Submit'];
-    }
-    if (!voterParamsOpened) {
-      if (tokenType === 'standard') {
-        return [
-          !!tokenName &&
-            tokenName.length <= 10 &&
-            !!symbol &&
-            symbol.length <= 10 &&
-            !!ownerAddress &&
-            validateAddress(ownerAddress) &&
-            !!voteNumber &&
-            Number(voteNumber) > 0 &&
-            !!threshold &&
-            Number(threshold) > 0 &&
-            Number(threshold) <= Number(voteNumber),
-          'Submit',
-        ];
-      } else {
-        return [
-          !!lsdTokenAddress &&
-            lsdTokenInWhiteListInfo.inWhiteList &&
-            !!ownerAddress &&
-            validateAddress(ownerAddress) &&
-            !!voteNumber &&
-            Number(voteNumber) > 0 &&
-            !!threshold &&
-            Number(threshold) > 0 &&
-            Number(threshold) <= Number(voteNumber),
-          'Submit',
-        ];
-      }
-    } else {
-      for (let addr of votersAddrs) {
-        if (!addr || !validateAddress(addr)) {
-          return [false, 'Submit'];
-        }
-      }
-      return [true, 'Submit'];
-    }
-  }, [
-    tokenName,
-    symbol,
-    ownerAddress,
-    tokenType,
-    voteNumber,
-    lsdTokenAddress,
-    threshold,
-    voterParamsOpened,
-    votersAddrs,
-    metaMaskAccount,
-    metaMaskChainId,
-    lsdTokenInWhiteListInfo,
-  ]);
+    return 'primary';
+  }, [address, chainId]);
 
   const changeVotersAddrs = (addr: string, index: number) => {
     setVotersAddrs((prev) => {
@@ -142,9 +94,24 @@ const ParameterPage = () => {
     });
   };
 
-  const submit = () => {
-    if (!metaMaskAccount || Number(metaMaskChainId) !== getEthereumChainId()) {
-      dispatch(connectMetaMask(getEthereumChainInfo()));
+  const submit = async () => {
+    if (!address) {
+      const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
+      if (!metamaskConnector) {
+        return;
+      }
+      await connectAsync({
+        chainId: getEthereumChainId(),
+        connector: metamaskConnector,
+      });
+      return;
+    }
+    if (Number(chainId) !== getEthereumChainId()) {
+      try {
+        await switchChainAsync({ chainId: getEthereumChainId() });
+      } catch (err: any) {
+        console.error(err);
+      }
       return;
     }
 
@@ -244,6 +211,87 @@ const ParameterPage = () => {
       dispatch(queryLsdTokenInWhiteList(lsdTokenAddress));
     }
   }, [dispatch, lsdTokenAddress]);
+
+  useEffect(() => {
+    if (!isNaN(Number(voteNumber)) && Number(voteNumber) > 0) {
+      let mid = Math.floor(Number(voteNumber) / 2);
+      if (mid <= 0) {
+        mid = 1;
+      }
+      setThreshold(mid + '');
+    }
+  }, [voteNumber]);
+
+  useEffect(() => {
+    if (!address) {
+      setBtnContent('Connect Wallet');
+    } else {
+      if (Number(chainId) !== getEthereumChainId()) {
+        setBtnContent('Switch Network');
+      } else {
+        setBtnContent('Submit');
+      }
+    }
+  }, [address, chainId]);
+
+  useEffect(() => {
+    if (!address || Number(chainId !== getEthereumChainId())) {
+      setSubmittable(true);
+      return;
+    }
+    if (tokenType === 'customize' && !lsdTokenInWhiteListInfo.inWhiteList) {
+      setSubmittable(false);
+    }
+    if (!voterParamsOpened) {
+      if (tokenType === 'standard') {
+        setSubmittable(
+          !!tokenName &&
+            tokenName.length <= 10 &&
+            !!symbol &&
+            symbol.length <= 10 &&
+            !!ownerAddress &&
+            validateAddress(ownerAddress) &&
+            !!voteNumber &&
+            Number(voteNumber) > 0 &&
+            !!threshold &&
+            Number(threshold) > 0 &&
+            Number(threshold) <= Number(voteNumber)
+        );
+      } else {
+        setSubmittable(
+          !!lsdTokenAddress &&
+            lsdTokenInWhiteListInfo.inWhiteList &&
+            !!ownerAddress &&
+            validateAddress(ownerAddress) &&
+            !!voteNumber &&
+            Number(voteNumber) > 0 &&
+            !!threshold &&
+            Number(threshold) > 0 &&
+            Number(threshold) <= Number(voteNumber)
+        );
+      }
+    } else {
+      for (let addr of votersAddrs) {
+        if (!addr || !validateAddress(addr)) {
+          setSubmittable(false);
+          return;
+        }
+      }
+      setSubmittable(true);
+    }
+  }, [
+    address,
+    chainId,
+    tokenName,
+    symbol,
+    ownerAddress,
+    tokenType,
+    voterParamsOpened,
+    voteNumber,
+    threshold,
+    lsdTokenAddress,
+    votersAddrs,
+  ]);
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
@@ -381,12 +429,7 @@ const ParameterPage = () => {
                   disabled={!submittable}
                   loading={lsdTokenInWhiteListInfo.queryLoading}
                   onClick={submit}
-                  type={
-                    metaMaskAccount &&
-                    Number(metaMaskChainId) !== getEthereumChainId()
-                      ? 'secondary'
-                      : 'primary'
-                  }
+                  type={btnType}
                 >
                   {btnContent}
                 </CustomButton>

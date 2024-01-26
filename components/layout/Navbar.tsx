@@ -2,7 +2,6 @@ import { Popover } from '@mui/material';
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
-import { useWalletAccount } from 'hooks/useWalletAccount';
 import {
   bindPopover,
   bindTrigger,
@@ -11,25 +10,23 @@ import {
 import Image from 'next/image';
 import defaultAvatar from 'public/images/default_avatar.png';
 import ethereumLogo from 'public/images/ethereum.png';
-import { connectMetaMask, disconnectWallet } from 'redux/reducers/WalletSlice';
-import { RootState } from 'redux/store';
 import { getShortAddress } from 'utils/stringUtils';
-import { getEthereumChainId, getEthereumChainInfo } from 'config/env';
+import { getEthereumChainId } from 'config/env';
 import LogoTextImg from 'public/images/logo_text.svg';
 import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import { CreationStep } from 'components/common/CreationStep';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
 import BackImg from 'public/images/back.svg';
 import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { STANDARD_CREATION_STEPS } from 'constants/common';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 const Navbar = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
 
-  const { metaMaskAccount } = useWalletAccount();
+  const { address } = useAccount();
 
   const { creationStepInfo } = useAppSelector((state) => state.app);
 
@@ -63,7 +60,7 @@ const Navbar = () => {
           </div>
           <div className={classNames('flex items-center')}>
             <div className={classNames('ml-[.16rem]')}>
-              {metaMaskAccount ? <UserInfo /> : <ConnectButton />}
+              {address ? <UserInfo /> : <ConnectButton />}
             </div>
           </div>
         </div>
@@ -125,7 +122,10 @@ const Navbar = () => {
 
 const UserInfo = () => {
   const dispatch = useAppDispatch();
-  const { metaMaskAccount } = useWalletAccount();
+  // const { metaMaskAccount } = useWalletAccount();
+
+  const { address } = useAccount();
+  const { disconnectAsync } = useDisconnect();
 
   const addressPopupState = usePopupState({
     variant: 'popover',
@@ -184,7 +184,7 @@ const UserInfo = () => {
             addressPopupState.isOpen ? 'text-text1 ' : 'text-color-text1'
           )}
         >
-          {getShortAddress(metaMaskAccount, 5)}
+          {getShortAddress(address, 5)}
         </div>
       </div>
 
@@ -220,7 +220,7 @@ const UserInfo = () => {
           <div
             className="cursor-pointer flex items-center justify-between"
             onClick={() => {
-              navigator.clipboard.writeText(metaMaskAccount || '').then(() => {
+              navigator.clipboard.writeText(address || '').then(() => {
                 addressPopupState.close();
               });
             }}
@@ -236,9 +236,10 @@ const UserInfo = () => {
 
           <div
             className="cursor-pointer flex items-center justify-between"
-            onClick={() => {
+            onClick={async () => {
               addressPopupState.close();
-              dispatch(disconnectWallet());
+              // dispatch(disconnectWallet());
+              await disconnectAsync();
             }}
           >
             <div className="ml-[.12rem] text-color-text1 text-[.16rem]">
@@ -252,10 +253,24 @@ const UserInfo = () => {
 };
 
 const ConnectButton = () => {
-  const dispatch = useAppDispatch();
+  const { connectors, connectAsync } = useConnect();
 
-  const clickConnectWallet = () => {
-    dispatch(connectMetaMask(getEthereumChainInfo()));
+  const clickConnectWallet = async () => {
+    const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
+    if (!metamaskConnector) {
+      return;
+    }
+    try {
+      await connectAsync({
+        connector: metamaskConnector,
+        chainId: getEthereumChainId(),
+      });
+    } catch (err: any) {
+      if (err.code === 4001) {
+      } else {
+        console.error(err);
+      }
+    }
   };
 
   return (

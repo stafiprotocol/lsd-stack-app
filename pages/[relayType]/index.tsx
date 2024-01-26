@@ -4,20 +4,16 @@ import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
-import {
-  getEthereumChainId,
-  getEthereumChainInfo,
-  getEthereumChainName,
-} from 'config/env';
+import { getEthereumChainId } from 'config/env';
 import { useAppDispatch } from 'hooks/common';
-import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { setBackRoute } from 'redux/reducers/AppSlice';
 import { createLsdNetworkStandard } from 'redux/reducers/LsdSlice';
-import { connectMetaMask } from 'redux/reducers/WalletSlice';
+import { validateAddress } from 'utils/web3Utils';
+import { useAccount, useConnect, useSwitchChain } from 'wagmi';
 import Web3 from 'web3';
 
 export function getStaticProps() {
@@ -47,7 +43,9 @@ const ParameterPage = () => {
 
   const dispatch = useAppDispatch();
 
-  const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
+  const { connectors, connectAsync } = useConnect();
+  const { address, chainId } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
 
   const [tokenName, setTokenName] = useState('');
   const [symbol, setSymbol] = useState('');
@@ -55,36 +53,40 @@ const ParameterPage = () => {
   const [confirmModalOpened, setConfirmModalOpened] = useState(false);
   const [paramList, setParamList] = useState<ParamItem[]>([]);
 
+  const [btnContent, setBtnContent] = useState<
+    'Connect Wallet' | 'Switch Network' | 'Submit'
+  >('Connect Wallet');
+  const [submittable, setSubmittable] = useState(false);
+
   const isOwnerAddressValid = useMemo(() => {
     return Web3.utils.isAddress(ownerAddress);
   }, [ownerAddress]);
 
-  const [submittable, btnContent] = useMemo(() => {
-    if (!metaMaskAccount) return [true, 'Connect Wallet'];
-    if (Number(metaMaskChainId) !== getEthereumChainId()) {
-      return [true, 'Switch Network'];
+  const btnType = useMemo(() => {
+    if (address && chainId !== getEthereumChainId()) {
+      return 'secondary';
     }
-    return [
-      !!tokenName &&
-        tokenName.length <= 10 &&
-        !!symbol &&
-        symbol.length <= 10 &&
-        !!ownerAddress &&
-        isOwnerAddressValid,
-      'Submit',
-    ];
-  }, [
-    tokenName,
-    symbol,
-    ownerAddress,
-    metaMaskAccount,
-    metaMaskChainId,
-    isOwnerAddressValid,
-  ]);
+    return 'primary';
+  }, [address, chainId]);
 
-  const submit = () => {
-    if (!metaMaskAccount || Number(metaMaskChainId) !== getEthereumChainId()) {
-      dispatch(connectMetaMask(getEthereumChainInfo()));
+  const submit = async () => {
+    if (!address) {
+      const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
+      if (!metamaskConnector) {
+        return;
+      }
+      await connectAsync({
+        chainId: getEthereumChainId(),
+        connector: metamaskConnector,
+      });
+      return;
+    }
+    if (Number(chainId) !== getEthereumChainId()) {
+      try {
+        await switchChainAsync({ chainId: getEthereumChainId() });
+      } catch (err: any) {
+        console.error(err);
+      }
       return;
     }
 
@@ -106,6 +108,33 @@ const ParameterPage = () => {
       })
     );
   };
+
+  useEffect(() => {
+    if (!address) {
+      setBtnContent('Connect Wallet');
+    } else {
+      if (Number(chainId) !== getEthereumChainId()) {
+        setBtnContent('Switch Network');
+      } else {
+        setBtnContent('Submit');
+      }
+    }
+  }, [address, chainId]);
+
+  useEffect(() => {
+    if (!address || Number(chainId !== getEthereumChainId())) {
+      setSubmittable(true);
+      return;
+    }
+    setSubmittable(
+      !!tokenName &&
+        tokenName.length <= 10 &&
+        !!symbol &&
+        symbol.length <= 10 &&
+        !!ownerAddress &&
+        validateAddress(ownerAddress)
+    );
+  }, [address, chainId, tokenName, symbol, ownerAddress]);
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
@@ -171,12 +200,7 @@ const ParameterPage = () => {
                   height=".56rem"
                   disabled={!submittable}
                   onClick={submit}
-                  type={
-                    metaMaskAccount &&
-                    Number(metaMaskChainId) !== getEthereumChainId()
-                      ? 'secondary'
-                      : 'primary'
-                  }
+                  type={btnType}
                 >
                   {btnContent}
                 </CustomButton>

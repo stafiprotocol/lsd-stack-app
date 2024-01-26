@@ -32,7 +32,7 @@ export function getNetworkBalanceContractAbi() {
 export function getFactoryContract() {
   return {
     abi: factoryContractAbi as AbiItem[],
-    address: '0xf9bb59107e293951205cdeef8b482f48f35e5cc1',
+    address: '0xf9bb59107e293951205cdeef8b482f48f35e5cc1' as `0x${string}`,
   };
 }
 

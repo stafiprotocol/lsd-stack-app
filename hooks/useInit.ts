@@ -1,12 +1,6 @@
-import { hooks, metaMask } from 'connectors/metaMask';
-import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { setCreationStepInfo, setUpdateFlag } from 'redux/reducers/AppSlice';
-import {
-  setMetaMaskAccount,
-  setMetaMaskChainId,
-  setMetaMaskDisconnected,
-} from 'redux/reducers/WalletSlice';
+import { setMetaMaskDisconnected } from 'redux/reducers/WalletSlice';
 import {
   getStorage,
   STORAGE_KEY_DISCONNECT_METAMASK,
@@ -27,9 +21,6 @@ export function useInit() {
 
   const dispatch = useAppDispatch();
   const { backRoute } = useAppSelector((state) => state.app);
-
-  const { useAccount: useMetaMaskAccount } = hooks;
-  const metaMaskAccount = useMetaMaskAccount();
 
   useEffect(() => {
     if (!path) return;
@@ -94,33 +85,6 @@ export function useInit() {
   // useInterval(() => {
   //   dispatch(setUpdateFlag(dayjs().unix()));
   // }, 6000); // 6s
-
-  useEffect(() => {
-    if (!metaMaskAccount) {
-      metaMask.connectEagerly();
-    }
-    dispatch(setMetaMaskAccount(metaMaskAccount));
-  }, [dispatch, metaMaskAccount]);
-
-  useEffect(() => {
-    const listener = (chainId: any) => {
-      dispatch(setMetaMaskChainId(parseInt(chainId, 16) + ''));
-    };
-    if (window.ethereum && window.ethereum.isMetaMask) {
-      ethereum.request({ method: 'eth_chainId' }).then((chainId: string) => {
-        dispatch(setMetaMaskChainId(parseInt(chainId, 16) + ''));
-        // clearDefaultProviderWeb3();
-      });
-
-      ethereum.on('chainChanged', listener);
-    }
-
-    return () => {
-      if (window.ethereum) {
-        ethereum?.removeListener('chainChanged', listener);
-      }
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     document.body.style.backgroundColor = '#E8EFFD';
