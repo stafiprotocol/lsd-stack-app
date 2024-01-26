@@ -75,10 +75,17 @@ const ParameterPage = () => {
       if (!metamaskConnector) {
         return;
       }
-      await connectAsync({
-        chainId: getEthereumChainId(),
-        connector: metamaskConnector,
-      });
+      try {
+        await connectAsync({
+          chainId: getEthereumChainId(),
+          connector: metamaskConnector,
+        });
+      } catch (err: any) {
+        if (err.code === 4001) {
+        } else {
+          console.error(err);
+        }
+      }
       return;
     }
     if (Number(chainId) !== getEthereumChainId()) {
