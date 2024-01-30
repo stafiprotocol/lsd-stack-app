@@ -51,10 +51,10 @@ const Navbar = () => {
             </div>
             <div className="w-[.45rem] h-[.2rem] relative">
               <div className="text-[.12rem] font-[700] leading-[.18rem] z-10 absolute top-0 left-0 w-full h-full text-white text-center flex items-center justify-center">
-                LLAAS
+                LSAAS
               </div>
               <div className="absolute w-[.45rem] h-[.2rem] top-0 left-0">
-                <Image src={LogoLabelBgImg} alt="LLAAS" layout="fill" />
+                <Image src={LogoLabelBgImg} alt="LSAAS" layout="fill" />
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@ const Navbar = () => {
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW flex flex-col">
           <div className="h-full w-smallContentW xl:w-contentW 2xl:w-largeContentW text-text2 text-[.14rem] leading-[.21rem]">
             <div>
-              Welcome to StaFi LLAAS platform, all parameters shown are defaults
+              Welcome to StaFi LSAAS platform, all parameters shown are defaults
               (including some randomly generated addresses), which we recommend
               using for testing purposes. More information around parameter
               customization and guidance can be found in the{' '}

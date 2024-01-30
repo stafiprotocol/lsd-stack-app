@@ -50,7 +50,7 @@ export const Layout = (props: React.PropsWithChildren) => {
     >
       <div className={classNames(roboto.className)}>
         <Head>
-          <title>StaFi LLAAS</title>
+          <title>StaFi LSAAS</title>
           <meta name="description" content="" />
           <meta
             name="viewport"
