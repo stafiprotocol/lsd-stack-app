@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from 'redux/store';
-import { setSubmitLoadingParams } from './AppSlice';
-import { createWeb3, getEthWeb3 } from 'utils/web3Utils';
-import { getFactoryContract } from 'config/contract';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "redux/store";
+import { setSubmitLoadingParams } from "./AppSlice";
+import { createWeb3, getEthWeb3 } from "utils/web3Utils";
+import { getFactoryContract } from "config/eth/contract";
 import {
   CANCELLED_MESSAGE,
   CONNECTION_ERROR_MESSAGE,
   TRANSACTION_FAILED_MESSAGE,
-} from 'constants/common';
-import snackbarUtil from 'utils/snackbarUtils';
+} from "constants/common";
+import snackbarUtil from "utils/snackbarUtils";
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
@@ -26,7 +26,7 @@ const initialState: LsdState = {
 };
 
 export const lsdSlice = createSlice({
-  name: 'lsdEth',
+  name: "lsdEth",
   initialState,
   reducers: {
     setLsdTokenInWhiteListInfo: (
@@ -52,7 +52,7 @@ export const createLsdNetworkStandard =
   async (dispatch, getState) => {
     dispatch(
       createLsdNetwork(
-        'createLsdNetworkWithEntrustedVoters',
+        "createLsdNetworkWithEntrustedVoters",
         [lsdTokenName, lsdTokenSymbol, ownerAddress],
         cb
       )
@@ -71,7 +71,7 @@ export const createLsdNetworkCustomStandard =
   async (dispatch) => {
     dispatch(
       createLsdNetwork(
-        'createLsdNetwork',
+        "createLsdNetwork",
         [lsdTokenName, lsdTokenSymbol, ownerAddress, voters, threshold],
         cb
       )
@@ -89,7 +89,7 @@ export const createLsdNetworkCustomCustom =
   async (dispatch) => {
     dispatch(
       createLsdNetwork(
-        'createLsdNetworkWithLsdToken',
+        "createLsdNetworkWithLsdToken",
         [lsdTokenAddress, ownerAddress, voters, threshold],
         cb
       )
@@ -101,15 +101,15 @@ const createLsdNetwork =
   async (dispatch, getState) => {
     const metaMaskAccount = getState().wallet.metaMaskAccount;
     if (!metaMaskAccount) {
-      snackbarUtil.error('Please connect MetaMask');
+      snackbarUtil.error("Please connect MetaMask");
       return;
     }
 
     dispatch(
       setSubmitLoadingParams({
-        status: 'loading',
+        status: "loading",
         modalOpened: true,
-        txHash: '',
+        txHash: "",
       })
     );
 
@@ -126,7 +126,7 @@ const createLsdNetwork =
         const txHash = result.transactionHash;
         dispatch(
           setSubmitLoadingParams({
-            status: 'success',
+            status: "success",
             modalOpened: true,
             txHash,
           })
@@ -140,9 +140,9 @@ const createLsdNetwork =
       if (err.code === 4001) {
         dispatch(
           setSubmitLoadingParams({
-            status: 'error',
+            status: "error",
             modalOpened: false,
-            txHash: '',
+            txHash: "",
           })
         );
         snackbarUtil.error(CANCELLED_MESSAGE);
@@ -155,10 +155,10 @@ const createLsdNetwork =
       }
       dispatch(
         setSubmitLoadingParams({
-          status: 'error',
+          status: "error",
           modalOpened: true,
           msg,
-          txHash: '',
+          txHash: "",
         })
       );
       cb && cb(false);
@@ -194,7 +194,7 @@ export const queryLsdTokenInWhiteList =
           })
         );
       } else {
-        throw new Error('not in whitelist');
+        throw new Error("not in whitelist");
       }
     } catch (err: any) {
       console.error(err);

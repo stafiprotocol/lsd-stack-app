@@ -34,7 +34,11 @@
     "viem": "^2.5.0",
     "wagmi": "^2.5.2",
     "web3": "1.9.0",
-    "web3-utils": "1.9.0"
+    "web3-utils": "1.9.0",
+    "@stafihub/apps-wallet": "2.8.1",
+    "@cosmjs/cosmwasm-stargate": "0.32.2",
+    "@cosmjs/proto-signing": "0.32.2",
+    "@cosmjs/stargate": "0.32.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.21",

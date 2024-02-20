@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
-import { setCreationStepInfo, setUpdateFlag } from 'redux/reducers/AppSlice';
-import { setMetaMaskDisconnected } from 'redux/reducers/WalletSlice';
+import { useEffect } from "react";
+import { setCreationStepInfo, setUpdateFlag } from "redux/reducers/AppSlice";
+import {
+  autoConnectKeplrChains,
+  setMetaMaskDisconnected,
+} from "redux/reducers/WalletSlice";
 import {
   getStorage,
   STORAGE_KEY_DISCONNECT_METAMASK,
-} from 'utils/storageUtils';
-import { useAppDispatch, useAppSelector } from './common';
-import { useInterval } from './useInterval';
-import { usePathname } from 'next/navigation';
+} from "utils/storageUtils";
+import { useAppDispatch, useAppSelector } from "./common";
+import { useInterval } from "./useInterval";
+import { usePathname } from "next/navigation";
 import {
   CUSTOMIZE_CREATION_STEPS,
   STANDARD_CREATION_STEPS,
-} from 'constants/common';
+} from "constants/common";
 
 declare const window: { ethereum: any };
 declare const ethereum: any;
@@ -24,8 +27,8 @@ export function useInit() {
 
   useEffect(() => {
     if (!path) return;
-    if (path === '/') {
-      if (backRoute === 'tokenStandard') {
+    if (path === "/") {
+      if (backRoute === "tokenStandard") {
         dispatch(
           setCreationStepInfo({
             steps: CUSTOMIZE_CREATION_STEPS,
@@ -40,8 +43,8 @@ export function useInit() {
           })
         );
       }
-    } else if (path.startsWith('/standard')) {
-      if (path.endsWith('review') || path.endsWith('review/')) {
+    } else if (path.startsWith("/standard")) {
+      if (path.endsWith("review") || path.endsWith("review/")) {
         dispatch(
           setCreationStepInfo({
             steps: STANDARD_CREATION_STEPS,
@@ -57,7 +60,7 @@ export function useInit() {
         );
       }
     } else {
-      if (path.endsWith('review') || path.endsWith('review/')) {
+      if (path.endsWith("review") || path.endsWith("review/")) {
         dispatch(
           setCreationStepInfo({
             steps: CUSTOMIZE_CREATION_STEPS,
@@ -82,11 +85,28 @@ export function useInit() {
     );
   }, [dispatch]);
 
+  // Keplr auto connect and user account switch logic.
+  useEffect(() => {
+    // Auto connect Keplr accounts
+    dispatch(autoConnectKeplrChains());
+
+    const onKeplrAccountChange = () => {
+      dispatch(autoConnectKeplrChains());
+    };
+
+    // Keplr account change event.
+    addEventListener("keplr_keystorechange", onKeplrAccountChange);
+
+    return () => {
+      removeEventListener("keplr_keystorechange", onKeplrAccountChange);
+    };
+  }, [dispatch]);
+
   // useInterval(() => {
   //   dispatch(setUpdateFlag(dayjs().unix()));
   // }, 6000); // 6s
 
   useEffect(() => {
-    document.body.style.backgroundColor = '#E8EFFD';
+    document.body.style.backgroundColor = "#E8EFFD";
   }, []);
 }

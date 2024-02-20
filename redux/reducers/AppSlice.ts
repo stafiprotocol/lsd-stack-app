@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { STANDARD_CREATION_STEPS } from 'constants/common';
-import { AppThunk } from 'redux/store';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { STANDARD_CREATION_STEPS } from "constants/common";
+import { AppEco } from "interfaces/common";
+import { AppThunk } from "redux/store";
 
 export interface CreationStepInfo {
   steps: string[];
@@ -8,13 +9,14 @@ export interface CreationStepInfo {
 }
 
 export interface SubmitLoadingParams {
-  status: 'loading' | 'success' | 'error';
+  status: "loading" | "success" | "error";
   modalOpened: boolean;
   txHash: string;
   msg?: string;
 }
 
 export interface AppState {
+  appEco: AppEco;
   updateFlag: number;
   submitLoadingParams: SubmitLoadingParams;
   creationStepInfo: CreationStepInfo;
@@ -22,23 +24,27 @@ export interface AppState {
 }
 
 const initialState: AppState = {
+  appEco: AppEco.Eth,
   updateFlag: 0,
   submitLoadingParams: {
-    status: 'loading',
+    status: "loading",
     modalOpened: false,
-    txHash: '',
+    txHash: "",
   },
   creationStepInfo: {
     steps: STANDARD_CREATION_STEPS,
     activedIndex: 0,
   },
-  backRoute: '',
+  backRoute: "",
 };
 
 export const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
+    setAppEco: (state: AppState, action: PayloadAction<AppEco>) => {
+      state.appEco = action.payload;
+    },
     setUpdateFlag: (state: AppState, action: PayloadAction<number>) => {
       state.updateFlag = action.payload;
     },
@@ -61,6 +67,7 @@ export const appSlice = createSlice({
 });
 
 export const {
+  setAppEco,
   setUpdateFlag,
   setSubmitLoadingParams,
   setCreationStepInfo,

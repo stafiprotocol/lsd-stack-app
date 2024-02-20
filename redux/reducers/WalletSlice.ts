@@ -1,27 +1,36 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { metaMask } from 'connectors/metaMask';
-import snackbarUtil from 'utils/snackbarUtils';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { metaMask } from "connectors/metaMask";
+import snackbarUtil from "utils/snackbarUtils";
 import {
   STORAGE_KEY_DISCONNECT_METAMASK,
+  clearCosmosNetworkAllowedFlag,
+  isCosmosNetworkAllowed,
   saveStorage,
-} from 'utils/storageUtils';
-import { AppThunk } from '../store';
-import { AddEthereumChainParameter } from '@web3-react/types';
+} from "utils/storageUtils";
+import { AppThunk } from "../store";
+import { AddEthereumChainParameter } from "@web3-react/types";
+import { AppEco, CosmosAccountMap, CosmosChainConfig } from "interfaces/common";
+import { lsdTokenChainConfigs, neutronChainConfig } from "config/cosmos/chain";
+import { KEPLR_NOT_INSTALLED_MESSAGE } from "constants/common";
+import { isKeplrInstalled } from "utils/commonUtils";
+import { _connectKeplr } from "utils/cosmosUtils";
 
 export interface WalletState {
   metaMaskAccount: string | undefined;
   metaMaskChainId: string | undefined;
   metaMaskDisconnected: boolean;
+  cosmosAccounts: CosmosAccountMap;
 }
 
 const initialState: WalletState = {
   metaMaskAccount: undefined,
   metaMaskChainId: undefined,
   metaMaskDisconnected: false,
+  cosmosAccounts: {},
 };
 
 export const walletSlice = createSlice({
-  name: 'wallet',
+  name: "wallet",
   initialState,
   reducers: {
     setMetaMaskAccount: (
@@ -40,8 +49,14 @@ export const walletSlice = createSlice({
       state: WalletState,
       action: PayloadAction<boolean>
     ) => {
-      saveStorage(STORAGE_KEY_DISCONNECT_METAMASK, action.payload ? '1' : '');
+      saveStorage(STORAGE_KEY_DISCONNECT_METAMASK, action.payload ? "1" : "");
       state.metaMaskDisconnected = action.payload;
+    },
+    setCosmosAccounts: (
+      state: WalletState,
+      action: PayloadAction<CosmosAccountMap>
+    ) => {
+      state.cosmosAccounts = action.payload;
     },
   },
 });
@@ -50,6 +65,7 @@ export const {
   setMetaMaskAccount,
   setMetaMaskChainId,
   setMetaMaskDisconnected,
+  setCosmosAccounts,
 } = walletSlice.actions;
 
 export default walletSlice.reducer;
@@ -80,9 +96,81 @@ export const connectMetaMask =
     } catch (err: unknown) {}
   };
 
+export const updateCosmosAccounts =
+  (accountMap: CosmosAccountMap): AppThunk =>
+  async (dispatch, getState) => {
+    const newAccounts = {
+      ...getState().wallet.cosmosAccounts,
+      ...accountMap,
+    };
+    // console.log({ newAccounts });
+    dispatch(setCosmosAccounts(newAccounts));
+  };
+
+/**
+ * Auto connect keplr.
+ */
+export const autoConnectKeplrChains =
+  (): AppThunk => async (dispatch, getState) => {
+    const allowedChains: CosmosChainConfig[] = [];
+
+    if (isCosmosNetworkAllowed(neutronChainConfig.chainId)) {
+      allowedChains.push(neutronChainConfig);
+    }
+    lsdTokenChainConfigs.forEach((item) => {
+      if (isCosmosNetworkAllowed(item.chainId)) {
+        allowedChains.push(item);
+      }
+    });
+
+    if (allowedChains.length === 0) {
+      return;
+    }
+    dispatch(connectKeplrAccount(allowedChains));
+  };
+
+/**
+ * Connect to Keplr extension.
+ */
+export const connectKeplrAccount =
+  (chainConfigs: CosmosChainConfig[]): AppThunk =>
+  async (dispatch, getState) => {
+    if (chainConfigs.length === 0) {
+      return;
+    }
+    if (!isKeplrInstalled()) {
+      snackbarUtil.error(KEPLR_NOT_INSTALLED_MESSAGE);
+      return;
+    }
+
+    const requests = chainConfigs.map((chainConfig) => {
+      return _connectKeplr(chainConfig);
+    });
+
+    const results = await Promise.all(requests);
+
+    const newAccounts: CosmosAccountMap = {};
+    results
+      .filter((item) => !!item)
+      .forEach((account, index) => {
+        newAccounts[chainConfigs[index].chainId] = account;
+      });
+
+    dispatch(updateCosmosAccounts(newAccounts));
+  };
+
 /**
  * disconnect from wallet
  */
 export const disconnectWallet = (): AppThunk => async (dispatch, getState) => {
-  dispatch(setMetaMaskDisconnected(true));
+  switch (getState().app.appEco) {
+    case AppEco.Eth:
+      dispatch(setMetaMaskDisconnected(true));
+      break;
+    case AppEco.Cosmos:
+      const chainId = neutronChainConfig.chainId;
+      dispatch(updateCosmosAccounts({ [chainId]: null }));
+      clearCosmosNetworkAllowedFlag(chainId);
+      break;
+  }
 };

@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useAppSelector } from './common';
-import { getEthWeb3 } from 'utils/web3Utils';
+import { useCallback, useEffect, useState } from "react";
+import { useAppSelector } from "./common";
+import { getEthWeb3 } from "utils/web3Utils";
 import {
   getFactoryContract,
   getLsdTokenContractAbi,
   getNetworkProposalContractAbi,
-} from 'config/contract';
-import { RelayType } from 'interfaces/common';
+} from "config/eth/contract";
+import { RelayType } from "interfaces/common";
 
 export interface DeployInfo {
   ownerAddress: string;
@@ -64,7 +64,7 @@ export const useDeployInfo = (relayType: RelayType) => {
         { from: metaMaskAccount }
       );
       let _voters: string[] = [];
-      if (relayType === 'customize') {
+      if (relayType === "customize") {
         _voters = await proposalContract.methods.getVoters().call();
       } else {
         _voters = await contract.methods.getEntrustWithVoters().call();
@@ -81,7 +81,7 @@ export const useDeployInfo = (relayType: RelayType) => {
       const lsdTokenName = await lsdTokenContract.methods.symbol().call();
 
       setDeployInfo({
-        ownerAddress: ownerAddress + '',
+        ownerAddress: ownerAddress + "",
         lsdTokenAddress: latestLsdToken,
         feePoolAddress: networkContractsOfLsdToken._feePool,
         networkBalancesAddress: networkContractsOfLsdToken._networkBalances,

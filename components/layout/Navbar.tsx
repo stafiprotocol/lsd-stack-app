@@ -1,44 +1,69 @@
-import { Popover } from '@mui/material';
-import classNames from 'classnames';
-import { CustomButton } from 'components/common/CustomButton';
-import { useAppDispatch, useAppSelector } from 'hooks/common';
+import { Popover } from "@mui/material";
+import classNames from "classnames";
+import { CustomButton } from "components/common/CustomButton";
+import { useAppDispatch, useAppSelector } from "hooks/common";
 import {
   bindPopover,
   bindTrigger,
   usePopupState,
-} from 'material-ui-popup-state/hooks';
-import Image from 'next/image';
-import defaultAvatar from 'public/images/default_avatar.png';
-import ethereumLogo from 'public/images/ethereum.png';
-import { getShortAddress } from 'utils/stringUtils';
-import { getEthereumChainId } from 'config/env';
-import LogoTextImg from 'public/images/logo_text.svg';
-import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
-import { CreationStep } from 'components/common/CreationStep';
-import { useRouter } from 'next/router';
-import BackImg from 'public/images/back.svg';
-import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
-import { STANDARD_CREATION_STEPS } from 'constants/common';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+} from "material-ui-popup-state/hooks";
+import Image from "next/image";
+import defaultAvatar from "public/images/default_avatar.png";
+import ethereumLogo from "public/images/ethereum.png";
+import neutronLogo from "public/images/neutron.png";
+import { getShortAddress } from "utils/stringUtils";
+import { getEthereumChainId } from "config/env";
+import LogoTextImg from "public/images/logo_text.svg";
+import LogoLabelBgImg from "public/images/logo_label_bg.svg";
+import { CreationStep } from "components/common/CreationStep";
+import { useRouter } from "next/router";
+import BackImg from "public/images/back.svg";
+import { setBackRoute, setCreationStepInfo } from "redux/reducers/AppSlice";
+import { STANDARD_CREATION_STEPS } from "constants/common";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { RootState } from "redux/store";
+import { useMemo } from "react";
+import { useCosmosChainAccount } from "hooks/useCosmosChainAccount";
+import { neutronChainConfig } from "config/cosmos/chain";
+import { AppEco } from "interfaces/common";
+import {
+  connectKeplrAccount,
+  disconnectWallet,
+} from "redux/reducers/WalletSlice";
 
 const Navbar = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
 
+  const { appEco } = useAppSelector((state: RootState) => {
+    return {
+      appEco: state.app.appEco,
+    };
+  });
+  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
   const { address } = useAccount();
+
+  const walletNotConnected = useMemo(() => {
+    if (appEco === AppEco.Eth) {
+      return !address;
+    } else if (appEco === AppEco.Cosmos) {
+      return !neutronChainAccount?.bech32Address;
+    }
+    return true;
+  }, [appEco, neutronChainAccount, address]);
 
   const { creationStepInfo } = useAppSelector((state) => state.app);
 
   const backToHome = () => {
-    dispatch(setBackRoute(''));
+    dispatch(setBackRoute(""));
     dispatch(
       setCreationStepInfo({
         steps: STANDARD_CREATION_STEPS,
         activedIndex: 0,
       })
     );
-    router.replace('/');
+    router.replace("/");
   };
 
   return (
@@ -58,15 +83,15 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-          <div className={classNames('flex items-center')}>
-            <div className={classNames('ml-[.16rem]')}>
-              {address ? <UserInfo /> : <ConnectButton />}
+          <div className={classNames("flex items-center")}>
+            <div className={classNames("ml-[.16rem]")}>
+              {walletNotConnected ? <ConnectButton /> : <UserInfo />}
             </div>
           </div>
         </div>
       </div>
 
-      {(router.pathname !== '/' || creationStepInfo.activedIndex > 0) && (
+      {(router.pathname !== "/" || creationStepInfo.activedIndex > 0) && (
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto mb-[.32rem]">
           <div
             className="flex w-[.88rem] h-[.4rem] items-center justify-center gap-[.08rem] bg-bg2 rounded-[.1rem] cursor-pointer"
@@ -83,11 +108,11 @@ const Navbar = () => {
       )}
 
       <div
-        className={classNames('flex justify-center h-[1.86rem]')}
+        className={classNames("flex justify-center h-[1.86rem]")}
         style={{
           background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) -20.69%, rgba(255, 255, 255, 0.5) 103.45%)',
-          boxShadow: '0px 1px 0px #FFFFFF',
+            "linear-gradient(180deg, rgba(255, 255, 255, 0) -20.69%, rgba(255, 255, 255, 0.5) 103.45%)",
+          boxShadow: "0px 1px 0px #FFFFFF",
         }}
       >
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW flex flex-col">
@@ -96,7 +121,7 @@ const Navbar = () => {
               Welcome to StaFi LSAAS platform, all parameters shown are defaults
               (including some randomly generated addresses), which we recommend
               using for testing purposes. More information around parameter
-              customization and guidance can be found in the{' '}
+              customization and guidance can be found in the{" "}
               <a
                 href="https://d835jsgd5asjf.cloudfront.net/"
                 target="_blank"
@@ -122,26 +147,69 @@ const Navbar = () => {
 
 const UserInfo = () => {
   const dispatch = useAppDispatch();
+  const { appEco } = useAppSelector((state: RootState) => {
+    return {
+      appEco: state.app.appEco,
+    };
+  });
+  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
   // const { metaMaskAccount } = useWalletAccount();
 
   const { address } = useAccount();
   const { disconnectAsync } = useDisconnect();
 
+  const displayAddress = useMemo(() => {
+    if (appEco === AppEco.Eth) {
+      return address;
+    } else if (appEco === AppEco.Cosmos) {
+      return neutronChainAccount?.bech32Address;
+    }
+    return "";
+  }, [appEco, neutronChainAccount, address]);
+
   const addressPopupState = usePopupState({
-    variant: 'popover',
-    popupId: 'address',
+    variant: "popover",
+    popupId: "address",
   });
+
+  const getLogo = () => {
+    switch (appEco) {
+      case AppEco.Eth:
+        return ethereumLogo;
+      case AppEco.Cosmos:
+        return neutronLogo;
+    }
+    return ethereumLogo;
+  };
+
+  const getTitle = () => {
+    switch (appEco) {
+      case AppEco.Eth:
+        return "Ethereum";
+      case AppEco.Cosmos:
+        return "Neutron";
+    }
+    return "";
+  };
+
+  const clickDisconnectWallet = async () => {
+    if (appEco === AppEco.Eth) {
+      await disconnectAsync();
+    } else if (appEco === AppEco.Cosmos) {
+      dispatch(disconnectWallet());
+    }
+  };
 
   return (
     <div className="h-[.42rem] bg-color-bg2 rounded-[.6rem] flex items-stretch">
       <div
         className={classNames(
-          'items-center pl-[.04rem] pr-[.12rem] rounded-l-[.6rem] cursor-pointer flex'
+          "items-center pl-[.04rem] pr-[.12rem] rounded-l-[.6rem] cursor-pointer flex"
         )}
       >
         <div className="w-[.34rem] h-[.34rem] relative">
           <Image
-            src={ethereumLogo}
+            src={getLogo()}
             alt="logo"
             className="rounded-full  overflow-hidden"
             layout="fill"
@@ -149,9 +217,9 @@ const UserInfo = () => {
         </div>
 
         <div
-          className={classNames('ml-[.08rem] text-[.16rem] text-color-text1')}
+          className={classNames("ml-[.08rem] text-[.16rem] text-color-text1")}
         >
-          Ethereum
+          {getTitle()}
         </div>
 
         {/* <div className="ml-[.12rem]">
@@ -161,14 +229,14 @@ const UserInfo = () => {
 
       <div
         className={classNames(
-          'self-center h-[.22rem] w-[.01rem] bg-[#DEE6F7] dark:bg-[#6C86AD80] flex'
+          "self-center h-[.22rem] w-[.01rem] bg-[#DEE6F7] dark:bg-[#6C86AD80] flex"
         )}
       />
 
       <div
         className={classNames(
-          'cursor-pointer pr-[.04rem] flex items-center rounded-r-[.6rem] pl-[.12rem]',
-          addressPopupState.isOpen ? 'bg-color-selected' : ''
+          "cursor-pointer pr-[.04rem] flex items-center rounded-r-[.6rem] pl-[.12rem]",
+          addressPopupState.isOpen ? "bg-color-selected" : ""
         )}
         {...bindTrigger(addressPopupState)}
       >
@@ -180,11 +248,11 @@ const UserInfo = () => {
 
         <div
           className={classNames(
-            'mx-[.12rem] text-[.16rem]',
-            addressPopupState.isOpen ? 'text-text1 ' : 'text-color-text1'
+            "mx-[.12rem] text-[.16rem]",
+            addressPopupState.isOpen ? "text-text1 " : "text-color-text1"
           )}
         >
-          {getShortAddress(address, 5)}
+          {getShortAddress(displayAddress, 5)}
         </div>
       </div>
 
@@ -192,35 +260,35 @@ const UserInfo = () => {
       <Popover
         {...bindPopover(addressPopupState)}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         elevation={0}
         sx={{
-          marginTop: '.15rem',
-          '& .MuiPopover-paper': {
-            background: '#ffffff80',
-            border: '0.01rem solid #FFFFFF',
-            backdropFilter: 'blur(.4rem)',
-            borderRadius: '.3rem',
+          marginTop: ".15rem",
+          "& .MuiPopover-paper": {
+            background: "#ffffff80",
+            border: "0.01rem solid #FFFFFF",
+            backdropFilter: "blur(.4rem)",
+            borderRadius: ".3rem",
           },
-          '& .MuiTypography-root': {
-            padding: '0px',
+          "& .MuiTypography-root": {
+            padding: "0px",
           },
-          '& .MuiBox-root': {
-            padding: '0px',
+          "& .MuiBox-root": {
+            padding: "0px",
           },
         }}
       >
-        <div className={classNames('p-[.16rem] w-[2rem]')}>
+        <div className={classNames("p-[.16rem] w-[2rem]")}>
           <div
             className="cursor-pointer flex items-center justify-between"
             onClick={() => {
-              navigator.clipboard.writeText(address || '').then(() => {
+              navigator.clipboard.writeText(displayAddress || "").then(() => {
                 addressPopupState.close();
               });
             }}
@@ -239,7 +307,8 @@ const UserInfo = () => {
             onClick={async () => {
               addressPopupState.close();
               // dispatch(disconnectWallet());
-              await disconnectAsync();
+
+              clickDisconnectWallet();
             }}
           >
             <div className="ml-[.12rem] text-color-text1 text-[.16rem]">
@@ -253,23 +322,33 @@ const UserInfo = () => {
 };
 
 const ConnectButton = () => {
+  const dispatch = useAppDispatch();
+  const { appEco } = useAppSelector((state: RootState) => {
+    return {
+      appEco: state.app.appEco,
+    };
+  });
   const { connectors, connectAsync } = useConnect();
 
   const clickConnectWallet = async () => {
-    const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
-    if (!metamaskConnector) {
-      return;
-    }
-    try {
-      await connectAsync({
-        connector: metamaskConnector,
-        chainId: getEthereumChainId(),
-      });
-    } catch (err: any) {
-      if (err.code === 4001) {
-      } else {
-        console.error(err);
+    if (appEco === AppEco.Eth) {
+      const metamaskConnector = connectors.find((c) => c.id === "io.metamask");
+      if (!metamaskConnector) {
+        return;
       }
+      try {
+        await connectAsync({
+          connector: metamaskConnector,
+          chainId: getEthereumChainId(),
+        });
+      } catch (err: any) {
+        if (err.code === 4001) {
+        } else {
+          console.error(err);
+        }
+      }
+    } else if (appEco == AppEco.Cosmos) {
+      dispatch(connectKeplrAccount([neutronChainConfig]));
     }
   };
 
