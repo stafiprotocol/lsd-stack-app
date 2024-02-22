@@ -13,6 +13,7 @@ import {
   setMetaMaskAccount,
   setMetaMaskChainId,
 } from 'redux/reducers/WalletSlice';
+import { useRouter } from 'next/router';
 
 const Navbar = dynamic(() => import('./Navbar'), { ssr: false });
 
@@ -25,6 +26,8 @@ export const MyLayoutContext = React.createContext<{
 });
 
 export const Layout = (props: React.PropsWithChildren) => {
+  const router = useRouter();
+
   const dispatch = useAppDispatch();
   useInit();
 
@@ -58,17 +61,19 @@ export const Layout = (props: React.PropsWithChildren) => {
           />
         </Head>
 
-        <AppBar
-          position="relative"
-          color="transparent"
-          elevation={0}
-          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        >
-          <Navbar />
-        </AppBar>
+        {router.pathname !== '/' && (
+          <AppBar
+            position="relative"
+            color="transparent"
+            elevation={0}
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          >
+            <Navbar />
+          </AppBar>
+        )}
 
         <main className="flex flex-col items-center">
-          <div className="mb-[.2rem] w-full">{props.children}</div>
+          <div className="w-full">{props.children}</div>
         </main>
 
         <SubmitLoadingModal />

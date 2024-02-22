@@ -1,8 +1,8 @@
 export enum AppEco {
-  Eth = "ETH",
-  Cosmos = "COSMOS",
-  Polkadot = "Polkadot",
-  Others = "others",
+  Eth = 'ETH',
+  Cosmos = 'COSMOS',
+  Polkadot = 'Polkadot',
+  Others = 'Others',
 }
 
 export interface NavigationItem {
@@ -10,7 +10,7 @@ export interface NavigationItem {
   path?: string;
 }
 
-export type RelayType = "standard" | "customize";
+export type RelayType = 'standard' | 'customize';
 
 export interface Coin {
   denom: string;

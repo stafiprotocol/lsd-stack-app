@@ -2,6 +2,7 @@ import NumArrowUpImg from 'public/images/num_arrow_up.svg';
 import NumArrowDownImg from 'public/images/num_arrow_down.svg';
 import Image from 'next/image';
 import classNames from 'classnames';
+import { robotoBold } from 'config/font';
 
 interface Props {
   label: string;
@@ -11,6 +12,7 @@ interface Props {
   disabled?: boolean;
   isNumber?: boolean;
   min?: number;
+  className?: string;
 }
 
 export const InputItem = ({
@@ -20,6 +22,7 @@ export const InputItem = ({
   placeholder,
   disabled,
   isNumber,
+  className,
 }: Props) => {
   const onChangeValue = (v: string) => {
     if (isNumber) {
@@ -45,8 +48,18 @@ export const InputItem = ({
   };
 
   return (
-    <div className="flex justify-between items-center h-[.5rem]">
-      <div className="text-[.16rem] leading-[.18rem] font-[700] text-text2 w-[1.2rem]">
+    <div
+      className={classNames(
+        'flex justify-between items-center h-[.5rem]',
+        className || ''
+      )}
+    >
+      <div
+        className={classNames(
+          robotoBold.className,
+          'text-[.16rem] leading-[.18rem] text-text2 w-[1.2rem]'
+        )}
+      >
         {label}
       </div>
 

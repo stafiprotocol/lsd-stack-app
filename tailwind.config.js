@@ -9,6 +9,8 @@ module.exports = {
     colors: {
       transparent: 'transparent',
       white: '#ffffff',
+      black: '#000000',
+      blue: '#80CAFF',
       primary: '#00F3AB',
       // Background
       bgPage: '#E8EFFD',

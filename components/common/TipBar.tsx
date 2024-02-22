@@ -2,17 +2,22 @@ import Image from 'next/image';
 import TipImg from 'public/images/tip.svg';
 import TipYellowImg from 'public/images/tip_yellow.svg';
 import LinkArrowImg from 'public/images/link_arrow.svg';
+import classNames from 'classnames';
 
 interface Props {
   isWarning?: boolean;
   link: string;
   content: JSX.Element | string;
+  className?: string;
 }
 
-export const TipBar = ({ isWarning, link, content }: Props) => {
+export const TipBar = ({ isWarning, link, content, className }: Props) => {
   return (
     <a
-      className="bg-bg3 rounded-[.12rem] flex items-center py-[.18rem] px-[.12rem]"
+      className={classNames(
+        'bg-bg3 rounded-[.12rem] flex items-center py-[.18rem] px-[.12rem]',
+        className || ''
+      )}
       target="_blank"
       href={link}
     >
