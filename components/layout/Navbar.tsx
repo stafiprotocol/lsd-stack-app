@@ -12,7 +12,7 @@ import defaultAvatar from 'public/images/default_avatar.png';
 import ethereumLogo from 'public/images/ethereum.png';
 import neutronLogo from 'public/images/neutron.png';
 import { getShortAddress } from 'utils/stringUtils';
-import { getDocHost, getEthereumChainId } from 'config/env';
+import { getEthereumChainId } from 'config/eth/env';
 import LogoTextImg from 'public/images/logo_text.svg';
 import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import { CreationStep } from 'components/common/CreationStep';
@@ -31,6 +31,7 @@ import {
   disconnectWallet,
 } from 'redux/reducers/WalletSlice';
 import { useSelector } from 'react-redux';
+import { getDocHost } from 'config/common';
 
 const Navbar = () => {
   const router = useRouter();

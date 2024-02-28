@@ -4,7 +4,7 @@ import { setNtrnPrice } from 'redux/reducers/TokenSlice';
 import { RootState } from 'redux/store';
 import { useAppDispatch, useAppSelector } from './common';
 import { useDebouncedEffect } from './useDebouncedEffect';
-import { getTokenPriceUrl } from 'config/env';
+import { getTokenPriceUrl } from 'config/common';
 
 export function usePrice() {
   const updateTimestampRef = useRef<number>(0);

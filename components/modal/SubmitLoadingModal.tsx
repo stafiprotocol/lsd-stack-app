@@ -2,18 +2,24 @@ import { Box, Modal } from '@mui/material';
 import classNames from 'classnames';
 import { PrimaryLoading } from 'components/common/PrimaryLoading';
 import { Icomoon } from 'components/icon/Icomoon';
+import { getCosmosExplorerTxUrl, getEtherScanTxUrl } from 'config/explorer';
+import { roboto } from 'config/font';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
+import { AppEco } from 'interfaces/common';
 import Image from 'next/image';
-import successIcon from 'public/images/tx_success.png';
 import errorIcon from 'public/images/tx_error.png';
+import successIcon from 'public/images/tx_success.png';
 import { useMemo } from 'react';
 import { setSubmitLoadingParams } from 'redux/reducers/AppSlice';
-import { roboto } from 'config/font';
-import { getEtherScanTxUrl } from 'config/explorer';
 
 export const SubmitLoadingModal = () => {
   const dispatch = useAppDispatch();
-  const { submitLoadingParams } = useAppSelector((state) => state.app);
+  const { appEco, submitLoadingParams } = useAppSelector((state) => {
+    return {
+      submitLoadingParams: state.app.submitLoadingParams,
+      appEco: state.app.appEco,
+    };
+  });
 
   const title = useMemo(() => {
     if (submitLoadingParams.status === 'loading') {
@@ -121,7 +127,11 @@ export const SubmitLoadingModal = () => {
           {!!submitLoadingParams.txHash && (
             <a
               className="mb-[.32rem] flex items-center"
-              href={getEtherScanTxUrl(submitLoadingParams.txHash)}
+              href={
+                appEco === AppEco.Cosmos
+                  ? getCosmosExplorerTxUrl(submitLoadingParams.txHash)
+                  : getEtherScanTxUrl(submitLoadingParams.txHash)
+              }
               target="_blank"
               rel="noreferrer"
             >

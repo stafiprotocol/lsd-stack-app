@@ -4,7 +4,7 @@ import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
-import { getEthereumChainId } from 'config/env';
+import { getEthereumChainId } from 'config/eth/env';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

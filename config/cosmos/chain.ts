@@ -1,7 +1,7 @@
 import { CosmosChainConfig, LsdTokenConfig } from 'interfaces/common';
 import devConfig from './dev.json';
 import prodConfig from './prod.json';
-import { isDev } from 'config/env';
+import { isDev } from 'config/common';
 
 export const neutronChainConfig: CosmosChainConfig = isDev()
   ? devConfig.chains.neutron

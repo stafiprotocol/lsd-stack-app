@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { getEthereumRpc } from 'config/env';
+import { getEthereumRpc } from 'config/eth/env';
 import { AbiItem } from 'web3-utils';
 
 declare const window: any;
