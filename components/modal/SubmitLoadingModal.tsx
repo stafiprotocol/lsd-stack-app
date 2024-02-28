@@ -35,7 +35,7 @@ export const SubmitLoadingModal = () => {
     return submitLoadingParams.msg
       ? submitLoadingParams.msg
       : submitLoadingParams.status === 'success'
-      ? `Creating LSD network successful`
+      ? `Creating LSD network successfully`
       : submitLoadingParams.status === 'error'
       ? 'Something went wrong, please try again'
       : 'Please wait for a moment';
