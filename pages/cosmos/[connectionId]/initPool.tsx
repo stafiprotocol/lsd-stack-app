@@ -14,6 +14,7 @@ import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { LsdToken } from 'gen/neutron';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
+import { usePrice } from 'hooks/usePrice';
 import { LsdTokenConfig } from 'interfaces/common';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -21,7 +22,11 @@ import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { cosmosInitPool } from 'redux/reducers/CosmosLsdSlice';
 import { RootState } from 'redux/store';
 import { openLink } from 'utils/commonUtils';
-import { getNeutronWasmClient, getStakeManagerClient } from 'utils/cosmosUtils';
+import {
+  getNeutronInitPoolFeeAmount,
+  getNeutronWasmClient,
+  getStakeManagerClient,
+} from 'utils/cosmosUtils';
 import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 import { formatDuration } from 'utils/timeUtils';
@@ -51,7 +56,9 @@ const InitPoolPage = () => {
     // 'cosmosvaloper1jke3a48tpnqlq6ck7eccm6qh5lppeq3ydqxk5p',
   ]);
   const [poolAddr, setPoolAddr] = useState('');
+  const [initFee, setInitFee] = useState<string>();
 
+  const { ntrnPrice } = usePrice();
   const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
 
   const { cosmosEcoLoading } = useAppSelector((state: RootState) => {
@@ -123,6 +130,18 @@ const InitPoolPage = () => {
       })
     );
   }, [dispatch]);
+
+  useEffect(() => {
+    (async () => {
+      // console.log({ ntrnPrice });
+      if (!ntrnPrice || isNaN(Number(ntrnPrice))) {
+        return;
+      }
+      const fundAmount = await getNeutronInitPoolFeeAmount();
+      const amount = chainAmountToHuman(fundAmount, 6);
+      setInitFee(ntrnPrice * (Number(amount) + 0.02) + '');
+    })();
+  }, [ntrnPrice]);
 
   const submit = async () => {
     if (!lsdTokenChainConfig) {
@@ -358,6 +377,33 @@ const InitPoolPage = () => {
                   />
                 ))}
               </div>
+
+              <TipBar
+                content={
+                  <div className="flex items-center">
+                    Note: Pool init has a
+                    <span className="text-text1 ml-[0.04rem]">
+                      non-refundable{' '}
+                    </span>
+                    <span className="mx-[.04rem]">
+                      {initFee ? (
+                        <>
+                          {formatNumber(initFee, {
+                            decimals: 2,
+                            fixedDecimals: false,
+                          })}
+                          U
+                        </>
+                      ) : (
+                        <DataLoading height=".14rem" width=".4rem" />
+                      )}
+                    </span>
+                    fee.
+                  </div>
+                }
+                link="https://www.google.com"
+                className="mt-[.36rem]"
+              />
 
               <div className="mt-[.57rem] mb-[.36rem] flex justify-between">
                 <CustomButton

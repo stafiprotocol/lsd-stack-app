@@ -106,3 +106,59 @@ export function getCosmosTxErrorMsg(response: any) {
   }
   return JSON.stringify(response.events);
 }
+
+export async function getNeutronInitPoolFeeAmount() {
+  let fundAmount = 0;
+
+  const fundResponse = await fetch(
+    'https://rest-falcron.pion-1.ntrn.tech/neutron/interchainqueries/params',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  const fundResponseJson = await fundResponse.json();
+  if (
+    fundResponseJson.params.query_deposit &&
+    fundResponseJson.params.query_deposit.length > 0
+  ) {
+    const depositFee = fundResponseJson.params.query_deposit[0];
+    fundAmount += Number(depositFee.amount) * 4;
+  }
+
+  const refundResponse = await fetch(
+    'https://rest-falcron.pion-1.ntrn.tech/neutron-org/neutron/feerefunder/params',
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  const refundResponseJson = await refundResponse.json();
+  if (
+    refundResponseJson.params.min_fee.recv_fee &&
+    refundResponseJson.params.min_fee.recv_fee.length > 0
+  ) {
+    const recvFee = refundResponseJson.params.min_fee.recv_fee[0];
+    fundAmount += Number(recvFee.amount);
+  }
+  if (
+    refundResponseJson.params.min_fee.ack_fee &&
+    refundResponseJson.params.min_fee.ack_fee.length > 0
+  ) {
+    const ackFee = refundResponseJson.params.min_fee.ack_fee[0];
+    fundAmount += Number(ackFee.amount);
+  }
+  if (
+    refundResponseJson.params.min_fee.timeout_fee &&
+    refundResponseJson.params.min_fee.timeout_fee.length > 0
+  ) {
+    const timeoutFee = refundResponseJson.params.min_fee.timeout_fee[0];
+    fundAmount += Number(timeoutFee.amount);
+  }
+
+  return fundAmount;
+}
