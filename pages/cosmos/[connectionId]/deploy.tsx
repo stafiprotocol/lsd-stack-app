@@ -43,7 +43,7 @@ const DeployPage = () => {
     dispatch(
       setCreationStepInfo({
         steps: COSMOS_CREATION_STEPS,
-        activedIndex: 4,
+        activedIndex: 3,
       })
     );
   }, [dispatch]);
@@ -114,7 +114,7 @@ const DeployPage = () => {
                     'text-color-text1'
                   )}
                 >
-                  rATOM Is Ready Now!
+                  {lsdTokenSymbol} Is Ready Now!
                 </span>{' '}
                 Now you can{' '}
                 <span className={'text-color-text1'}>
@@ -151,12 +151,10 @@ const DeployPage = () => {
                   'mt-[.3rem] text-[.14rem] text-text1 flex items-center'
                 )}
               >
-                <div className="mr-[.06rem]">Owner Address:</div>
+                <div className="mr-[.06rem] min-w-[1.1rem]">Owner Address:</div>
 
                 {adminAddress ? (
-                  <span className={'text-text2'}>
-                    {getShortAddress(adminAddress, 20)}
-                  </span>
+                  <span className={'text-text2'}>{adminAddress}</span>
                 ) : (
                   <DataLoading height=".14rem" width="1rem" />
                 )}
@@ -167,10 +165,12 @@ const DeployPage = () => {
                   'mt-[.24rem] text-[.14rem] text-text1 flex'
                 )}
               >
-                <div className="mr-[.06rem]">Stake Manager Contract:</div>
+                <div className="mr-[.06rem] min-w-[1.7rem]">
+                  Stake Manager Contract:
+                </div>
 
-                <span className={'text-text2'}>
-                  {getShortAddress(getNeutronStakeManagerContract(), 20)}
+                <span className={'text-text2 break-all'}>
+                  {getNeutronStakeManagerContract()}
                 </span>
               </div>
 
@@ -179,11 +179,13 @@ const DeployPage = () => {
                   'mt-[.24rem] text-[.14rem] text-text1 flex'
                 )}
               >
-                <div className="mr-[.06rem]">Lsd Token Contract:</div>
+                <div className="mr-[.06rem]  min-w-[1.4rem]">
+                  Lsd Token Contract:
+                </div>
 
                 {lsdTokenAddress ? (
-                  <span className={'text-text2'}>
-                    {getShortAddress(lsdTokenAddress, 20)}
+                  <span className={'text-text2 break-all'}>
+                    {lsdTokenAddress}
                   </span>
                 ) : (
                   <DataLoading height=".14rem" width="1rem" />
@@ -218,31 +220,49 @@ const DeployPage = () => {
                 )}
               </div>
 
-              {validatorAddrs.map((addr, index) => (
+              <div
+                className={classNames(
+                  'mt-[.24rem] text-[.14rem] text-text1 flex'
+                )}
+              >
+                <div className="mr-[.06rem] min-w-[1.4rem]">
+                  Validator Addresses:
+                </div>
+
+                <div>
+                  {validatorAddrs.map((addr, index) => (
+                    <div key={index} className="text-text2 break-all">
+                      {addr}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* {validatorAddrs.map((addr, index) => (
                 <div
                   key={index}
                   className={classNames(
                     'mt-[.24rem] text-[.14rem] text-text1 flex'
                   )}
                 >
-                  <div className="mr-[.06rem]">Validator{index + 1}:</div>
+                  <div className="mr-[.06rem]">
+                    Validator Address{index + 1}:
+                  </div>
                   <span className={'text-text2'}>
                     {getShortAddress(addr, 20)}
                   </span>
                 </div>
-              ))}
+              ))} */}
 
               <div
                 className={classNames(
                   'mt-[.24rem] text-[.14rem] text-text1 flex'
                 )}
               >
-                <div className="mr-[.06rem]">Fee Receiver:</div>
+                <div className="mr-[.06rem] min-w-[1rem]">Fee Receiver:</div>
 
                 {feeReceiver ? (
-                  <span className={'text-text2'}>
-                    {getShortAddress(feeReceiver, 20)}
-                  </span>
+                  <span className={'text-text2 break-all'}>{feeReceiver}</span>
                 ) : (
                   <DataLoading height=".14rem" width="1rem" />
                 )}
@@ -332,6 +352,12 @@ const DeployPage = () => {
                 height=".56rem"
                 width="2.62rem"
                 onClick={() => {
+                  dispatch(
+                    setCreationStepInfo({
+                      steps: COSMOS_CREATION_STEPS,
+                      activedIndex: 4,
+                    })
+                  );
                   setShowFollowingPage(true);
                 }}
               >
