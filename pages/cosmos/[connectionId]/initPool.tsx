@@ -188,9 +188,9 @@ const InitPoolPage = () => {
                 className="mt-[.16rem]"
               />
 
-              {Number(feeCommision) >= 100 && (
+              {Number(feeCommision) > 100 && (
                 <div className="my-[.16rem] text-[.16rem] text-error">
-                  Fee Commission must be {'<'}100
+                  Fee Commission must be {'<='}100
                 </div>
               )}
 
@@ -295,7 +295,7 @@ const InitPoolPage = () => {
                     !lsdTokenSymbol ||
                     Number(validatorAddrAmount) < 1 ||
                     Number(validatorAddrAmount) > 10 ||
-                    Number(feeCommision) >= 100
+                    Number(feeCommision) > 100
                   }
                   onClick={() => {
                     if (
