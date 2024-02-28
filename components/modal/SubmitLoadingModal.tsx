@@ -107,13 +107,12 @@ export const SubmitLoadingModal = () => {
               'mx-[.36rem] mt-[.2rem] mb-[.32rem] leading-tight text-center text-[.16rem] text-color-text2'
             )}
             style={{
-              maxLines: 3,
-              WebkitLineClamp: 3,
-              lineClamp: 3,
+              WebkitLineClamp: 5,
+              lineClamp: 5,
               overflow: 'hidden',
-              textOverflow: 'ellipsis',
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',
+              wordBreak: 'break-word',
             }}
           >
             {description}

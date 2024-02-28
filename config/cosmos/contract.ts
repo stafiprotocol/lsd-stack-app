@@ -5,7 +5,7 @@ import appProdConfig from "./prod.json";
 /**
  * get neutron stakeManager contract address
  */
-export function getStakeManagerContract() {
+export function getNeutronStakeManagerContract() {
   if (isDev()) {
     return appDevConfig.stakeManagerContract;
   }
@@ -15,7 +15,7 @@ export function getStakeManagerContract() {
 /**
  * get neutron poolAddress
  */
-export function getPoolAddress() {
+export function getNeutronPoolAddress() {
   if (isDev()) {
     return appDevConfig.poolAddress;
   }

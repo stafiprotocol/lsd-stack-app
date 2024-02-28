@@ -5,16 +5,16 @@ export function formatNumber(
     fixedDecimals?: boolean;
     withSplit?: boolean;
     toReadable?: boolean;
-    roundMode?: "round" | "floor" | "ceil";
+    roundMode?: 'round' | 'floor' | 'ceil';
     prefix?: string;
     hideDecimalsForZero?: boolean;
   } = {}
 ) {
-  if (num === undefined || num === "") {
-    return "--";
+  if (num === undefined || num === '') {
+    return '--';
   }
   if (isNaN(Number(num))) {
-    return "--";
+    return '--';
   }
 
   let decimals = options.decimals === undefined ? 6 : options.decimals;
@@ -23,57 +23,57 @@ export function formatNumber(
     options.fixedDecimals === undefined ? true : options.fixedDecimals;
   const toReadable =
     options.toReadable === undefined ? true : options.toReadable;
-  const roundMode = options.roundMode || "floor";
+  const roundMode = options.roundMode || 'floor';
   const hideDecimalsForZero = !!options.hideDecimalsForZero;
-  let suffix = "";
+  let suffix = '';
 
   if (hideDecimalsForZero && Number(num) === 0) {
-    return "0";
+    return '0';
   }
 
-  let newNum = "0";
+  let newNum = '0';
   if (toReadable && Number(num) >= 1000000000) {
-    newNum = Number(num) / 1000000000 + "";
-    suffix = "B";
+    newNum = Number(num) / 1000000000 + '';
+    suffix = 'B';
     decimals = 3;
   } else if (toReadable && Number(num) >= 1000000) {
-    newNum = Number(num) / 1000000 + "";
-    suffix = "M";
+    newNum = Number(num) / 1000000 + '';
+    suffix = 'M';
     decimals = 3;
   } else if (toReadable && Number(num) >= 1000) {
-    newNum = Number(num) / 1000 + "";
-    suffix = "K";
+    newNum = Number(num) / 1000 + '';
+    suffix = 'K';
     decimals = 3;
   } else {
-    newNum = num + "";
+    newNum = num + '';
   }
 
   const roundMethod =
-    roundMode === "floor"
+    roundMode === 'floor'
       ? Math.floor
-      : roundMode === "ceil"
+      : roundMode === 'ceil'
       ? Math.ceil
       : Math.round;
 
   newNum =
     roundMethod(Number(newNum) * Math.pow(10, decimals)) /
       Math.pow(10, decimals) +
-    "";
+    '';
 
   if (fixedDecimals) {
     newNum = Number(newNum).toFixed(decimals);
   }
 
   if (Number(newNum) === 0 && Number(num) > 0) {
-    newNum = `<${options.prefix || ""}${1.0 / Math.pow(10, decimals)}`;
+    newNum = `<${options.prefix || ''}${1.0 / Math.pow(10, decimals)}`;
   } else {
-    newNum = (options.prefix || "") + newNum;
+    newNum = (options.prefix || '') + newNum;
   }
 
   if (withSplit) {
-    var parts = newNum.split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    newNum = parts.join(".") + suffix;
+    var parts = newNum.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    newNum = parts.join('.') + suffix;
   } else {
     newNum = newNum + suffix;
   }
@@ -88,11 +88,46 @@ export function formatLargeAmount(amount: string | number) {
   return formatNumber(amount, { decimals: 4 });
 }
 
-export function chainAmountToHuman(num: string | number) {
-  if (num === "" || num === undefined || num === null || isNaN(Number(num))) {
-    return "--";
+export function chainAmountToHuman(
+  num: string | number | undefined,
+  decimals?: number
+) {
+  if (num === '' || num === undefined || num === null || isNaN(Number(num))) {
+    return '--';
   }
-  const factor = "1000000000000000000";
+  const factor = decimals ? Math.pow(10, decimals) + '' : '1000000000000000000';
 
-  return Number(num) / Number(factor) + "";
+  return Number(num) / Number(factor) + '';
+}
+
+export function amountToChain(
+  input: string | number | undefined,
+  decimals: number = 6
+): string {
+  if (isNaN(Number(input)) || input === undefined) {
+    return '--';
+  }
+  let factor = Math.pow(10, decimals) + '';
+
+  const multiplyRes = Number(input) * 1000000 * (Number(factor) / 1000000);
+  const res = formatScientificNumber(multiplyRes);
+  return res;
+}
+
+function formatScientificNumber(x: any): string {
+  if (Math.abs(x) < 1.0) {
+    var e = parseInt(x.toString().split('e-')[1]);
+    if (e) {
+      x *= Math.pow(10, e - 1);
+      x = '0.' + new Array(e).join('0') + x.toString().substring(2);
+    }
+  } else {
+    var e = parseInt(x.toString().split('+')[1]);
+    if (e > 20) {
+      e -= 20;
+      x /= Math.pow(10, e);
+      x += new Array(e + 1).join('0');
+    }
+  }
+  return x.toString();
 }

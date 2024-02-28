@@ -1,19 +1,16 @@
 import classNames from 'classnames';
-import Image from 'next/image';
-import ExternalLinkImg from 'public/images/external_link.svg';
-import { RelayType } from 'components/lsd/RelayType';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { TipBar } from 'components/common/TipBar';
-import { useAppDispatch, useAppSelector } from 'hooks/common';
-import { setAppEco, setCreationStepInfo } from 'redux/reducers/AppSlice';
+import { RelayType } from 'components/lsd/RelayType';
 import {
   ETH_CUSTOMIZE_CREATION_STEPS,
   ETH_STANDARD_CREATION_STEPS,
 } from 'constants/common';
-import { AppBar } from '@mui/material';
-import Navbar from 'components/layout/Navbar';
-import { AppEco } from 'interfaces/common';
+import { useAppDispatch, useAppSelector } from 'hooks/common';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import ExternalLinkImg from 'public/images/external_link.svg';
+import { useEffect, useState } from 'react';
+import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 
 const EthPage = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +24,7 @@ const EthPage = () => {
     dispatch(
       setCreationStepInfo({
         steps: ETH_CUSTOMIZE_CREATION_STEPS,
-        activedIndex: 1,
+        activedIndex: 2,
       })
     );
     setRelayType('Customize');
@@ -40,11 +37,10 @@ const EthPage = () => {
   }, [creationStepInfo]);
 
   useEffect(() => {
-    dispatch(setAppEco(AppEco.Eth));
     dispatch(
       setCreationStepInfo({
         steps: ETH_STANDARD_CREATION_STEPS,
-        activedIndex: 0,
+        activedIndex: 1,
       })
     );
   }, [dispatch]);

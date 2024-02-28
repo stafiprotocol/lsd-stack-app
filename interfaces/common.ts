@@ -46,3 +46,15 @@ export interface CosmosChainConfig {
   gasLimit?: string;
   stakeIbcChannel?: string;
 }
+
+export interface LsdTokenConfig {
+  displayName: string;
+  connectionId: string;
+  defaultFeeCommission: number;
+  lsdTokenCodeId: string;
+  channelIdOfIbcDenom: string;
+  ibcDenom: string;
+  remoteDenom: string;
+  bech32PrefixValAddr: string;
+  icon: string;
+}

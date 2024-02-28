@@ -38,7 +38,7 @@ const Step = ({ actived, label, index }: StepProps) => {
           actived ? 'bg-stepActived text-text1' : 'bg-stepInactived text-text2'
         )}
       >
-        {index + 1}
+        {index}
       </div>
 
       <div

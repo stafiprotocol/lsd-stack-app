@@ -6,13 +6,17 @@ import { robotoBold } from 'config/font';
 
 interface Props {
   label: string;
-  value: string;
+  value: string | undefined;
   onChange: (v: string) => void;
   placeholder: string;
   disabled?: boolean;
   isNumber?: boolean;
+  showAddMinusButton?: boolean;
   min?: number;
+  max?: number;
   className?: string;
+  suffix?: string;
+  isInteger?: boolean;
 }
 
 export const InputItem = ({
@@ -22,7 +26,12 @@ export const InputItem = ({
   placeholder,
   disabled,
   isNumber,
+  showAddMinusButton,
   className,
+  suffix,
+  min,
+  max,
+  isInteger,
 }: Props) => {
   const onChangeValue = (v: string) => {
     if (isNumber) {
@@ -32,6 +41,9 @@ export const InputItem = ({
   };
 
   const onAddNum = () => {
+    if (Number(value) + 1 > Number(max)) {
+      return;
+    }
     if (isNaN(Number(value))) {
       onChange('1');
     } else {
@@ -40,6 +52,9 @@ export const InputItem = ({
   };
 
   const onMinusNum = () => {
+    if (Number(value) - 1 < Number(min)) {
+      return;
+    }
     if (isNaN(Number(value)) || Number(value) === 0) {
       onChange('0');
     } else {
@@ -66,7 +81,31 @@ export const InputItem = ({
       <div className="w-[4.23rem] h-[.5rem] relative">
         <input
           value={value}
-          onChange={(e) => onChangeValue(e.target.value)}
+          onChange={(e) => {
+            let value = e.target.value;
+            if (isInteger) {
+              value = value.replace(/[^\d]/g, '');
+              // value = value.replace(/^\./g, "");
+              value = value.replace(/\.{2,}/g, '.');
+              value = value
+                .replace('.', '$#$')
+                .replace(/\./g, '')
+                .replace('$#$', '.');
+              const regexTemplate = /^(-)*(\d*)\.*$/;
+              value = value.replace(regexTemplate, '$1$2');
+            } else if (isNumber) {
+              value = value.replace(/[^\d.]/g, '');
+              // value = value.replace(/^\./g, "");
+              value = value.replace(/\.{2,}/g, '.');
+              value = value
+                .replace('.', '$#$')
+                .replace(/\./g, '')
+                .replace('$#$', '.');
+              const regexTemplate = /^(-)*(\d*)\.(\d\d\d\d\d\d).*$/;
+              value = value.replace(regexTemplate, '$1$2.$3');
+            }
+            onChangeValue(value);
+          }}
           placeholder={placeholder}
           disabled={!!disabled}
           className={classNames(
@@ -76,24 +115,46 @@ export const InputItem = ({
               : 'border-[#6C86AD4D] bg-transparent border-solid border-[.01rem]'
           )}
         />
-        {isNumber && (
+
+        {showAddMinusButton && (
           <div className="absolute top-[.06rem] right-[.2rem] flex flex-col items-center gap-[.04rem] z-10">
             <div
               className="w-[.16rem] h-[.16rem] rounded-[.04rem] cursor-pointer bg-divider2 flex justify-center items-center"
               onClick={onAddNum}
             >
-              <div className="relative w-[.1rem] h-[.08rem]">
+              <div
+                className={classNames(
+                  'relative w-[.1rem] h-[.08rem]',
+                  max !== undefined && Number(value) + 1 > Number(max)
+                    ? 'opacity-50'
+                    : ''
+                )}
+              >
                 <Image src={NumArrowUpImg} alt="add" layout="fill" />
               </div>
             </div>
+
             <div
               className="w-[.16rem] h-[.16rem] rounded-[.04rem] cursor-pointer bg-divider2 flex justify-center items-center"
               onClick={onMinusNum}
             >
-              <div className="relative w-[.1rem] h-[.08rem]">
+              <div
+                className={classNames(
+                  'relative w-[.1rem] h-[.08rem]',
+                  min !== undefined && Number(value) - 1 < Number(min)
+                    ? 'opacity-50'
+                    : ''
+                )}
+              >
                 <Image src={NumArrowDownImg} alt="minus" layout="fill" />
               </div>
             </div>
+          </div>
+        )}
+
+        {suffix && (
+          <div className="absolute top-[.18rem] right-[.2rem] flex flex-col items-center gap-[.04rem] z-10">
+            {suffix}
           </div>
         )}
       </div>

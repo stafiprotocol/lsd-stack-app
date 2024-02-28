@@ -11,10 +11,13 @@ import Image from 'next/image';
 import LogoImg from 'public/images/logo_text.svg';
 import RelayTypeImg from 'public/images/relay_type.svg';
 import EcoEthImg from 'public/images/eco/eth.svg';
+import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import { AppEco } from 'interfaces/common';
 import { useRouter } from 'next/router';
+import { useAppSelector } from 'hooks/common';
+import { RootState } from 'redux/store';
 
 const HomePage = () => {
   return (
@@ -109,16 +112,15 @@ const EcoSelector = () => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Cosmos, AppEco.Polkadot, AppEco.Others].map(
-          (eco) => (
-            <div key={eco}>
-              <EcoItem eco={eco} />
-              {eco !== AppEco.Others && (
-                <div className="bg-[#E8EFFD0D] h-[.01rem]" />
-              )}
-            </div>
-          )
-        )}
+        {[AppEco.Eth, AppEco.Cosmos].map((eco) => (
+          <div key={eco}>
+            <EcoItem eco={eco} />
+
+            {eco !== AppEco.Others && (
+              <div className="bg-[#E8EFFD0D] h-[.01rem]" />
+            )}
+          </div>
+        ))}
       </Popover>
     </div>
   );
@@ -130,6 +132,11 @@ interface EcoItemProps {
 
 const EcoItem = ({ eco }: EcoItemProps) => {
   const router = useRouter();
+  const { appEco } = useAppSelector((state: RootState) => {
+    return {
+      appEco: state.app.appEco,
+    };
+  });
 
   return (
     <div
@@ -137,14 +144,24 @@ const EcoItem = ({ eco }: EcoItemProps) => {
       onClick={() => router.push(eco.toLowerCase())}
     >
       <div className="relative w-[.28rem] h-[.28rem]">
-        <Image src={EcoEthImg} fill alt="eth" />
+        <Image
+          src={eco === AppEco.Cosmos ? EcoCosmosImg : EcoEthImg}
+          fill
+          alt="eth"
+        />
       </div>
 
       <div className="ml-[.12rem] text-[.16rem] text-white">{eco}</div>
 
-      <div className="relative w-[.18rem] h-[.18rem] ml-auto mr-[.05rem]">
-        <Image src={EcoUnselectedImg} fill alt="check" />
-      </div>
+      {appEco === eco ? (
+        <div className="relative w-[.18rem] h-[.18rem] ml-auto mr-[.05rem]">
+          <Image src={EcoSelectedImg} fill alt="check" />
+        </div>
+      ) : (
+        <div className="relative w-[.18rem] h-[.18rem] ml-auto mr-[.05rem]">
+          <Image src={EcoUnselectedImg} fill alt="check" />
+        </div>
+      )}
     </div>
   );
 };

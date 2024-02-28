@@ -54,6 +54,7 @@ const Navbar = () => {
   }, [appEco, neutronChainAccount, address]);
 
   const backToHome = () => {
+    router.replace('/');
     dispatch(setBackRoute(''));
     dispatch(
       setCreationStepInfo({
@@ -61,7 +62,6 @@ const Navbar = () => {
         activedIndex: 0,
       })
     );
-    router.replace('/');
   };
 
   return (
@@ -133,7 +133,7 @@ const Navbar = () => {
             ) : (
               <div>
                 Current liquid staking supports chains like ATOM and SWTH
-                (Neutron contracts, ICA needed). We'll add native contract
+                (Neutron contracts, ICA needed). We&apos;ll add native contract
                 support for chains like SEI and INJ (Cosmwasm) in the future.
                 Please check the{' '}
                 <a href="" target="_blank" className="underline text-text1">
@@ -230,7 +230,7 @@ const UserInfo = () => {
         <div
           className={classNames('ml-[.08rem] text-[.16rem] text-color-text1')}
         >
-          {/* {getTitle()} */}
+          {getTitle()}
         </div>
 
         {/* <div className="ml-[.12rem]">

@@ -1,19 +1,19 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { metaMask } from "connectors/metaMask";
-import snackbarUtil from "utils/snackbarUtils";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AddEthereumChainParameter } from '@web3-react/types';
+import { neutronChainConfig } from 'config/cosmos/chain';
+import { metaMask } from 'connectors/metaMask';
+import { KEPLR_NOT_INSTALLED_MESSAGE } from 'constants/common';
+import { AppEco, CosmosAccountMap, CosmosChainConfig } from 'interfaces/common';
+import { isKeplrInstalled } from 'utils/commonUtils';
+import { _connectKeplr } from 'utils/cosmosUtils';
+import snackbarUtil from 'utils/snackbarUtils';
 import {
   STORAGE_KEY_DISCONNECT_METAMASK,
   clearCosmosNetworkAllowedFlag,
   isCosmosNetworkAllowed,
   saveStorage,
-} from "utils/storageUtils";
-import { AppThunk } from "../store";
-import { AddEthereumChainParameter } from "@web3-react/types";
-import { AppEco, CosmosAccountMap, CosmosChainConfig } from "interfaces/common";
-import { lsdTokenChainConfigs, neutronChainConfig } from "config/cosmos/chain";
-import { KEPLR_NOT_INSTALLED_MESSAGE } from "constants/common";
-import { isKeplrInstalled } from "utils/commonUtils";
-import { _connectKeplr } from "utils/cosmosUtils";
+} from 'utils/storageUtils';
+import { AppThunk } from '../store';
 
 export interface WalletState {
   metaMaskAccount: string | undefined;
@@ -30,7 +30,7 @@ const initialState: WalletState = {
 };
 
 export const walletSlice = createSlice({
-  name: "wallet",
+  name: 'wallet',
   initialState,
   reducers: {
     setMetaMaskAccount: (
@@ -49,7 +49,7 @@ export const walletSlice = createSlice({
       state: WalletState,
       action: PayloadAction<boolean>
     ) => {
-      saveStorage(STORAGE_KEY_DISCONNECT_METAMASK, action.payload ? "1" : "");
+      saveStorage(STORAGE_KEY_DISCONNECT_METAMASK, action.payload ? '1' : '');
       state.metaMaskDisconnected = action.payload;
     },
     setCosmosAccounts: (
@@ -117,11 +117,6 @@ export const autoConnectKeplrChains =
     if (isCosmosNetworkAllowed(neutronChainConfig.chainId)) {
       allowedChains.push(neutronChainConfig);
     }
-    lsdTokenChainConfigs.forEach((item) => {
-      if (isCosmosNetworkAllowed(item.chainId)) {
-        allowedChains.push(item);
-      }
-    });
 
     if (allowedChains.length === 0) {
       return;

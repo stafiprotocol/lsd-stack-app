@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { NavigationItem } from 'interfaces/common';
-import Head from 'next/head';
 import { AppBar } from '@mui/material';
-import dynamic from 'next/dynamic';
-import { useInit } from 'hooks/useInit';
 import classNames from 'classnames';
-import { roboto } from 'config/font';
 import { SubmitLoadingModal } from 'components/modal/SubmitLoadingModal';
-import { useAccount } from 'wagmi';
+import { roboto } from 'config/font';
 import { useAppDispatch } from 'hooks/common';
+import { useInit } from 'hooks/useInit';
+import { AppEco, NavigationItem } from 'interfaces/common';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { setAppEco } from 'redux/reducers/AppSlice';
 import {
   setMetaMaskAccount,
   setMetaMaskChainId,
 } from 'redux/reducers/WalletSlice';
-import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 
 const Navbar = dynamic(() => import('./Navbar'), { ssr: false });
 
@@ -43,6 +44,17 @@ export const Layout = (props: React.PropsWithChildren) => {
       dispatch(setMetaMaskChainId(chainId + ''));
     }
   }, [address, dispatch, chainId]);
+
+  useEffect(() => {
+    if (router.pathname === '/') {
+      return;
+    }
+    if (router.pathname.includes('cosmos')) {
+      dispatch(setAppEco(AppEco.Cosmos));
+    } else {
+      dispatch(setAppEco(AppEco.Eth));
+    }
+  }, [router, dispatch]);
 
   return (
     <MyLayoutContext.Provider

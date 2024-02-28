@@ -1,4 +1,4 @@
-import { KEPLR_ERROR_REJECT } from "constants/common";
+import { KEPLR_ERROR_REJECT } from 'constants/common';
 
 /**
  * open link in new tab
@@ -22,3 +22,7 @@ export const isKeplrCancelError = (err: any) => {
 export const isKeplrInstalled = () => {
   return (window as any).getOfflineSignerAuto && (window as any).keplr;
 };
+
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
