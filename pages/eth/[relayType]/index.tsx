@@ -5,6 +5,7 @@ import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
+import { getDocHost } from 'config/common';
 import { getEthereumChainId } from 'config/eth/env';
 import { useAppDispatch } from 'hooks/common';
 import Image from 'next/image';
@@ -187,7 +188,7 @@ const ParameterPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#rewards-distribution"
+                  link={`${getDocHost()}/docs/developethlsd/deploy.html#rewards-distribution`}
                 />
               </div>
 
@@ -218,7 +219,7 @@ const ParameterPage = () => {
 
           <FaqCard
             title="Parameter Tips"
-            link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#parameter-tips"
+            link={`${getDocHost()}/docs/developethlsd/deploy.html#parameter-tips`}
           >
             <>
               Owner Address: sets the owner of the LSD network being created.

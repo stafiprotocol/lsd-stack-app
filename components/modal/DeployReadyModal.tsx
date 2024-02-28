@@ -1,5 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { getDocHost } from 'config/common';
 import Image from 'next/image';
 import CloseImg from 'public/images/close_white.svg';
 import ReadyBgImg from 'public/images/ready_bg.svg';
@@ -84,9 +85,7 @@ export const DeployReadyModal = ({
             width="1.75rem"
             height=".46rem"
             onClick={() =>
-              openLink(
-                'https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/ethlsdapp.html'
-              )
+              openLink(`${getDocHost()}/docs/developethlsd/ethlsdapp.html`)
             }
             border="none"
             trRaidus="0"

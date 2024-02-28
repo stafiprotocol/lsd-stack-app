@@ -1,12 +1,17 @@
 import { checkAddress } from '@stafihub/apps-wallet';
+import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
+import { DataLoading } from 'components/common/DataLoading';
 import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { CosmosSubmitConfirmModal } from 'components/modal/CosmosSubmitConfirmModal';
+import { getDocHost } from 'config/common';
 import { lsdTokenConfigs, neutronChainConfig } from 'config/cosmos/chain';
+import { getNeutronStakeManagerContract } from 'config/cosmos/contract';
 import { COSMOS_CREATION_STEPS } from 'constants/common';
+import { LsdToken } from 'gen/neutron';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { LsdTokenConfig } from 'interfaces/common';
@@ -15,8 +20,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { cosmosInitPool } from 'redux/reducers/CosmosLsdSlice';
 import { RootState } from 'redux/store';
-import { chainAmountToHuman } from 'utils/numberUtils';
+import { openLink } from 'utils/commonUtils';
+import { getNeutronWasmClient, getStakeManagerClient } from 'utils/cosmosUtils';
+import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
+import { formatDuration } from 'utils/timeUtils';
 
 const InitPoolPage = () => {
   const dispatch = useAppDispatch();
@@ -31,6 +39,7 @@ const InitPoolPage = () => {
     // 'neutron1gn54y6lmkhchan2cy9fxzt8v6j6crq6huays6m'
   );
   const [showValidatorPage, setShowValidatorPage] = useState(false);
+  const [showReviewPage, setShowReviewPage] = useState(false);
   const [feeCommision, setFeeCommision] = useState('');
   const [minimalStake, setMinimalStake] = useState('');
   const [lsdTokenCodeId, setLsdTokenCodeId] = useState('');
@@ -41,6 +50,7 @@ const InitPoolPage = () => {
     '',
     // 'cosmosvaloper1jke3a48tpnqlq6ck7eccm6qh5lppeq3ydqxk5p',
   ]);
+  const [poolAddr, setPoolAddr] = useState('');
 
   const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
 
@@ -132,14 +142,8 @@ const InitPoolPage = () => {
         lsdTokenChainConfig,
         (poolAddr) => {
           if (poolAddr) {
-            router.push({
-              pathname: '/cosmos/[connectionId]/deploy',
-              query: {
-                ...router.query,
-                connectionId: lsdTokenChainConfig?.connectionId,
-                poolAddr: poolAddr,
-              },
-            });
+            setShowReviewPage(true);
+            setPoolAddr(poolAddr);
           }
         }
       )
@@ -149,7 +153,12 @@ const InitPoolPage = () => {
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto pb-[1rem]">
       <div className="flex justify-center mt-[.42rem]">
-        {!showValidatorPage ? (
+        {showReviewPage ? (
+          <ReviewPage
+            poolAddr={poolAddr}
+            connectionId={lsdTokenChainConfig?.connectionId}
+          />
+        ) : !showValidatorPage ? (
           <FormCard title="Set Parameters">
             <>
               <InputItem
@@ -443,4 +452,261 @@ const InitPoolPage = () => {
 
 export default InitPoolPage;
 
-const ValidatorSet = () => {};
+const ReviewPage = (props: { poolAddr: string; connectionId?: string }) => {
+  const { poolAddr, connectionId } = props;
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const [adminAddress, setAdminAddress] = useState('');
+  const [lsdTokenAddress, setLsdTokenAddress] = useState('');
+  const [feeCommision, setFeeCommision] = useState('');
+  const [feeReceiver, setFeeReceiver] = useState('');
+  const [minimalStake, setMinimalStake] = useState('');
+  const [lsdTokenName, setLsdTokenName] = useState('');
+  const [lsdTokenSymbol, setLsdTokenSymbol] = useState('');
+  const [validatorAddrs, setValidatorAddrs] = useState<string[]>([]);
+  const [eraSeconds, setEraSeconds] = useState('');
+  const [unbondingPeriod, setUnbondingPeriod] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const stakeManagerClient = await getStakeManagerClient();
+      const poolInfo = await stakeManagerClient.queryPoolInfo({
+        pool_addr: poolAddr,
+      });
+
+      console.log({ poolInfo });
+
+      if (poolInfo) {
+        setFeeCommision(
+          chainAmountToHuman(poolInfo.platform_fee_commission, 4)
+        );
+        setFeeReceiver(poolInfo.platform_fee_receiver);
+        setAdminAddress(poolInfo.admin);
+        setValidatorAddrs(poolInfo.validator_addrs);
+        setMinimalStake(chainAmountToHuman(poolInfo.minimal_stake, 6));
+        setEraSeconds(poolInfo.era_seconds + '');
+        setUnbondingPeriod(poolInfo.unbonding_period + '');
+        setLsdTokenAddress(poolInfo.lsd_token);
+      }
+
+      const wasmClient = await getNeutronWasmClient();
+      const lsdTokenClient = new LsdToken.Client(
+        wasmClient,
+        poolInfo.lsd_token
+      );
+      const tokenInfo = await lsdTokenClient.queryTokenInfo();
+      console.log({ tokenInfo });
+      if (tokenInfo) {
+        setLsdTokenName(tokenInfo.name);
+        setLsdTokenSymbol(tokenInfo.symbol);
+      }
+    })();
+  }, [poolAddr]);
+
+  return (
+    <FormCard title="Review & Deploy Config">
+      <TipBar
+        isWarning
+        content={<div>Please back up the following information</div>}
+        link={`${getDocHost()}/docs/developethlsd/deploy.html#save-all-the-information-generated`}
+        className="mt-[.16rem]"
+      />
+
+      <div className="h-[4.5rem] overflow-auto max-h-[4.5rem]">
+        <div
+          className={classNames(
+            'mt-[.3rem] text-[.14rem] text-text1 flex items-center'
+          )}
+        >
+          <div className="mr-[.06rem] min-w-[1.1rem]">Owner Address:</div>
+
+          {adminAddress ? (
+            <span className={'text-text2'}>{adminAddress}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem] min-w-[1.7rem]">
+            Stake Manager Contract:
+          </div>
+
+          <span className={'text-text2 break-all'}>
+            {getNeutronStakeManagerContract()}
+          </span>
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]  min-w-[1.4rem]">Lsd Token Contract:</div>
+
+          {lsdTokenAddress ? (
+            <span className={'text-text2 break-all'}>{lsdTokenAddress}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]">Lsd Token Name:</div>
+
+          {lsdTokenName ? (
+            <span className={'text-text2'}>{lsdTokenName}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]">Lsd Token Symbol:</div>
+
+          {lsdTokenSymbol ? (
+            <span className={'text-text2'}>{lsdTokenSymbol}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem] min-w-[1.4rem]">Validator Addresses:</div>
+
+          <div>
+            {validatorAddrs.map((addr, index) => (
+              <div key={index} className="text-text2 break-all">
+                {addr}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* {validatorAddrs.map((addr, index) => (
+      <div
+        key={index}
+        className={classNames(
+          'mt-[.24rem] text-[.14rem] text-text1 flex'
+        )}
+      >
+        <div className="mr-[.06rem]">
+          Validator Address{index + 1}:
+        </div>
+        <span className={'text-text2'}>
+          {getShortAddress(addr, 20)}
+        </span>
+      </div>
+    ))} */}
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem] min-w-[1rem]">Fee Receiver:</div>
+
+          {feeReceiver ? (
+            <span className={'text-text2 break-all'}>{feeReceiver}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]">Fee Commission:</div>
+
+          {feeCommision ? (
+            <span className={'text-text2'}>{feeCommision}%</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]">Minimal Stake Amount:</div>
+
+          {minimalStake ? (
+            <span className={'text-text2'}>
+              {formatNumber(minimalStake, { fixedDecimals: false })}
+            </span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]">Era Period:</div>
+
+          {eraSeconds ? (
+            <span className={'text-text2'}>
+              {formatNumber(Number(eraSeconds) / (60 * 60), {
+                fixedDecimals: false,
+                decimals: 2,
+              })}{' '}
+              Hours
+            </span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames('mt-[.24rem] text-[.14rem] text-text1 flex')}
+        >
+          <div className="mr-[.06rem]">Unbonding Period:</div>
+
+          {eraSeconds ? (
+            <span className={'text-text2'}>
+              {formatDuration(
+                Number(eraSeconds) * Number(unbondingPeriod) * 1000
+              )}
+            </span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+      </div>
+
+      <div className="mt-[.36rem] flex justify-between mb-[.36rem]">
+        <CustomButton
+          type="stroke"
+          height=".56rem"
+          onClick={() => openLink('https://www.google.com')}
+          width="2.62rem"
+        >
+          Re-edit Params
+        </CustomButton>
+
+        <CustomButton
+          type="primary"
+          height=".56rem"
+          width="2.62rem"
+          onClick={() => {
+            router.push({
+              pathname: '/cosmos/[connectionId]/deploy',
+              query: {
+                ...router.query,
+                connectionId: connectionId,
+                poolAddr: poolAddr,
+              },
+            });
+          }}
+        >
+          Confirm
+        </CustomButton>
+      </div>
+    </FormCard>
+  );
+};

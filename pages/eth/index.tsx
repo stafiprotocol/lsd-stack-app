@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { TipBar } from 'components/common/TipBar';
 import { RelayType } from 'components/lsd/RelayType';
+import { getDocHost } from 'config/common';
 import {
   ETH_CUSTOMIZE_CREATION_STEPS,
   ETH_STANDARD_CREATION_STEPS,
@@ -99,7 +100,7 @@ const RelayTypeSelector = ({ onChooseCustomize }: RelayTypeSelectorProps) => {
           <div className="mt-[.24rem] w-[5.31rem] mx-auto">
             <TipBar
               content="You can change into the other mode anytime"
-              link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#how-to-switch-to-custom-relay-service"
+              link={`${getDocHost()}/docs/developethlsd/deploy.html#how-to-switch-to-custom-relay-service`}
             />
           </div>
         </div>
@@ -109,7 +110,7 @@ const RelayTypeSelector = ({ onChooseCustomize }: RelayTypeSelectorProps) => {
         <div className="flex items-center gap-[.12rem]">
           <a
             className="text-[.24rem] text-text1 leading-[.36rem] underline"
-            href="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#which-relay-type-should-i-choose"
+            href={`${getDocHost()}/docs/developethlsd/deploy.html#which-relay-type-should-i-choose`}
             target="_blank"
           >
             Compare Relay Types
@@ -176,7 +177,7 @@ const LsdTokenTypeSelector = () => {
                   once it is set.
                 </div>
               }
-              link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#why-lsd-token-could-not-be-changed"
+              link={`${getDocHost()}/docs/developethlsd/deploy.html#why-lsd-token-could-not-be-changed`}
             />
           </div>
         </div>
@@ -186,7 +187,7 @@ const LsdTokenTypeSelector = () => {
         <div className="flex items-center gap-[.12rem]">
           <a
             className="text-[.24rem] text-text1 leading-[.36rem] underline"
-            href="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#which-token-type-should-i-choose"
+            href={`${getDocHost()}/docs/developethlsd/deploy.html#which-token-type-should-i-choose`}
             target="_blank"
           >
             Compare Token Types

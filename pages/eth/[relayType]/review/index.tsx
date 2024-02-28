@@ -1,14 +1,15 @@
-import { Skeleton } from "@mui/material";
-import classNames from "classnames";
-import { CustomButton } from "components/common/CustomButton";
-import { TipBar } from "components/common/TipBar";
-import { DeployReadyModal } from "components/modal/DeployReadyModal";
-import { getFactoryContract } from "config/eth/contract";
-import { useDeployInfo } from "hooks/useDeployInfo";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import ExternalLinkImg from "public/images/external_link.svg";
-import { useState } from "react";
+import { Skeleton } from '@mui/material';
+import classNames from 'classnames';
+import { CustomButton } from 'components/common/CustomButton';
+import { TipBar } from 'components/common/TipBar';
+import { DeployReadyModal } from 'components/modal/DeployReadyModal';
+import { getDocHost } from 'config/common';
+import { getFactoryContract } from 'config/eth/contract';
+import { useDeployInfo } from 'hooks/useDeployInfo';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import ExternalLinkImg from 'public/images/external_link.svg';
+import { useState } from 'react';
 
 export function getStaticProps() {
   return { props: {} };
@@ -19,7 +20,7 @@ export function getStaticPaths() {
     paths: [
       {
         params: {
-          relayType: "standard",
+          relayType: 'standard',
         },
       },
     ],
@@ -30,19 +31,19 @@ export function getStaticPaths() {
 const ReviewPage = () => {
   const router = useRouter();
 
-  const { fetchLoading, deployInfo } = useDeployInfo("standard");
+  const { fetchLoading, deployInfo } = useDeployInfo('standard');
 
   const [readyModalOpened, setReadyModalOpened] = useState(false);
 
   const onBack = () => {
-    router.replace("/");
+    router.replace('/');
   };
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
       <div className="my-[.36rem] mr-[.56rem]">
         <div className="mt-[.36rem] flex ">
-          <div className={classNames("flex-1 min-w-[6.4rem] w-[6.4rem]")}>
+          <div className={classNames('flex-1 min-w-[6.4rem] w-[6.4rem]')}>
             <div className="bg-color-bg2 rounded-[.3rem] pb-[.14rem] border-[.01rem] border-color-border1">
               <div className="text-[.28rem] leading-[.42rem] font-[700] text-text1 text-center mt-[.24rem]">
                 Review & Deploy Config
@@ -51,7 +52,7 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#save-all-the-information-generated"
+                  link={`${getDocHost()}/docs/developethlsd/deploy.html#save-all-the-information-generated`}
                   isWarning
                 />
               </div>
@@ -136,7 +137,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/ethlsdapp.html"
+                href={`${getDocHost()}/docs/developethlsd/ethlsdapp.html`}
                 target="_blank"
               >
                 How to deploy your own LSD APP
@@ -180,7 +181,7 @@ interface DeployInfoItemProps {
 const DeployInfoItem = ({ name, value }: DeployInfoItemProps) => {
   return (
     <div className="text-[.16rem] leading-[.24rem] text-text1 mt-[.32rem] flex items-end">
-      <div className={classNames(Array.isArray(value) ? "self-start" : "")}>
+      <div className={classNames(Array.isArray(value) ? 'self-start' : '')}>
         {name}:
       </div>
       <div className="text-text2 text-[.14rem] leading-[.21rem] ml-[.04rem]">

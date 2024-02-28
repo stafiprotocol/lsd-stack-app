@@ -4,6 +4,7 @@ import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
+import { getDocHost } from 'config/common';
 import { getEthereumChainId } from 'config/eth/env';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import Image from 'next/image';
@@ -434,7 +435,7 @@ const ParameterPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#rewards-distribution"
+                  link={`${getDocHost()}/docs/developethlsd/deploy.html#rewards-distribution`}
                 />
               </div>
 
@@ -465,7 +466,7 @@ const ParameterPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href="https://d835jsgd5asjf.cloudfront.net/docs/developethlsd/deploy.html#parameter-tips"
+                href={`${getDocHost()}/docs/developethlsd/deploy.html#parameter-tips`}
                 target="_blank"
               >
                 Parameter Tips

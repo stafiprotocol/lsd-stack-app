@@ -123,7 +123,7 @@ const Navbar = () => {
                 recommend using for testing purposes. More information around
                 parameter customization and guidance can be found in the{' '}
                 <a
-                  href="https://d835jsgd5asjf.cloudfront.net/"
+                  href={getDocHost()}
                   target="_blank"
                   className="underline text-text1"
                 >
