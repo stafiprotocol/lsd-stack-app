@@ -12,7 +12,7 @@ import defaultAvatar from 'public/images/default_avatar.png';
 import ethereumLogo from 'public/images/ethereum.png';
 import neutronLogo from 'public/images/neutron.png';
 import { getShortAddress } from 'utils/stringUtils';
-import { getEthereumChainId } from 'config/env';
+import { getDocHost, getEthereumChainId } from 'config/env';
 import LogoTextImg from 'public/images/logo_text.svg';
 import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import { CreationStep } from 'components/common/CreationStep';
@@ -136,7 +136,11 @@ const Navbar = () => {
                 (Neutron contracts, ICA needed). We&apos;ll add native contract
                 support for chains like SEI and INJ (Cosmwasm) in the future.
                 Please check the{' '}
-                <a href="" target="_blank" className="underline text-text1">
+                <a
+                  href={`${getDocHost()}/docs/architecture/cosmoslsd.html`}
+                  target="_blank"
+                  className="underline text-text1"
+                >
                   documentation
                 </a>{' '}
                 for details and customization.

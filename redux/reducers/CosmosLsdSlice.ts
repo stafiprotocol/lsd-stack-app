@@ -13,7 +13,11 @@ import {
 } from 'utils/cosmosUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 import { setSubmitLoadingParams } from './AppSlice';
-import { amountToChain } from 'utils/numberUtils';
+import {
+  amountToChain,
+  chainAmountToHuman,
+  formatNumber,
+} from 'utils/numberUtils';
 import { LsdTokenConfig } from 'interfaces/common';
 
 export interface LsdState {
@@ -110,6 +114,23 @@ export const cosmosRegisterPool =
         fundResponseJson.params.register_fee.length > 0
       ) {
         const registerFee = fundResponseJson.params.register_fee[0];
+
+        const ntrnBalance = neutronChainAccount?.allBalances?.find(
+          (item) => item.denom === neutronChainConfig.denom
+        );
+
+        console.log();
+        if (
+          Number(ntrnBalance ? ntrnBalance.amount : 0) <
+          Number(registerFee.amount) * 2 + 0.02
+        ) {
+          throw new Error(
+            `Insufficient NTRN balance, need est. ${formatNumber(
+              Number(chainAmountToHuman(registerFee.amount * 2, 6)) + 0.02
+            )} NTRN for fee`
+          );
+        }
+
         funds.push({
           denom: registerFee.denom,
           amount: Number(registerFee.amount) * 2 + '',
@@ -175,7 +196,16 @@ export const cosmosRegisterPool =
     } catch (err: any) {
       dispatch(setCosmosEcoLoading(false));
 
-      if (isKeplrCancelError(err)) {
+      if (err.message.startsWith('Insufficient NTRN balance')) {
+        snackbarUtil.error(err.message);
+        dispatch(
+          setSubmitLoadingParams({
+            status: 'loading',
+            modalOpened: false,
+            txHash: '',
+          })
+        );
+      } else if (isKeplrCancelError(err)) {
         snackbarUtil.error(CANCELLED_MESSAGE);
       } else {
         snackbarUtil.error(err.message);
@@ -214,6 +244,30 @@ export const cosmosInitPool =
           txHash: '',
         })
       );
+
+      // Check if wallet address match
+      {
+        let interChainAccountAddress;
+        try {
+          interChainAccountAddress =
+            await signingStakeManagerClient.queryInterchainAccountAddressFromContract(
+              {
+                interchain_account_id: interChainId,
+              }
+            );
+        } catch {}
+
+        console.log({ interChainAccountAddress });
+        if (interChainAccountAddress) {
+          if (
+            interChainAccountAddress.admin !== neutronChainAccount.bech32Address
+          ) {
+            throw new Error(
+              `Wrong neutron address in your wallet, please switch to ${interChainAccountAddress.admin}`
+            );
+          }
+        }
+      }
 
       const funds: Coin[] = [];
       let fundAmount = 0;
@@ -266,6 +320,21 @@ export const cosmosInitPool =
       ) {
         const timeoutFee = refundResponseJson.params.min_fee.timeout_fee[0];
         fundAmount += Number(timeoutFee.amount);
+      }
+
+      const ntrnBalance = neutronChainAccount?.allBalances?.find(
+        (item) => item.denom === neutronChainConfig.denom
+      );
+
+      if (
+        Number(ntrnBalance ? ntrnBalance.amount : 0) <
+        Number(fundAmount) + 0.02
+      ) {
+        throw new Error(
+          `Insufficient NTRN balance, need est. ${formatNumber(
+            Number(chainAmountToHuman(fundAmount, 6)) + 0.02
+          )} NTRN for fee`
+        );
       }
 
       funds.push({
@@ -359,7 +428,19 @@ export const cosmosInitPool =
     } catch (err: any) {
       dispatch(setCosmosEcoLoading(false));
 
-      if (isKeplrCancelError(err)) {
+      if (
+        err.message.startsWith('Insufficient NTRN balance') ||
+        err.message.startsWith('Wrong neutron address')
+      ) {
+        snackbarUtil.error(err.message);
+        dispatch(
+          setSubmitLoadingParams({
+            status: 'loading',
+            modalOpened: false,
+            txHash: '',
+          })
+        );
+      } else if (isKeplrCancelError(err)) {
         snackbarUtil.error(CANCELLED_MESSAGE);
         dispatch(
           setSubmitLoadingParams({

@@ -151,7 +151,7 @@ const DeployPage = () => {
                   'mt-[.3rem] text-[.14rem] text-text1 flex items-center'
                 )}
               >
-                <div className="mr-[.06rem]">Admin Address:</div>
+                <div className="mr-[.06rem]">Owner Address:</div>
 
                 {adminAddress ? (
                   <span className={'text-text2'}>

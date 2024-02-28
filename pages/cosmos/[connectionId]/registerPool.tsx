@@ -1,4 +1,5 @@
 import { CustomButton } from 'components/common/CustomButton';
+import { DataLoading } from 'components/common/DataLoading';
 import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
 import { InputItem } from 'components/common/InputItem';
@@ -7,20 +8,31 @@ import { lsdTokenConfigs, neutronChainConfig } from 'config/cosmos/chain';
 import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
+import { usePrice } from 'hooks/usePrice';
 import { LsdTokenConfig } from 'interfaces/common';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { cosmosRegisterPool } from 'redux/reducers/CosmosLsdSlice';
 import { RootState } from 'redux/store';
+import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 
 const RegisterPoolPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [interChainAccountId, setInterChainAccountId] = useState('');
+  const [registerFee, setRegisterFee] = useState<string>();
   const [lsdTokenChainConfig, setLsdTokenChainConfig] =
     useState<LsdTokenConfig>();
+
+  const { cosmosEcoLoading } = useAppSelector((state: RootState) => {
+    return {
+      cosmosEcoLoading: state.cosmosLsd.cosmosEcoLoading,
+    };
+  });
+  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
+  const { ntrnPrice } = usePrice();
 
   useEffect(() => {
     if (router.isReady) {
@@ -47,13 +59,32 @@ const RegisterPoolPage = () => {
     );
   }, [dispatch]);
 
-  const { cosmosEcoLoading } = useAppSelector((state: RootState) => {
-    return {
-      cosmosEcoLoading: state.cosmosLsd.cosmosEcoLoading,
-    };
-  });
-
-  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
+  useEffect(() => {
+    (async () => {
+      console.log({ ntrnPrice });
+      if (!ntrnPrice || isNaN(Number(ntrnPrice))) {
+        return;
+      }
+      const fundResponse = await fetch(
+        'https://rest-falcron.pion-1.ntrn.tech/neutron/interchaintxs/params',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const fundResponseJson = await fundResponse.json();
+      if (
+        fundResponseJson.params.register_fee &&
+        fundResponseJson.params.register_fee.length > 0
+      ) {
+        const registerFee = fundResponseJson.params.register_fee[0];
+        const amount = chainAmountToHuman(registerFee.amount, 6);
+        setRegisterFee(ntrnPrice * Number(amount) * 2 + '');
+      }
+    })();
+  }, [ntrnPrice]);
 
   const submit = async () => {
     const connectionId = lsdTokenChainConfig?.connectionId;
@@ -108,7 +139,7 @@ const RegisterPoolPage = () => {
             />
 
             <InputItem
-              label="Pool Admin"
+              label="Owner Address"
               placeholder="Neutron wallet address"
               value={neutronChainAccount?.bech32Address || ''}
               disabled
@@ -118,9 +149,25 @@ const RegisterPoolPage = () => {
 
             <TipBar
               content={
-                <div>
-                  Note: Pool registration has a{' '}
-                  <span className="text-text1">non-refundable 10U fee</span>.
+                <div className="flex items-center">
+                  Note: Pool registration has a
+                  <span className="text-text1 ml-[0.04rem]">
+                    non-refundable{' '}
+                  </span>
+                  <span className="mx-[.04rem]">
+                    {registerFee ? (
+                      <>
+                        {formatNumber(registerFee, {
+                          decimals: 2,
+                          fixedDecimals: false,
+                        })}
+                        U
+                      </>
+                    ) : (
+                      <DataLoading height=".14rem" width=".4rem" />
+                    )}
+                  </span>
+                  fee.
                 </div>
               }
               link="https://www.google.com"

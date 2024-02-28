@@ -1,0 +1,4 @@
+{
+  "docHost": "https://d835jsgd5asjf.cloudfront.net",
+  "tokenPriceUrl": "https://api.coingecko.com/api/v3/simple/price?ids=neutron-3&vs_currencies=usd"
+}

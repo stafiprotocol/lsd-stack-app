@@ -188,6 +188,12 @@ const InitPoolPage = () => {
                 className="mt-[.16rem]"
               />
 
+              {Number(feeCommision) >= 100 && (
+                <div className="my-[.16rem] text-[.16rem] text-error">
+                  Fee Commission must be {'<'}100
+                </div>
+              )}
+
               <InputItem
                 label="Minimal Stake"
                 placeholder={'Minimal Stake Amount'}
@@ -288,7 +294,8 @@ const InitPoolPage = () => {
                     !lsdTokenName ||
                     !lsdTokenSymbol ||
                     Number(validatorAddrAmount) < 1 ||
-                    Number(validatorAddrAmount) > 10
+                    Number(validatorAddrAmount) > 10 ||
+                    Number(feeCommision) >= 100
                   }
                   onClick={() => {
                     if (

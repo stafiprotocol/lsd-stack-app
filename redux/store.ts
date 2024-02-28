@@ -3,6 +3,7 @@ import appReducer from './reducers/AppSlice';
 import walletReducer from './reducers/WalletSlice';
 import lsdReducer from './reducers/LsdSlice';
 import cosmosLsdReducer from './reducers/CosmosLsdSlice';
+import tokenReducer from './reducers/TokenSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     wallet: walletReducer,
     lsd: lsdReducer,
     cosmosLsd: cosmosLsdReducer,
+    token: tokenReducer,
   },
 });
 
