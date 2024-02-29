@@ -574,6 +574,20 @@ const ReviewPage = (props: { poolAddr: string; connectionId?: string }) => {
             'mt-[.3rem] text-[.14rem] text-text1 flex items-center'
           )}
         >
+          <div className="mr-[.06rem] min-w-[1.1rem]">Pool Address:</div>
+
+          {poolAddr ? (
+            <span className={'text-text2'}>{poolAddr}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
+
+        <div
+          className={classNames(
+            'mt-[.24rem] text-[.14rem] text-text1 flex items-center'
+          )}
+        >
           <div className="mr-[.06rem] min-w-[1.1rem]">Owner Address:</div>
 
           {adminAddress ? (
