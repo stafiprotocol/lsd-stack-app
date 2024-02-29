@@ -184,7 +184,7 @@ const CosmosPage = () => {
         </FormCard>
 
         <FaqCard
-          title="Neutron vs Native contract?"
+          title="Neutron vs Native contract"
           link={`${getDocHost()}/docs/develop_cosmos_lsd/getstarted.html`}
         >
           <>
