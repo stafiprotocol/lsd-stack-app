@@ -4,6 +4,7 @@ import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
 import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
+import { getDocHost } from 'config/common';
 import { lsdTokenConfigs, neutronChainConfig } from 'config/cosmos/chain';
 import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
@@ -111,7 +112,7 @@ const RegisterPoolPage = () => {
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto pb-[1rem]">
-      <div className="flex justify-center mt-[.42rem]">
+      <div className="flex justify-center mt-[.42rem] items-start">
         <FormCard title="Register Pool">
           <>
             <InputItem
@@ -170,7 +171,7 @@ const RegisterPoolPage = () => {
                   fee.
                 </div>
               }
-              link="https://www.google.com"
+              link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#pool-registration-fee `}
               className="mt-[.36rem]"
             />
 
@@ -198,25 +199,33 @@ const RegisterPoolPage = () => {
           </>
         </FormCard>
 
-        <FaqCard title="Parameter Tips" link="https://www.google.com">
+        <FaqCard
+          title="Parameter Tips"
+          link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#parameter-tips`}
+        >
           <>
-            Standard:
+            Connecition ID:
             <br />
-            - No Server Needed
-            <br />
-            - Able to change to custom at anytime
-            <br />
-            - Operated by StaFi Stack DAO
+            - Connection identifier of target chain and Neutron
             <br />
             <br />
-            Custom:
+            Interchain Account ID:
             <br />
-            - Server required
+            - An identifier of your pool
             <br />
-            - Both Execution & Beacon chain RPC required
+            - Must be unique
             <br />
-            - At least run 3 relay instances
-            <br />- Maintained by your own
+            - Max 16 characters
+            <br />
+            - Not contains Hyphen(-) or Dot(.)
+            <br />
+            <br />
+            Owner Address:
+            <br />- Adjust commission fee
+            <br />- Adjust duration of era
+            <br />- Manage validator set
+            <br />- Pause or unpause pool
+            <br />- Turn on or off LSM feature
           </>
         </FaqCard>
       </div>

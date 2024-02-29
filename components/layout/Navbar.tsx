@@ -133,10 +133,10 @@ const Navbar = () => {
               </div>
             ) : (
               <div>
-                Current liquid staking supports chains like ATOM and SWTH
-                (Neutron contracts, ICA needed). We&apos;ll add native contract
-                support for chains like SEI and INJ (Cosmwasm) in the future.
-                Please check the{' '}
+                Current liquid staking supports chains like ATOM (Neutron
+                contracts, ICA needed). We&apos;ll add native contract support
+                for chains like SEI and INJ (Cosmwasm) in the future. Please
+                check the{' '}
                 <a
                   href={`${getDocHost()}/docs/architecture/cosmoslsd.html`}
                   target="_blank"

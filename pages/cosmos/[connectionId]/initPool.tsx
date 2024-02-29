@@ -171,7 +171,7 @@ const InitPoolPage = () => {
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto pb-[1rem]">
-      <div className="flex justify-center mt-[.42rem]">
+      <div className="flex justify-center mt-[.42rem] items-start">
         {showReviewPage ? (
           <ReviewPage
             poolAddr={poolAddr}
@@ -299,7 +299,7 @@ const InitPoolPage = () => {
                     as 10%.
                   </div>
                 }
-                link="https://www.google.com"
+                link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html##rewards-distribution`}
                 className="mt-[.16rem]"
               />
 
@@ -402,7 +402,7 @@ const InitPoolPage = () => {
                     fee.
                   </div>
                 }
-                link="https://www.google.com"
+                link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#pool-initialization-fee`}
                 className="mt-[.36rem]"
               />
 
@@ -451,25 +451,33 @@ const InitPoolPage = () => {
           </FormCard>
         )}
 
-        <FaqCard title="LSD Token Name" link="https://www.google.com">
+        <FaqCard
+          title="Parameter Tips"
+          link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#parameter-tips`}
+        >
           <>
-            Standard:
+            Fee Receiver:
             <br />
-            - No Server Needed
-            <br />
-            - Able to change to custom at anytime
-            <br />
-            - Operated by StaFi Stack DAO
+            - A neutron address to receive LSD commission fee
             <br />
             <br />
-            Custom:
+            Fee commission:
+            <br />- 10% is an reasonable price for most stakers
             <br />
-            - Server required
             <br />
-            - Both Execution & Beacon chain RPC required
+            Minimal Stake:
+            <br />- The smallest amount of assets accept in staking procedure
             <br />
-            - At least run 3 relay instances
-            <br />- Maintained by your own
+            <br />
+            LSD Token Code ID:
+            <br />- A cw20-base compatable smart contract
+            <br />- Recommend to keep default
+            <br />- Able to use your own Code ID
+            <br />
+            <br />
+            Validators:
+            <br />- Pool will delegate assets evenly to every validator
+            <br />- Target chain validator address
           </>
         </FaqCard>
       </div>

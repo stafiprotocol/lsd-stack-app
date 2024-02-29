@@ -1,11 +1,9 @@
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
-import { DataLoading } from 'components/common/DataLoading';
 import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
-import { TipBar } from 'components/common/TipBar';
 import { Icomoon } from 'components/icon/Icomoon';
-import { getNeutronStakeManagerContract } from 'config/cosmos/contract';
+import { getDocHost } from 'config/common';
 import { robotoBold } from 'config/font';
 import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { LsdToken } from 'gen/neutron';
@@ -17,9 +15,6 @@ import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { openLink } from 'utils/commonUtils';
 import { getNeutronWasmClient, getStakeManagerClient } from 'utils/cosmosUtils';
-import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
-import { getShortAddress } from 'utils/stringUtils';
-import { formatDuration } from 'utils/timeUtils';
 
 const DeployPage = () => {
   const dispatch = useAppDispatch();
@@ -40,23 +35,25 @@ const DeployPage = () => {
     if (router.isReady) {
       if (router.query.poolAddr && typeof router.query.poolAddr === 'string') {
         (async () => {
-          const stakeManagerClient = await getStakeManagerClient();
-          const poolInfo = await stakeManagerClient.queryPoolInfo({
-            pool_addr: router.query.poolAddr as string,
-          });
+          try {
+            const stakeManagerClient = await getStakeManagerClient();
+            const poolInfo = await stakeManagerClient.queryPoolInfo({
+              pool_addr: router.query.poolAddr as string,
+            });
 
-          console.log({ poolInfo });
+            console.log({ poolInfo });
 
-          const wasmClient = await getNeutronWasmClient();
-          const lsdTokenClient = new LsdToken.Client(
-            wasmClient,
-            poolInfo.lsd_token
-          );
-          const tokenInfo = await lsdTokenClient.queryTokenInfo();
-          console.log({ tokenInfo });
-          if (tokenInfo) {
-            setLsdTokenSymbol(tokenInfo.symbol);
-          }
+            const wasmClient = await getNeutronWasmClient();
+            const lsdTokenClient = new LsdToken.Client(
+              wasmClient,
+              poolInfo.lsd_token
+            );
+            const tokenInfo = await lsdTokenClient.queryTokenInfo();
+            console.log({ tokenInfo });
+            if (tokenInfo) {
+              setLsdTokenSymbol(tokenInfo.symbol);
+            }
+          } catch {}
         })();
       }
     }
@@ -72,7 +69,9 @@ const DeployPage = () => {
               'linear-gradient(90.05deg, rgba(128, 202, 255, 0.3) 30%, rgba(128, 202, 255, 0.05) 96.37%)',
           }}
           onClick={() => {
-            openLink('https://www.google.com');
+            openLink(
+              `${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#step2-run-relay-service`
+            );
           }}
         >
           <div className="flex items-center">
@@ -100,7 +99,7 @@ const DeployPage = () => {
         </div>
       </div>
 
-      <div className="flex justify-center mt-[.42rem]">
+      <div className="flex justify-center mt-[.42rem] items-start">
         <FormCard title="Following Deployment">
           <div className="flex items-center flex-col">
             <div>
@@ -167,27 +166,49 @@ const DeployPage = () => {
           </div>
         </FormCard>
 
-        <FaqCard title="LSD Token Name" link="">
-          <>
-            Standard:
-            <br />
-            - No Server Needed
-            <br />
-            - Able to change to custom at anytime
-            <br />
-            - Operated by StaFi Stack DAO
-            <br />
-            <br />
-            Custom:
-            <br />
-            - Server required
-            <br />
-            - Both Execution & Beacon chain RPC required
-            <br />
-            - At least run 3 relay instances
-            <br />- Maintained by your own
-          </>
-        </FaqCard>
+        <div>
+          <FaqCard
+            title="How to run your LSD relay service?"
+            link={`${getDocHost()}/docs/develop_cosmos_lsd/app.html`}
+          >
+            <>
+              - Two servers recommended
+              <br />
+              - Two Neutron account with sufficient funds for submitting
+              transactions
+              <br />- Neutron RPC required
+            </>
+          </FaqCard>
+
+          <div className="h-[.32rem]" />
+
+          <FaqCard
+            title="How to run your ICQ relay service?"
+            link={`${getDocHost()}/docs/develop_cosmos_lsd/icq_relay.html`}
+          >
+            <>
+              - At least two servers
+              <br />
+              - Two Neutron account with sufficient funds for submitting
+              transactions
+              <br />- Neutron RPC required
+            </>
+          </FaqCard>
+
+          <div className="h-[.32rem]" />
+
+          <FaqCard
+            title="How to run your own LSD App?"
+            link={`${getDocHost()}/docs/develop_cosmos_lsd/app.html`}
+          >
+            <>
+              - Basic frontend knowledge required to customize branding stuffs
+              <br />
+              - At least one server
+              <br />- Content Delivery Network is recommended
+            </>
+          </FaqCard>
+        </div>
       </div>
     </div>
   );

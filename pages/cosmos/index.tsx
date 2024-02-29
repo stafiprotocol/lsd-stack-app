@@ -4,6 +4,7 @@ import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
 import { TipBar } from 'components/common/TipBar';
 import { Icomoon } from 'components/icon/Icomoon';
+import { getDocHost } from 'config/common';
 import { lsdTokenConfigs } from 'config/cosmos/chain';
 import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch } from 'hooks/common';
@@ -56,7 +57,7 @@ const CosmosPage = () => {
                 'ATOM Liquid Staking utilizes Neutron infrastructure. Please acknowledge the inherent risks before proceeding.'
               }
               isWarning
-              link="https://www.google.com"
+              link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#neutron-risks-awareness`}
               className="mt-[.24rem]"
             />
 
@@ -182,25 +183,30 @@ const CosmosPage = () => {
           </>
         </FormCard>
 
-        <FaqCard title="LSD Token Name" link="https://www.google.com">
+        <FaqCard
+          title="Neutron vs Native contract?"
+          link={`${getDocHost()}/docs/develop_cosmos_lsd/getstarted.html`}
+        >
           <>
-            Standard:
+            Neutron Contract:
             <br />
-            - No Server Needed
+            - Require ICS-27 protocol support on the target chain
             <br />
-            - Able to change to custom at anytime
+            - Require trust in Neutron
             <br />
-            - Operated by StaFi Stack DAO
+            - Support most chain
+            <br />
+            - High security implemented
+            <br />
+            - Ready to use
             <br />
             <br />
-            Custom:
+            Native Contract:
             <br />
-            - Server required
+            - Require Native smart contract support on the target chain
             <br />
-            - Both Execution & Beacon chain RPC required
-            <br />
-            - At least run 3 relay instances
-            <br />- Maintained by your own
+            - Top-tier security implemented
+            <br />- Coming soon
           </>
         </FaqCard>
       </div>
