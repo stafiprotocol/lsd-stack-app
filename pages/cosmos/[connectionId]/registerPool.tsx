@@ -204,7 +204,7 @@ const RegisterPoolPage = () => {
           link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#parameter-tips`}
         >
           <>
-            Connecition ID:
+            Connection ID:
             <br />
             - Connection identifier of target chain and Neutron
             <br />

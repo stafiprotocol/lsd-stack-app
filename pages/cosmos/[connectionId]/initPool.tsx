@@ -470,7 +470,7 @@ const InitPoolPage = () => {
             <br />
             <br />
             LSD Token Code ID:
-            <br />- A cw20-base compatable smart contract
+            <br />- A cw20-base compatible smart contract
             <br />- Recommend to keep default
             <br />- Able to use your own Code ID
             <br />
