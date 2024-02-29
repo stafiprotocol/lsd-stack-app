@@ -175,6 +175,7 @@ const InitPoolPage = () => {
         {showReviewPage ? (
           <ReviewPage
             poolAddr={poolAddr}
+            interchainAccountId={interChainAccountId}
             connectionId={lsdTokenChainConfig?.connectionId}
           />
         ) : !showValidatorPage ? (
@@ -507,8 +508,12 @@ const InitPoolPage = () => {
 
 export default InitPoolPage;
 
-const ReviewPage = (props: { poolAddr: string; connectionId?: string }) => {
-  const { poolAddr, connectionId } = props;
+const ReviewPage = (props: {
+  poolAddr: string;
+  interchainAccountId: string;
+  connectionId?: string;
+}) => {
+  const { poolAddr, connectionId, interchainAccountId } = props;
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -583,6 +588,21 @@ const ReviewPage = (props: { poolAddr: string; connectionId?: string }) => {
           )}
         </div>
 
+        <div
+          className={classNames(
+            'mt-[.24rem] text-[.14rem] text-text1 flex items-center'
+          )}
+        >
+          <div className="mr-[.06rem] min-w-[1.1rem]">
+            Interchain Account ID:
+          </div>
+
+          {adminAddress ? (
+            <span className={'text-text2'}>{interchainAccountId}</span>
+          ) : (
+            <DataLoading height=".14rem" width="1rem" />
+          )}
+        </div>
         <div
           className={classNames(
             'mt-[.24rem] text-[.14rem] text-text1 flex items-center'
