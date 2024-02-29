@@ -243,6 +243,7 @@ const InitPoolPage = () => {
                   setLsdTokenCodeId(v);
                 }}
                 className="mt-[.16rem]"
+                isInteger
               />
 
               <InputItem
