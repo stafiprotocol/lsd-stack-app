@@ -48,8 +48,8 @@ const CosmosPage = () => {
   }, [dispatch]);
 
   return (
-    <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
-      <div className="flex justify-center mt-[.42rem]">
+    <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto pb-[1rem]">
+      <div className="flex justify-center mt-[.42rem] items-start">
         <FormCard title="Choose LSD Token">
           <>
             <TipBar
@@ -82,7 +82,7 @@ const CosmosPage = () => {
               </CustomButton>
             </div>
 
-            <div className="text-[.14rem] leading-[.21rem] text-[#6C86AD] mt-[.15rem] text-center">
+            <div className="text-[.14rem] leading-[.21rem] text-[#6C86AD] mt-[.15rem] text-center mb-[.36rem]">
               We currently only support ATOM. To deploy other LSD, please{' '}
               <a
                 href="https://discord.com/invite/jB77etn"
