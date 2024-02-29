@@ -267,8 +267,8 @@ const InitPoolPage = () => {
               />
 
               <InputItem
-                label="Validator Addr Amount"
-                placeholder="Validator Addr Amount"
+                label="Validator Addr Number"
+                placeholder="Validator Addr Number"
                 value={validatorAddrAmount}
                 showAddMinusButton
                 isInteger
@@ -288,7 +288,7 @@ const InitPoolPage = () => {
               {Number(validatorAddrAmount) < 1 ||
                 (Number(validatorAddrAmount) > 10 && (
                   <div className="my-[.16rem] text-[.16rem] text-error">
-                    Validator Addr Amount must be between 1~10
+                    Validator Addr Number must be between 1~10
                   </div>
                 ))}
 
@@ -354,7 +354,7 @@ const InitPoolPage = () => {
           <FormCard title="Validator Address">
             <>
               <InputItem
-                label="Validator Addr Amount"
+                label="Validator Addr Number"
                 value={validatorAddrAmount}
                 onChange={() => {}}
                 placeholder=""
