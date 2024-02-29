@@ -77,7 +77,7 @@ const CosmosPage = () => {
                   )
                 }
               >
-                Submit
+                Next
               </CustomButton>
             </div>
 
