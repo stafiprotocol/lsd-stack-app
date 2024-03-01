@@ -126,7 +126,7 @@ const RegisterPoolPage = () => {
 
             <InputItem
               label="Interchain Account ID"
-              placeholder="Unique string, max 16 characters, no  , -, ., "
+              placeholder="Unique string, max 16 characters"
               value={interChainAccountId}
               onChange={(v) => {
                 if (v.length > 16) {
