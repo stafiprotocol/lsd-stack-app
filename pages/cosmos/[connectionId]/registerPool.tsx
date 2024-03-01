@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { usePrice } from 'hooks/usePrice';
 import { LsdTokenConfig } from 'interfaces/common';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
@@ -30,6 +31,10 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  return { props: {} };
+};
 
 const RegisterPoolPage = () => {
   const dispatch = useAppDispatch();

@@ -44,6 +44,10 @@ export async function getStaticPaths() {
   };
 }
 
+export const getStaticProps: GetStaticProps = async (context) => {
+  return { props: {} };
+};
+
 const InitPoolPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
