@@ -19,6 +19,18 @@ import { RootState } from 'redux/store';
 import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 
+export async function getStaticPaths() {
+  const paths: any[] = [];
+  lsdTokenConfigs.forEach((config) => {
+    paths.push({ params: { connectionId: config.connectionId } });
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
 const RegisterPoolPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();

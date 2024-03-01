@@ -4,10 +4,12 @@ import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
 import { Icomoon } from 'components/icon/Icomoon';
 import { getDocHost } from 'config/common';
+import { lsdTokenConfigs } from 'config/cosmos/chain';
 import { robotoBold } from 'config/font';
 import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { LsdToken } from 'gen/neutron';
 import { useAppDispatch } from 'hooks/common';
+import { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import celebrateIcon from 'public/images/celebrate.png';
@@ -15,6 +17,22 @@ import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { openLink } from 'utils/commonUtils';
 import { getNeutronWasmClient, getStakeManagerClient } from 'utils/cosmosUtils';
+
+export async function getStaticPaths() {
+  const paths: any[] = [];
+  lsdTokenConfigs.forEach((config) => {
+    paths.push({ params: { connectionId: config.connectionId } });
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  return { props: {} };
+};
 
 const DeployPage = () => {
   const dispatch = useAppDispatch();

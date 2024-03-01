@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { usePrice } from 'hooks/usePrice';
 import { LsdTokenConfig } from 'interfaces/common';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
@@ -30,6 +31,18 @@ import {
 import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 import { formatDuration } from 'utils/timeUtils';
+
+export async function getStaticPaths() {
+  const paths: any[] = [];
+  lsdTokenConfigs.forEach((config) => {
+    paths.push({ params: { connectionId: config.connectionId } });
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
 
 const InitPoolPage = () => {
   const dispatch = useAppDispatch();
