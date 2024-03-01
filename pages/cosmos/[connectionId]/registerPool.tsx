@@ -126,14 +126,17 @@ const RegisterPoolPage = () => {
 
             <InputItem
               label="Interchain Account ID"
-              placeholder="Unique string, max 16 characters, no - or ."
+              placeholder="Unique string, max 16 characters, no  , -, ., "
               value={interChainAccountId}
               onChange={(v) => {
                 if (v.length > 16) {
                   return;
                 }
                 let res = v;
-                res = res.replaceAll('.', '').replaceAll('-', '');
+                res = res
+                  .replaceAll('.', '')
+                  .replaceAll('-', '')
+                  .replaceAll(' ', '');
                 setInterChainAccountId(res);
               }}
               className="mt-[.16rem]"
@@ -217,7 +220,7 @@ const RegisterPoolPage = () => {
             <br />
             - Max 16 characters
             <br />
-            - Not contains Hyphen(-) or Dot(.)
+            - Not contains Hyphen(-), Dot(.), blank space( )
             <br />
             <br />
             Owner Address:
