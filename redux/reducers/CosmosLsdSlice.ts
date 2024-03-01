@@ -217,6 +217,7 @@ export const cosmosRegisterPool =
 export const cosmosInitPool =
   (
     interChainId: string,
+    lsdTokenCodeId: string,
     lsdTokenName: string,
     lsdTokenSymbol: string,
     minimalStake: string,
@@ -236,6 +237,20 @@ export const cosmosInitPool =
 
       if (!neutronChainAccount || !signingStakeManagerClient) {
         throw new Error(WALLET_NOT_CONNECTED_MESSAGE);
+      }
+
+      const checkTokenCodeResponse = await fetch(
+        `https://rest-falcron.pion-1.ntrn.tech/cosmwasm/wasm/v1/code/${lsdTokenCodeId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const checkTokenCodeResponseJson = await checkTokenCodeResponse.json();
+      if (!checkTokenCodeResponseJson.code_info) {
+        throw new Error('Token Code ID not exist');
       }
 
       dispatch(
@@ -381,7 +396,8 @@ export const cosmosInitPool =
 
       if (
         err.message.startsWith('Insufficient NTRN balance') ||
-        err.message.startsWith('Wrong neutron address')
+        err.message.startsWith('Wrong neutron address') ||
+        err.message.startsWith('Token Code ID not exist')
       ) {
         snackbarUtil.error(err.message);
         dispatch(

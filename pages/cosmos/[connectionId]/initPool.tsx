@@ -169,6 +169,7 @@ const InitPoolPage = () => {
     dispatch(
       cosmosInitPool(
         interChainAccountId,
+        lsdTokenCodeId,
         lsdTokenName,
         lsdTokenSymbol,
         minimalStake,
