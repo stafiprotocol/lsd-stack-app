@@ -9,7 +9,7 @@ import {
 } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
 import LogoImg from 'public/images/logo_text.svg';
-import RelayTypeImg from 'public/images/relay_type.svg';
+import RelayTypeImg from 'public/images/relay_type.png';
 import EcoEthImg from 'public/images/eco/eth.svg';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
