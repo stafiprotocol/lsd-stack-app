@@ -287,6 +287,11 @@ const InitPoolPage = () => {
                   if (v.length > 12) {
                     return;
                   }
+                  const pattern = /^[a-zA-Z\-]+$/;
+                  var result = v.match(pattern);
+                  if (v && !result) {
+                    return;
+                  }
                   setLsdTokenSymbol(v);
                 }}
                 className="mt-[.16rem]"
