@@ -136,7 +136,7 @@ const DeployPage = () => {
                 </div>
               </div>
 
-              <div className="self-start ml-[.20rem] h-[.32rem] w-[2px] bg-[#6C86AD80]" />
+              <div className="self-start ml-[.20rem] h-[.32rem] w-[1px] bg-[#6C86AD80]" />
 
               <div className="flex items-center">
                 <div
@@ -153,7 +153,7 @@ const DeployPage = () => {
                 </div>
               </div>
 
-              <div className="self-start ml-[.20rem] h-[.32rem] w-[2px] bg-[#6C86AD80]" />
+              <div className="self-start ml-[.20rem] h-[.32rem] w-[1px] bg-[#6C86AD80]" />
 
               <div className="flex items-center">
                 <div

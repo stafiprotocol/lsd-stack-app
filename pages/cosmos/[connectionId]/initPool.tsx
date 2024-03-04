@@ -821,7 +821,7 @@ const ReviewPage = (props: {
           onClick={() => openLink('https://www.google.com')}
           width="2.62rem"
         >
-          Re-edit Params
+          Re-edit Parameters
         </CustomButton>
 
         <CustomButton
@@ -839,7 +839,7 @@ const ReviewPage = (props: {
             });
           }}
         >
-          Confirm
+          Next
         </CustomButton>
       </div>
     </FormCard>
