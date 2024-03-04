@@ -13,9 +13,10 @@ import { usePrice } from 'hooks/usePrice';
 import { LsdTokenConfig } from 'interfaces/common';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { cosmosRegisterPool } from 'redux/reducers/CosmosLsdSlice';
+import { connectKeplrAccount } from 'redux/reducers/WalletSlice';
 import { RootState } from 'redux/store';
 import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
@@ -51,6 +52,16 @@ const RegisterPoolPage = () => {
   });
   const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
   const { ntrnPrice } = usePrice();
+
+  const [buttonDisabled, buttonText] = useMemo(() => {
+    if (!neutronChainAccount) {
+      return [false, 'Connect Wallet'];
+    }
+    if (!interChainAccountId) {
+      return [true, 'Submit'];
+    }
+    return [false, 'Submit'];
+  }, [interChainAccountId, neutronChainAccount]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -105,6 +116,10 @@ const RegisterPoolPage = () => {
   }, [ntrnPrice]);
 
   const submit = async () => {
+    if (!neutronChainAccount) {
+      dispatch(connectKeplrAccount([neutronChainConfig]));
+      return;
+    }
     const connectionId = lsdTokenChainConfig?.connectionId;
     if (!connectionId) {
       snackbarUtil.error('Connection ID not found');
@@ -209,11 +224,11 @@ const RegisterPoolPage = () => {
                 type="primary"
                 height=".56rem"
                 width="2.62rem"
-                disabled={!interChainAccountId || !neutronChainAccount}
+                disabled={buttonDisabled}
                 onClick={submit}
                 loading={cosmosEcoLoading}
               >
-                Submit
+                {buttonText}
               </CustomButton>
             </div>
           </>

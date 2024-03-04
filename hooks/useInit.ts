@@ -3,6 +3,7 @@ import { setCreationStepInfo, setUpdateFlag } from 'redux/reducers/AppSlice';
 import {
   autoConnectKeplrChains,
   setMetaMaskDisconnected,
+  updateCosmosTokenBalances,
 } from 'redux/reducers/WalletSlice';
 import {
   getStorage,
@@ -105,6 +106,10 @@ export function useInit() {
   // useInterval(() => {
   //   dispatch(setUpdateFlag(dayjs().unix()));
   // }, 6000); // 6s
+
+  useInterval(() => {
+    dispatch(updateCosmosTokenBalances());
+  }, 6000);
 
   useEffect(() => {
     document.body.style.backgroundColor = '#E8EFFD';

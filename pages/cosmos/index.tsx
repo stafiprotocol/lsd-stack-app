@@ -1,4 +1,5 @@
 import { Popover } from '@mui/material';
+import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
@@ -19,6 +20,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 import { openLink } from 'utils/commonUtils';
+import others from 'public/images/tokens/others.svg';
 
 const CosmosPage = () => {
   const router = useRouter();
@@ -68,7 +70,12 @@ const CosmosPage = () => {
               {selectedLsdToken?.displayName}
             </div>
 
-            <div className="mt-[.57rem]">
+            <div
+              className={classNames(
+                'mt-[.57rem]',
+                popupState.isOpen ? 'invisible' : ''
+              )}
+            >
               <CustomButton
                 type="primary"
                 height=".56rem"
@@ -107,7 +114,7 @@ const CosmosPage = () => {
               sx={{
                 marginTop: '.12rem',
                 '& .MuiPopover-paper': {
-                  background: '#FFFFFF',
+                  background: '#FFFFFF80',
                   borderRadius: '.3rem',
                   border: 'solid 1px #FFFFFF80',
                   width: '5.47rem',
@@ -162,9 +169,9 @@ const CosmosPage = () => {
 
               <div className="h-[.58rem] flex items-center justify-between">
                 <div className="flex items-center">
-                  {/* <div className="ml-[.16rem] w-[.28rem] h-[.28rem] relative">
-                    <Image src={lsdTokenConfig.icon} alt="logo" layout="fill" />
-                  </div> */}
+                  <div className="ml-[.16rem] w-[.28rem] h-[.28rem] relative">
+                    <Image src={others} alt="logo" layout="fill" />
+                  </div>
 
                   <div className="ml-[.16rem] text-[.16rem]">Others</div>
                 </div>

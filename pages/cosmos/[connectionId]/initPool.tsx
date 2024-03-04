@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { usePrice } from 'hooks/usePrice';
 import { LsdTokenConfig } from 'interfaces/common';
+import _ from 'lodash';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -267,9 +268,12 @@ const InitPoolPage = () => {
 
               <InputItem
                 label="LSD Token Name"
-                placeholder="Example: StaFi rATOM"
+                placeholder="Example: StaFi rATOM, length 3~50"
                 value={lsdTokenName}
                 onChange={(v) => {
+                  if (v.length > 50) {
+                    return;
+                  }
                   setLsdTokenName(v);
                 }}
                 className="mt-[.16rem]"
@@ -277,9 +281,12 @@ const InitPoolPage = () => {
 
               <InputItem
                 label="LSD Token Symbol"
-                placeholder="Example: rATOM"
+                placeholder="Example: rATOM, length 3~12"
                 value={lsdTokenSymbol}
                 onChange={(v) => {
+                  if (v.length > 12) {
+                    return;
+                  }
                   setLsdTokenSymbol(v);
                 }}
                 className="mt-[.16rem]"
@@ -322,20 +329,10 @@ const InitPoolPage = () => {
                 className="mt-[.16rem]"
               />
 
-              <div className="mt-[.24rem] flex justify-between mb-[.36rem]">
-                <CustomButton
-                  type="stroke"
-                  height=".56rem"
-                  onClick={() => router.back()}
-                  width="2.62rem"
-                >
-                  Back
-                </CustomButton>
-
+              <div className="mt-[.24rem] mb-[.36rem]">
                 <CustomButton
                   type="primary"
                   height=".56rem"
-                  width="2.62rem"
                   disabled={
                     !feeReceiver ||
                     !minimalStake ||
@@ -358,6 +355,19 @@ const InitPoolPage = () => {
 
                     if (isNaN(Number(realFeeCommission))) {
                       snackbarUtil.error('Invalid fee commission');
+                      return;
+                    }
+
+                    if (lsdTokenName.length < 3 || lsdTokenName.length > 50) {
+                      snackbarUtil.error('LSD Token Name length must be 3~50');
+                      return;
+                    }
+
+                    if (
+                      lsdTokenSymbol.length < 3 ||
+                      lsdTokenSymbol.length > 12
+                    ) {
+                      snackbarUtil.error('LSD Token Name length must be 3~12');
                       return;
                     }
 
@@ -445,7 +455,14 @@ const InitPoolPage = () => {
                   loading={cosmosEcoLoading}
                   onClick={() => {
                     let hasInvalidAddress = false;
+                    let hasRepeatAddress = false;
                     validatorAddrs.forEach((addr) => {
+                      if (
+                        _.uniq(validatorAddrs).length !== validatorAddrs.length
+                      ) {
+                        hasRepeatAddress = true;
+                      }
+
                       if (
                         !checkAddress(
                           addr,
@@ -455,6 +472,12 @@ const InitPoolPage = () => {
                         hasInvalidAddress = true;
                       }
                     });
+                    if (hasRepeatAddress) {
+                      snackbarUtil.error(
+                        'Validator Address cannot be repeated'
+                      );
+                      return;
+                    }
                     if (hasInvalidAddress) {
                       snackbarUtil.error('Invalid Validator Address format');
                       return;

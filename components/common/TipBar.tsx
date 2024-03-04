@@ -21,7 +21,7 @@ export const TipBar = ({ isWarning, link, content, className }: Props) => {
       target="_blank"
       href={link}
     >
-      <div className="relative w-[.2rem] h-[.2rem]">
+      <div className="relative w-[.2rem] h-[.2rem] min-w-[.2rem]">
         <Image
           src={isWarning ? TipYellowImg : TipImg}
           alt="tip"
@@ -33,7 +33,7 @@ export const TipBar = ({ isWarning, link, content, className }: Props) => {
         {content}
       </div>
 
-      <div className="ml-auto relative h-[.1116rem] w-[.0656rem]">
+      <div className="relative h-[.1116rem] w-[.07rem] min-w-[.07rem]">
         <Image src={LinkArrowImg} alt="link" layout="fill" />
       </div>
     </a>

@@ -14,6 +14,7 @@ import {
   saveStorage,
 } from 'utils/storageUtils';
 import { AppThunk } from '../store';
+import { queryAccountBalances } from '@stafihub/apps-wallet';
 
 export interface WalletState {
   metaMaskAccount: string | undefined;
@@ -152,6 +153,53 @@ export const connectKeplrAccount =
       });
 
     dispatch(updateCosmosAccounts(newAccounts));
+  };
+
+/**
+ * update cosmos token balances
+ */
+export const updateCosmosTokenBalances =
+  (): AppThunk => async (dispatch, getState) => {
+    const chainConfigs = [neutronChainConfig];
+
+    const requests = chainConfigs.map((chainConfig) => {
+      return (async () => {
+        try {
+          const account = getState().wallet.cosmosAccounts[chainConfig.chainId];
+          if (!account) {
+            return;
+          }
+          const newAccount = { ...account };
+          const userAddress = newAccount.bech32Address;
+
+          const balances = await queryAccountBalances(chainConfig, userAddress);
+          newAccount.allBalances = balances;
+
+          // Prevent disconnect conflict.
+          if (
+            !getState().wallet.cosmosAccounts[chainConfig.chainId] ||
+            getState().wallet.cosmosAccounts[chainConfig.chainId]
+              ?.bech32Address !== userAddress
+          ) {
+            return;
+          }
+          return { network: chainConfig.chainId, account: newAccount };
+        } catch (err: unknown) {
+          // console.log(`updateTokenBalance ${chainId} error`, err);
+          return null;
+        }
+      })();
+    });
+
+    const results = await Promise.all(requests);
+
+    const accountsMap: CosmosAccountMap = {};
+    results.forEach((result) => {
+      if (result) {
+        accountsMap[result.network] = result.account;
+      }
+    });
+    dispatch(updateCosmosAccounts(accountsMap));
   };
 
 /**

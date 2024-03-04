@@ -16,7 +16,7 @@ export interface SubmitLoadingParams {
 }
 
 export interface AppState {
-  appEco: AppEco;
+  appEco: AppEco | null;
   updateFlag: number;
   submitLoadingParams: SubmitLoadingParams;
   creationStepInfo: CreationStepInfo;
@@ -24,7 +24,7 @@ export interface AppState {
 }
 
 const initialState: AppState = {
-  appEco: AppEco.Eth,
+  appEco: null,
   updateFlag: 0,
   submitLoadingParams: {
     status: 'loading',
@@ -42,7 +42,7 @@ export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setAppEco: (state: AppState, action: PayloadAction<AppEco>) => {
+    setAppEco: (state: AppState, action: PayloadAction<AppEco | null>) => {
       state.appEco = action.payload;
     },
     setUpdateFlag: (state: AppState, action: PayloadAction<number>) => {

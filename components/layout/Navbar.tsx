@@ -54,6 +54,13 @@ const Navbar = () => {
     return true;
   }, [appEco, neutronChainAccount, address]);
 
+  const showBackToHome = useMemo(() => {
+    if (appEco === AppEco.Cosmos) {
+      return creationStepInfo.activedIndex === 4;
+    }
+    return router.pathname !== '/' || creationStepInfo.activedIndex > 0;
+  }, [appEco, router, creationStepInfo]);
+
   const backToHome = () => {
     router.replace('/');
     dispatch(setBackRoute(''));
@@ -90,7 +97,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {(router.pathname !== '/' || creationStepInfo.activedIndex > 0) && (
+      {showBackToHome && (
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto mb-[.32rem]">
           <div
             className="flex w-[.88rem] h-[.4rem] items-center justify-center gap-[.08rem] bg-bg2 rounded-[.1rem] cursor-pointer"
