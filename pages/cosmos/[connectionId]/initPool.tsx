@@ -818,7 +818,11 @@ const ReviewPage = (props: {
         <CustomButton
           type="stroke"
           height=".56rem"
-          onClick={() => openLink('https://www.google.com')}
+          onClick={() =>
+            openLink(
+              'https://d835jsgd5asjf.cloudfront.net/docs/develop_cosmos_lsd/deploy.html#re-edit-parameters'
+            )
+          }
           width="2.62rem"
         >
           Re-edit Parameters
