@@ -241,7 +241,7 @@ const InitPoolPage = () => {
               />
 
               {Number(feeCommision) > 100 && (
-                <div className="my-[.16rem] text-[.16rem] text-error">
+                <div className="mt-[.06rem] mb-[.16rem] text-[.16rem] text-error">
                   Fee Commission must be {'<='}100
                 </div>
               )}
@@ -258,7 +258,7 @@ const InitPoolPage = () => {
               />
 
               {minimalStakeTooLarge && (
-                <div className="my-[.16rem] text-[.16rem] text-error">
+                <div className="mt-[.06rem] mb-[.16rem] text-[.16rem] text-error">
                   Minimal Stake too large, must be {'<'} 10000000
                 </div>
               )}
