@@ -92,6 +92,10 @@ const InitPoolPage = () => {
     );
   }, [feeCommision, lsdTokenChainConfig]);
 
+  const minimalStakeTooLarge = useMemo(() => {
+    return Number(minimalStake) > 10000000;
+  }, [minimalStake]);
+
   const { submitModalDisabled } = useMemo(() => {
     if (!neutronChainAccount) {
       return {
@@ -253,6 +257,12 @@ const InitPoolPage = () => {
                 className="mt-[.16rem]"
               />
 
+              {minimalStakeTooLarge && (
+                <div className="my-[.16rem] text-[.16rem] text-error">
+                  Minimal Stake too large, must be {'<'} 10000000
+                </div>
+              )}
+
               <InputItem
                 label="LSD Token Code ID"
                 placeholder={
@@ -343,6 +353,7 @@ const InitPoolPage = () => {
                     !minimalStake ||
                     !lsdTokenName ||
                     !lsdTokenSymbol ||
+                    minimalStakeTooLarge ||
                     Number(validatorAddrAmount) < 1 ||
                     Number(validatorAddrAmount) > 10 ||
                     Number(feeCommision) > 100
