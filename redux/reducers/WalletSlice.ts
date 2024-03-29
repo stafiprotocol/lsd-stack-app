@@ -115,7 +115,7 @@ export const autoConnectKeplrChains =
   (): AppThunk => async (dispatch, getState) => {
     const allowedChains: CosmosChainConfig[] = [];
 
-    if (isCosmosNetworkAllowed(neutronChainConfig.chainId)) {
+    if (getState().wallet.cosmosAccounts[neutronChainConfig.chainId]) {
       allowedChains.push(neutronChainConfig);
     }
 
