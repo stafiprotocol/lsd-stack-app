@@ -2,6 +2,7 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import appReducer from './reducers/AppSlice';
 import walletReducer from './reducers/WalletSlice';
 import lsdReducer from './reducers/LsdSlice';
+import lrtReducer from './reducers/LrtSlice';
 import cosmosLsdReducer from './reducers/CosmosLsdSlice';
 import tokenReducer from './reducers/TokenSlice';
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     app: appReducer,
     wallet: walletReducer,
     lsd: lsdReducer,
+    lrt: lrtReducer,
     cosmosLsd: cosmosLsdReducer,
     token: tokenReducer,
   },

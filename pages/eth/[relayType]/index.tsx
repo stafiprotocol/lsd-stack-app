@@ -199,7 +199,7 @@ const ParameterPage = () => {
                   type="stroke"
                   onClick={() => {
                     dispatch(setBackRoute(''));
-                    router.replace('/');
+                    router.replace('/eth');
                   }}
                 >
                   Back

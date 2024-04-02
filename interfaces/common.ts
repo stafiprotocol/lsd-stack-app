@@ -1,6 +1,7 @@
 export enum AppEco {
   Eth = 'ETH',
   Cosmos = 'COSMOS',
+  Lrt = 'LRT',
   Polkadot = 'Polkadot',
   Others = 'Others',
 }

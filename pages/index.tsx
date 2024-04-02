@@ -12,6 +12,7 @@ import LogoImg from 'public/images/logo_text.svg';
 import RelayTypeImg from 'public/images/relay_type.png';
 import EcoEthImg from 'public/images/eco/eth.svg';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
+import EcoLrtImg from 'public/images/eco/lrt.svg';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import { AppEco } from 'interfaces/common';
@@ -136,7 +137,7 @@ const EcoSelector = () => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Cosmos].map((eco) => (
+        {[AppEco.Eth, AppEco.Lrt, AppEco.Cosmos].map((eco) => (
           <div key={eco}>
             <EcoItem
               eco={eco}
@@ -182,7 +183,13 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
     >
       <div className="relative w-[.28rem] h-[.28rem]">
         <Image
-          src={eco === AppEco.Cosmos ? EcoCosmosImg : EcoEthImg}
+          src={
+            eco === AppEco.Cosmos
+              ? EcoCosmosImg
+              : eco === AppEco.Lrt
+              ? EcoLrtImg
+              : EcoEthImg
+          }
           fill
           alt="eth"
         />

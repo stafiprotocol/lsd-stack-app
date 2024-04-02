@@ -19,6 +19,7 @@ export const ETH_STANDARD_CREATION_STEPS = [
   'Parameters',
   'Deploy',
 ];
+
 export const ETH_CUSTOMIZE_CREATION_STEPS = [
   'ETH Eco',
   'Relay Type',
@@ -26,10 +27,18 @@ export const ETH_CUSTOMIZE_CREATION_STEPS = [
   'Parameters',
   'Deploy',
 ];
+
 export const COSMOS_CREATION_STEPS = [
   'COSMOS Eco',
   'Choose Token',
   'Register Pool',
   'Init Pool',
+  'Deploy',
+];
+
+export const LRT_CREATION_STEPS = [
+  'LRT Eco',
+  'Token Standard',
+  'Parameters',
   'Deploy',
 ];

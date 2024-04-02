@@ -1,0 +1,9 @@
+[
+  {
+    "type": "function",
+    "name": "operatorAddress",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "stateMutability": "view"
+  }
+]

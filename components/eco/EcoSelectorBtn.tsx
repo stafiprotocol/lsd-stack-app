@@ -2,12 +2,12 @@ import classNames from 'classnames';
 import { useAppSelector } from 'hooks/common';
 import { AppEco } from 'interfaces/common';
 import Image from 'next/image';
+import EcoCosmosImg from 'public/images/eco/cosmos.svg';
+import EcoEthImg from 'public/images/eco/eth.svg';
+import EcoLrtImg from 'public/images/eco/lrt.svg';
 import ArrowDownImg from 'public/images/eco_arrow_down.svg';
 import ArrowUpImg from 'public/images/eco_arrow_up.svg';
 import { RootState } from 'redux/store';
-import EcoEthImg from 'public/images/eco/eth.svg';
-import EcoCosmosImg from 'public/images/eco/cosmos.svg';
-import EcoSelectedImg from 'public/images/eco/selected.svg';
 
 interface Props {
   active: boolean;
@@ -42,7 +42,13 @@ export const EcoSelectorBtn = ({ active }: Props) => {
         <div className="flex items-center justify-center">
           <div className="relative w-[.28rem] h-[.28rem]">
             <Image
-              src={appEco === AppEco.Cosmos ? EcoCosmosImg : EcoEthImg}
+              src={
+                appEco === AppEco.Cosmos
+                  ? EcoCosmosImg
+                  : appEco === AppEco.Lrt
+                  ? EcoLrtImg
+                  : EcoEthImg
+              }
               fill
               alt="eth"
             />

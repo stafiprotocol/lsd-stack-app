@@ -176,8 +176,10 @@ const ParameterPage = () => {
     if (voterParamsOpened) {
       setVoterParamsOpened(false);
     } else {
-      dispatch(setBackRoute('tokenStandard'));
-      router.replace('/');
+      // dispatch(setBackRoute('tokenStandard'));
+      // router.replace('/');
+      dispatch(setBackRoute(''));
+      router.replace('/eth');
     }
   };
 
