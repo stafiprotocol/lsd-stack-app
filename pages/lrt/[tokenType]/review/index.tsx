@@ -102,7 +102,7 @@ const ReviewPage = () => {
                     value={deployInfo.operatorAddress}
                   />
                   <DeployInfoItem
-                    name="LRT Token address"
+                    name="LRT address"
                     value={deployInfo.lrtTokenAddress}
                   />
                   <DeployInfoItem

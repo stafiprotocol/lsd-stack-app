@@ -134,7 +134,7 @@ const ParameterPage = () => {
       ]);
     } else {
       setParamList([
-        { name: 'LRT Token Address', value: lrtTokenAddress },
+        { name: 'LRT Address', value: lrtTokenAddress },
         { name: 'Owner Address', value: ownerAddress },
         { name: 'Operator Address', value: operatorAddress },
       ]);
@@ -282,10 +282,10 @@ const ParameterPage = () => {
                 {tokenType === 'customize' && (
                   <>
                     <InputItem
-                      label="LRT Token Address"
+                      label="LRT Address"
                       value={lrtTokenAddress}
                       onChange={(v) => setLrtTokenAddress(v)}
-                      placeholder="LRT Token Address"
+                      placeholder="LRT Address"
                     />
                     {!lrtTokenInWhiteListInfo.inWhiteList && (
                       <InputErrorTip msg="Please contact StaFi stack team to whitelist your LRT token contract" />
