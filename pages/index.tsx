@@ -50,8 +50,8 @@ const HomePage = () => {
             </div>
 
             <div className="text-[.16rem] leading-normal text-black capitalize mt-[.28rem] w-[3.8rem]">
-              Please Choose the Ecosystem of your lsd before Deploying your own
-              LSD protocol
+              Please Choose the Ecosystem of your LST/LRT before Deploying your
+              own protocol
             </div>
 
             <div className="mt-[.68rem]">

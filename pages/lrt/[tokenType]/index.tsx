@@ -19,10 +19,6 @@ import {
   queryLrdTokenInWhiteList,
   setLrtTokenInWhiteListInfo,
 } from 'redux/reducers/LrtSlice';
-import {
-  queryLsdTokenInWhiteList,
-  setLsdTokenInWhiteListInfo,
-} from 'redux/reducers/LsdSlice';
 import { validateAddress } from 'utils/web3Utils';
 import { useAccount, useConnect, useSwitchChain } from 'wagmi';
 import Web3 from 'web3';
@@ -219,7 +215,7 @@ const ParameterPage = () => {
     if (tokenType === 'standard') {
       setSubmittable(
         !!tokenName &&
-          tokenName.length <= 10 &&
+          tokenName.length <= 50 &&
           !!symbol &&
           symbol.length <= 10 &&
           !!ownerAddress &&
@@ -266,16 +262,16 @@ const ParameterPage = () => {
                       label="Token Name"
                       value={tokenName}
                       onChange={(v) => setTokenName(v)}
-                      placeholder="Example: StaFi rETH"
+                      placeholder="Example: StaFi rstETH"
                     />
-                    {tokenName.length > 10 && (
-                      <InputErrorTip msg="Token name must be less than 10 character" />
+                    {tokenName.length > 50 && (
+                      <InputErrorTip msg="Token name must be less than 50 character" />
                     )}
                     <InputItem
                       label="Symbol"
                       value={symbol}
                       onChange={(v) => setSymbol(v)}
-                      placeholder="Example: rETH"
+                      placeholder="Example: rstETH"
                     />
                     {symbol.length > 10 && (
                       <InputErrorTip msg="Symbol must be less than 10 character" />
@@ -363,10 +359,25 @@ const ParameterPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2 max-h-[5.6rem] overflow-y-auto">
-              Owner Address: sets the owner of the LSD network being created.
+              Owner Address: sets the owner of the LRT network being created.
               <br />
               <br />
               Owner Permissions:
+              <br />
+              - Upgrade contracts
+              <br />
+              - Adjust commission fee
+              <br />
+              - Adjust duration of era
+              <br />
+              - Nominate voter manager
+              <br />- Adjust parameters
+              <br />
+              <br />
+              Operator Address: sets the owner of the LRT network being created.
+              <br />
+              <br />
+              Operator Permissions:
               <br />
               - Upgrade contracts
               <br />

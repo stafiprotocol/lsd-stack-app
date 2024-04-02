@@ -158,7 +158,18 @@ const LsdTokenTypeSelector = () => {
           <div className="flex justify-center gap-[.32rem] mt-[.32rem]">
             <RelayType
               title="Standard"
-              desc="Standard LSD token contract (contract code linked to a GitHub repository)"
+              desc={
+                <div>
+                  Standard LSD Token{' '}
+                  <a
+                    href="https://github.com/stafiprotocol/eth-lsd-contracts/blob/main/contracts/LsdToken.sol"
+                    target="_blank"
+                    className="underline text-color-link"
+                  >
+                    contract
+                  </a>
+                </div>
+              }
               onChoose={() => router.push('/eth/customize/standard')}
             />
             <RelayType

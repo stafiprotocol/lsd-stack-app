@@ -265,7 +265,7 @@ const ParameterPage = () => {
       if (tokenType === 'standard') {
         setSubmittable(
           !!tokenName &&
-            tokenName.length <= 10 &&
+            tokenName.length <= 50 &&
             !!symbol &&
             symbol.length <= 10 &&
             !!ownerAddress &&
@@ -334,8 +334,8 @@ const ParameterPage = () => {
                         onChange={(v) => setTokenName(v)}
                         placeholder="Example: StaFi rETH"
                       />
-                      {tokenName.length > 10 && (
-                        <InputErrorTip msg="Token name must be less than 10 character" />
+                      {tokenName.length > 50 && (
+                        <InputErrorTip msg="Token name must be less than 50 character" />
                       )}
                       <InputItem
                         label="Symbol"

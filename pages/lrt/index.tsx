@@ -46,13 +46,24 @@ const LrtTokenTypeSelector = () => {
       <div className={classNames('flex-1 min-w-[6.2rem] w-[6.2rem]')}>
         <div className="bg-color-bg2 rounded-[.3rem] pb-[.14rem] border-[.01rem] border-color-border1">
           <div className="text-[.28rem] leading-[.42rem] font-[700] text-text1 text-center mt-[.24rem]">
-            Choose LRT Token Type
+            Choose LRT Type
           </div>
 
           <div className="flex justify-center gap-[.32rem] mt-[.32rem]">
             <RelayType
               title="Standard"
-              desc="Standard LRT token contract (contract code linked to a GitHub repository)"
+              desc={
+                <div>
+                  Standard LRT{' '}
+                  <a
+                    href="https://github.com/stafiprotocol/lrd-contracts/blob/main/src/LrdToken.sol"
+                    target="_blank"
+                    className="underline text-color-link"
+                  >
+                    contract
+                  </a>
+                </div>
+              }
               onChoose={() => router.push('/lrt/standard')}
             />
 
@@ -67,7 +78,7 @@ const LrtTokenTypeSelector = () => {
             <TipBar
               content={
                 <div>
-                  Please note that the LRT Token{' '}
+                  Please note that the LRT{' '}
                   <span className="text-[#FF2782]">cannot be modified</span>{' '}
                   once it is set.
                 </div>
@@ -93,7 +104,7 @@ const LrtTokenTypeSelector = () => {
         </div>
 
         <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.27rem] text-text2">
-          Standard LRT Token:
+          Standard LRT:
           <br />
           - Provided by StaFi Stack
           <br />
@@ -102,9 +113,9 @@ const LrtTokenTypeSelector = () => {
           - Ready to use
           <br />
           <br />
-          Several Precedures required before using Custom LRT Token:
+          Several Precedures required before using Custom LRT:
           <br />
-          1. Implement your own LST logic which comply with Stack&apos;s
+          1. Implement your own LRT logic which comply with Stack&apos;s
           standards.
           <br />
           2. Deploy your contract

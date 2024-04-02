@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
+import { ReactPropTypes } from 'react';
 
 interface Props {
   title: string;
-  desc: string;
+  desc: JSX.Element | string;
   onChoose: () => void;
 }
 
