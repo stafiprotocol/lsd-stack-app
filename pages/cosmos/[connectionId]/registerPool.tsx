@@ -90,7 +90,7 @@ const RegisterPoolPage = () => {
 
   useEffect(() => {
     (async () => {
-      console.log({ ntrnPrice });
+      // console.log({ ntrnPrice });
       if (!ntrnPrice || isNaN(Number(ntrnPrice))) {
         return;
       }

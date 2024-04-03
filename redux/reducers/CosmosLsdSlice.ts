@@ -73,7 +73,7 @@ export const cosmosRegisterPool =
             );
         } catch {}
 
-        console.log({ interChainAccountAddress });
+        // console.log({ interChainAccountAddress });
         if (interChainAccountAddress) {
           if (
             interChainAccountAddress.admin !== neutronChainAccount.bech32Address
@@ -120,7 +120,7 @@ export const cosmosRegisterPool =
           (item) => item.denom === neutronChainConfig.denom
         );
 
-        console.log();
+        // console.log();
         if (
           Number(ntrnBalance ? ntrnBalance.amount : 0) <
           Number(registerFee.amount) * 2 + 0.02
@@ -159,7 +159,7 @@ export const cosmosRegisterPool =
         funds
       );
 
-      console.log({ executeResult });
+      // console.log({ executeResult });
       dispatch(setCosmosEcoLoading(false));
 
       if (!executeResult?.transactionHash) {
@@ -181,7 +181,7 @@ export const cosmosRegisterPool =
                 interchain_account_id: interChainId,
               }
             );
-          console.log({ interChainAccountAddress });
+          // console.log({ interChainAccountAddress });
           if (interChainAccountAddress) {
             break;
           }
@@ -338,7 +338,7 @@ export const cosmosInitPool =
         funds
       );
 
-      console.log({ executeResult });
+      // console.log({ executeResult });
       dispatch(setCosmosEcoLoading(false));
 
       if (!executeResult?.transactionHash) {
@@ -361,7 +361,7 @@ export const cosmosInitPool =
                 interchain_account_id: interChainId,
               }
             );
-          console.log({ interChainAccountAddress });
+          // console.log({ interChainAccountAddress });
           if (
             interChainAccountAddress &&
             interChainAccountAddress.pool_address_ica_info.ica_addr

@@ -592,7 +592,7 @@ const ReviewPage = (props: {
         pool_addr: poolAddr,
       });
 
-      console.log({ poolInfo });
+      // console.log({ poolInfo });
 
       if (poolInfo) {
         setFeeCommision(
@@ -613,7 +613,7 @@ const ReviewPage = (props: {
         poolInfo.lsd_token
       );
       const tokenInfo = await lsdTokenClient.queryTokenInfo();
-      console.log({ tokenInfo });
+      // console.log({ tokenInfo });
       if (tokenInfo) {
         setLsdTokenName(tokenInfo.name);
         setLsdTokenSymbol(tokenInfo.symbol);

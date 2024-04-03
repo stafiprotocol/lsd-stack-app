@@ -59,7 +59,7 @@ const DeployPage = () => {
               pool_addr: router.query.poolAddr as string,
             });
 
-            console.log({ poolInfo });
+            // console.log({ poolInfo });
 
             const wasmClient = await getNeutronWasmClient();
             const lsdTokenClient = new LsdToken.Client(
@@ -67,7 +67,7 @@ const DeployPage = () => {
               poolInfo.lsd_token
             );
             const tokenInfo = await lsdTokenClient.queryTokenInfo();
-            console.log({ tokenInfo });
+            // console.log({ tokenInfo });
             if (tokenInfo) {
               setLsdTokenSymbol(tokenInfo.symbol);
             }

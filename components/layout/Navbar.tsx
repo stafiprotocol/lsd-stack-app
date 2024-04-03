@@ -40,7 +40,7 @@ const Navbar = () => {
   const { appEco, creationStepInfo } = useAppSelector(
     (state: RootState) => state.app
   );
-  console.log({ creationStepInfo });
+  // console.log({ creationStepInfo });
 
   const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
   const { address } = useAccount();
@@ -355,7 +355,7 @@ const ConnectButton = () => {
 
   const clickConnectWallet = async () => {
     if (appEco === AppEco.Eth) {
-      console.log({ connectors });
+      // console.log({ connectors });
       const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
       if (!metamaskConnector) {
         return;
