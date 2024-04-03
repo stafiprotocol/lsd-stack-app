@@ -4,6 +4,7 @@ import { AbiItem } from 'web3-utils';
 import { PublicClient } from 'viem';
 import { sleep } from './commonUtils';
 import {
+  CANCELLED_ERR_MESSAGE1,
   CANCELLED_ERR_MESSAGE2,
   CANCELLED_ERR_MESSAGE3,
 } from 'constants/common';
@@ -109,7 +110,7 @@ export async function fetchTransactionReceiptWithWeb3(
 export const isMetaMaskCancelError = (err: any) => {
   return (
     err.code === 4001 ||
-    err.message.indexOf(CANCELLED_ERR_MESSAGE) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE1) >= 0 ||
     err.message.indexOf(CANCELLED_ERR_MESSAGE2) >= 0 ||
     err.message.indexOf(CANCELLED_ERR_MESSAGE3) >= 0
   );
