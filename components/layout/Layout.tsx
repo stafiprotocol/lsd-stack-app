@@ -14,11 +14,9 @@ import {
   setMetaMaskAccount,
   setMetaMaskChainId,
 } from 'redux/reducers/WalletSlice';
-import { WagmiProvider, useAccount } from 'wagmi';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAccount, useNetwork } from 'wagmi';
 
 const Navbar = dynamic(() => import('./Navbar'), { ssr: false });
-const queryClient = new QueryClient();
 
 export const MyLayoutContext = React.createContext<{
   navigation: NavigationItem[] | undefined;
@@ -34,7 +32,8 @@ export const Layout = (props: React.PropsWithChildren) => {
   const dispatch = useAppDispatch();
   useInit();
 
-  const { address, chainId } = useAccount();
+  const { address } = useAccount();
+  const { chain: wagmiChain } = useNetwork();
 
   const [navigation, setNavigation] = useState<NavigationItem[]>([]);
 
@@ -42,10 +41,8 @@ export const Layout = (props: React.PropsWithChildren) => {
     if (address) {
       dispatch(setMetaMaskAccount(address));
     }
-    if (chainId) {
-      dispatch(setMetaMaskChainId(chainId + ''));
-    }
-  }, [address, dispatch, chainId]);
+    dispatch(setMetaMaskChainId(wagmiChain?.id));
+  }, [address, dispatch, wagmiChain?.id]);
 
   useEffect(() => {
     if (router.pathname === '/') {

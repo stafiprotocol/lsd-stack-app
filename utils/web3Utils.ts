@@ -3,6 +3,10 @@ import { getEthereumRpc } from 'config/eth/env';
 import { AbiItem } from 'web3-utils';
 import { PublicClient } from 'viem';
 import { sleep } from './commonUtils';
+import {
+  CANCELLED_ERR_MESSAGE2,
+  CANCELLED_ERR_MESSAGE3,
+} from 'constants/common';
 
 declare const window: any;
 
@@ -78,3 +82,35 @@ export async function fetchTransactionReceipt(
 
   return undefined;
 }
+
+export async function fetchTransactionReceiptWithWeb3(
+  web3Client: Web3,
+  hash: `0x${string}`
+) {
+  if (!hash) {
+    return undefined;
+  }
+  for (let i = 0; i < 10; i++) {
+    let transactionReceipt;
+    try {
+      transactionReceipt = await web3Client.eth.getTransactionReceipt(hash);
+    } catch {}
+
+    if (transactionReceipt) {
+      return transactionReceipt;
+    } else {
+      await sleep(6000);
+    }
+  }
+
+  return undefined;
+}
+
+export const isMetaMaskCancelError = (err: any) => {
+  return (
+    err.code === 4001 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE2) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE3) >= 0
+  );
+};

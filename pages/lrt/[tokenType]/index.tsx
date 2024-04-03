@@ -6,8 +6,10 @@ import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
 import { getDocHost } from 'config/common';
 import { getEthereumChainId } from 'config/eth/env';
+import { getLrtFactoryContract } from 'config/lrt/contract';
 import { LRT_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
+import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
@@ -20,7 +22,13 @@ import {
   setLrtTokenInWhiteListInfo,
 } from 'redux/reducers/LrtSlice';
 import { validateAddress } from 'utils/web3Utils';
-import { useAccount, useConnect, useSwitchChain } from 'wagmi';
+import {
+  useAccount,
+  useConnect,
+  useContractWrite,
+  useNetwork,
+  useSwitchNetwork,
+} from 'wagmi';
 import Web3 from 'web3';
 
 export function getStaticProps() {
@@ -50,10 +58,9 @@ const ParameterPage = () => {
 
   const dispatch = useAppDispatch();
   const { lrtTokenInWhiteListInfo } = useAppSelector((state) => state.lrt);
-
+  const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
   const { connectors, connectAsync } = useConnect();
-  const { address, chainId } = useAccount();
-  const { switchChainAsync } = useSwitchChain();
+  const { switchNetwork } = useSwitchNetwork();
 
   const [tokenName, setTokenName] = useState('');
   const [symbol, setSymbol] = useState('');
@@ -81,11 +88,25 @@ const ParameterPage = () => {
   }, [operatorAddress]);
 
   const btnType = useMemo(() => {
-    if (address && chainId !== getEthereumChainId()) {
+    if (metaMaskAccount && metaMaskChainId !== getEthereumChainId()) {
       return 'secondary';
     }
     return 'primary';
-  }, [address, chainId]);
+  }, [metaMaskAccount, metaMaskChainId]);
+
+  const { writeAsync: standardWriteAsync } = useContractWrite({
+    address: getLrtFactoryContract().address,
+    abi: getLrtFactoryContract().abi,
+    functionName: 'createLrdNetwork',
+    args: [],
+  });
+
+  const { writeAsync: customWriteAsync } = useContractWrite({
+    address: getLrtFactoryContract().address,
+    abi: getLrtFactoryContract().abi,
+    functionName: 'createLrdNetworkWithLrdToken',
+    args: [],
+  });
 
   useEffect(() => {
     dispatch(
@@ -97,8 +118,8 @@ const ParameterPage = () => {
   }, [dispatch]);
 
   const submit = async () => {
-    if (!address) {
-      const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
+    if (!metaMaskAccount) {
+      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
       if (!metamaskConnector) {
         return;
       }
@@ -115,9 +136,9 @@ const ParameterPage = () => {
       }
       return;
     }
-    if (Number(chainId) !== getEthereumChainId()) {
+    if (metaMaskChainId !== getEthereumChainId()) {
       try {
-        await switchChainAsync({ chainId: getEthereumChainId() });
+        switchNetwork && switchNetwork(getEthereumChainId());
       } catch (err: any) {
         console.error(err);
       }
@@ -158,6 +179,7 @@ const ParameterPage = () => {
     if (tokenType === 'standard') {
       dispatch(
         createLrtNetworkStandard(
+          standardWriteAsync,
           tokenName,
           symbol,
           ownerAddress,
@@ -168,6 +190,7 @@ const ParameterPage = () => {
     } else {
       dispatch(
         createLrtNetworkCustom(
+          customWriteAsync,
           lrtTokenAddress,
           ownerAddress,
           operatorAddress,
@@ -193,19 +216,19 @@ const ParameterPage = () => {
   }, [dispatch, lrtTokenAddress]);
 
   useEffect(() => {
-    if (!address) {
+    if (!metaMaskAccount) {
       setBtnContent('Connect Wallet');
     } else {
-      if (Number(chainId) !== getEthereumChainId()) {
+      if (metaMaskChainId !== getEthereumChainId()) {
         setBtnContent('Switch Network');
       } else {
         setBtnContent('Submit');
       }
     }
-  }, [address, chainId]);
+  }, [metaMaskAccount, metaMaskChainId]);
 
   useEffect(() => {
-    if (!address || Number(chainId !== getEthereumChainId())) {
+    if (!metaMaskAccount || metaMaskChainId !== getEthereumChainId()) {
       setSubmittable(true);
       return;
     }
@@ -234,8 +257,8 @@ const ParameterPage = () => {
       );
     }
   }, [
-    address,
-    chainId,
+    metaMaskChainId,
+    metaMaskAccount,
     tokenName,
     symbol,
     ownerAddress,

@@ -5,8 +5,10 @@ import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
 import { getDocHost } from 'config/common';
+import { getFactoryContract } from 'config/eth/contract';
 import { getEthereumChainId } from 'config/eth/env';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
+import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
@@ -20,7 +22,12 @@ import {
 } from 'redux/reducers/LsdSlice';
 import snackbarUtil from 'utils/snackbarUtils';
 import { validateAddress } from 'utils/web3Utils';
-import { useAccount, useConnect, useSwitchChain } from 'wagmi';
+import {
+  useAccount,
+  useConnect,
+  useContractWrite,
+  useSwitchNetwork,
+} from 'wagmi';
 import Web3 from 'web3';
 
 export function getStaticProps() {
@@ -54,8 +61,8 @@ const ParameterPage = () => {
   const { lsdTokenInWhiteListInfo } = useAppSelector((state) => state.lsd);
 
   const { connectors, connectAsync } = useConnect();
-  const { address, chainId } = useAccount();
-  const { switchChainAsync } = useSwitchChain();
+  const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
+  const { switchNetwork } = useSwitchNetwork();
 
   const [voterParamsOpened, setVoterParamsOpened] = useState(false);
   const [tokenName, setTokenName] = useState('');
@@ -82,11 +89,11 @@ const ParameterPage = () => {
   }, [ownerAddress]);
 
   const btnType = useMemo(() => {
-    if (address && chainId !== getEthereumChainId()) {
+    if (metaMaskAccount && metaMaskChainId !== getEthereumChainId()) {
       return 'secondary';
     }
     return 'primary';
-  }, [address, chainId]);
+  }, [metaMaskAccount, metaMaskChainId]);
 
   const changeVotersAddrs = (addr: string, index: number) => {
     setVotersAddrs((prev) => {
@@ -96,9 +103,23 @@ const ParameterPage = () => {
     });
   };
 
+  const { writeAsync: customStandardWriteAsync } = useContractWrite({
+    address: getFactoryContract().address,
+    abi: getFactoryContract().abi,
+    functionName: 'createLsdNetwork',
+    args: [],
+  });
+
+  const { writeAsync: customCustomWriteAsync } = useContractWrite({
+    address: getFactoryContract().address,
+    abi: getFactoryContract().abi,
+    functionName: 'createLsdNetworkWithLsdToken',
+    args: [],
+  });
+
   const submit = async () => {
-    if (!address) {
-      const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
+    if (!metaMaskAccount) {
+      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
       if (!metamaskConnector) {
         return;
       }
@@ -115,9 +136,9 @@ const ParameterPage = () => {
       }
       return;
     }
-    if (Number(chainId) !== getEthereumChainId()) {
+    if (metaMaskChainId !== getEthereumChainId()) {
       try {
-        await switchChainAsync({ chainId: getEthereumChainId() });
+        switchNetwork && switchNetwork(getEthereumChainId());
       } catch (err: any) {
         console.error(err);
       }
@@ -192,6 +213,7 @@ const ParameterPage = () => {
     if (tokenType === 'standard') {
       dispatch(
         createLsdNetworkCustomStandard(
+          customStandardWriteAsync,
           tokenName,
           symbol,
           ownerAddress,
@@ -203,6 +225,7 @@ const ParameterPage = () => {
     } else {
       dispatch(
         createLsdNetworkCustomCustom(
+          customCustomWriteAsync,
           lsdTokenAddress,
           ownerAddress,
           votersAddrs,
@@ -242,19 +265,19 @@ const ParameterPage = () => {
   }, [voteNumber]);
 
   useEffect(() => {
-    if (!address) {
+    if (!metaMaskAccount) {
       setBtnContent('Connect Wallet');
     } else {
-      if (Number(chainId) !== getEthereumChainId()) {
+      if (metaMaskChainId !== getEthereumChainId()) {
         setBtnContent('Switch Network');
       } else {
         setBtnContent('Submit');
       }
     }
-  }, [address, chainId]);
+  }, [metaMaskAccount, metaMaskChainId]);
 
   useEffect(() => {
-    if (!address || Number(chainId !== getEthereumChainId())) {
+    if (!metaMaskAccount || metaMaskChainId !== getEthereumChainId()) {
       setSubmittable(true);
       return;
     }
@@ -301,8 +324,8 @@ const ParameterPage = () => {
       setSubmittable(true);
     }
   }, [
-    address,
-    chainId,
+    metaMaskChainId,
+    metaMaskAccount,
     tokenName,
     symbol,
     ownerAddress,
@@ -312,6 +335,7 @@ const ParameterPage = () => {
     threshold,
     lsdTokenAddress,
     votersAddrs,
+    lsdTokenInWhiteListInfo.inWhiteList,
   ]);
 
   return (

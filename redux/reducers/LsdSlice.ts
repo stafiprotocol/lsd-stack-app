@@ -4,7 +4,9 @@ import { setSubmitLoadingParams } from './AppSlice';
 import {
   createWeb3,
   fetchTransactionReceipt,
+  fetchTransactionReceiptWithWeb3,
   getEthWeb3,
+  isMetaMaskCancelError,
 } from 'utils/web3Utils';
 import { getFactoryContract } from 'config/eth/contract';
 import {
@@ -15,8 +17,6 @@ import {
 import snackbarUtil from 'utils/snackbarUtils';
 import { createPublicClient, createWalletClient, custom } from 'viem';
 import { isDev } from 'config/common';
-import { holesky, mainnet } from 'viem/chains';
-import { viemPublicClient } from 'config/viemClient';
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
@@ -52,6 +52,7 @@ export default lsdSlice.reducer;
 
 export const createLsdNetworkStandard =
   (
+    writeAsync: any,
     lsdTokenName: string,
     lsdTokenSymbol: string,
     ownerAddress: string,
@@ -60,7 +61,7 @@ export const createLsdNetworkStandard =
   async (dispatch, getState) => {
     dispatch(
       createLsdNetwork(
-        'createLsdNetworkWithEntrustedVoters',
+        writeAsync,
         [lsdTokenName, lsdTokenSymbol, ownerAddress],
         cb
       )
@@ -69,6 +70,7 @@ export const createLsdNetworkStandard =
 
 export const createLsdNetworkCustomStandard =
   (
+    writeAsync: any,
     lsdTokenName: string,
     lsdTokenSymbol: string,
     ownerAddress: string,
@@ -79,7 +81,7 @@ export const createLsdNetworkCustomStandard =
   async (dispatch) => {
     dispatch(
       createLsdNetwork(
-        'createLsdNetwork',
+        writeAsync,
         [lsdTokenName, lsdTokenSymbol, ownerAddress, voters, threshold],
         cb
       )
@@ -88,6 +90,7 @@ export const createLsdNetworkCustomStandard =
 
 export const createLsdNetworkCustomCustom =
   (
+    writeAsync: any,
     lsdTokenAddress: string,
     ownerAddress: string,
     voters: string[],
@@ -97,7 +100,7 @@ export const createLsdNetworkCustomCustom =
   async (dispatch) => {
     dispatch(
       createLsdNetwork(
-        'createLsdNetworkWithLsdToken',
+        writeAsync,
         [lsdTokenAddress, ownerAddress, voters, threshold],
         cb
       )
@@ -105,7 +108,7 @@ export const createLsdNetworkCustomCustom =
   };
 
 const createLsdNetwork =
-  (method: string, params: any[], cb?: (success: boolean) => void): AppThunk =>
+  (writeAsync: any, params: any[], cb?: (success: boolean) => void): AppThunk =>
   async (dispatch, getState) => {
     const metaMaskAccount = getState().wallet.metaMaskAccount;
     if (!metaMaskAccount) {
@@ -122,43 +125,35 @@ const createLsdNetwork =
     );
 
     try {
-      const viemWalletClient = createWalletClient({
-        chain: isDev() ? holesky : mainnet,
-        transport: custom(window.ethereum!),
+      const result = await writeAsync({
+        args: [...params],
+        from: metaMaskAccount,
       });
 
-      const { request } = await viemPublicClient.simulateContract({
-        account: metaMaskAccount as `0x${string}`,
-        address: getFactoryContract().address,
-        abi: getFactoryContract().abi,
-        functionName: method,
-        args: params,
-      });
-      const txHash = await viemWalletClient.writeContract(request);
-      const transaction = await fetchTransactionReceipt(
-        viemPublicClient,
-        txHash
+      const withdrawTransactionReceipt = await fetchTransactionReceiptWithWeb3(
+        getEthWeb3(),
+        result.hash
       );
 
-      if (transaction?.status === 'success') {
+      if (withdrawTransactionReceipt?.status) {
         dispatch(
           setSubmitLoadingParams({
             status: 'success',
             modalOpened: true,
-            txHash,
+            txHash: withdrawTransactionReceipt.transactionHash,
           })
         );
         cb && cb(true);
       } else {
         throw new Error(
-          transaction?.logs
-            ? JSON.stringify(transaction?.logs)
+          withdrawTransactionReceipt?.logs
+            ? JSON.stringify(withdrawTransactionReceipt?.logs)
             : TRANSACTION_FAILED_MESSAGE
         );
       }
     } catch (err: any) {
       console.log(err);
-      if (err.code === 4001) {
+      if (isMetaMaskCancelError(err)) {
         dispatch(
           setSubmitLoadingParams({
             status: 'error',

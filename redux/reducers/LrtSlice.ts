@@ -1,29 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from 'redux/store';
-import { setSubmitLoadingParams } from './AppSlice';
-import {
-  createWeb3,
-  fetchTransactionReceipt,
-  getEthWeb3,
-} from 'utils/web3Utils';
-import { getFactoryContract } from 'config/eth/contract';
+import { getLrtFactoryContract } from 'config/lrt/contract';
 import {
   CANCELLED_MESSAGE,
   CONNECTION_ERROR_MESSAGE,
   TRANSACTION_FAILED_MESSAGE,
 } from 'constants/common';
+import { AppThunk } from 'redux/store';
 import snackbarUtil from 'utils/snackbarUtils';
-import { getLrtFactoryContract } from 'config/lrt/contract';
 import {
-  createPublicClient,
-  createWalletClient,
-  custom,
-  getAddress,
-  getContract,
-  http,
-} from 'viem';
-import { holesky, mainnet } from 'viem/chains';
-import { isDev } from 'config/common';
+  createWeb3,
+  fetchTransactionReceiptWithWeb3,
+  getEthWeb3,
+  isMetaMaskCancelError,
+} from 'utils/web3Utils';
+import { setSubmitLoadingParams } from './AppSlice';
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
@@ -59,6 +49,7 @@ export default lsdSlice.reducer;
 
 export const createLrtNetworkStandard =
   (
+    writeAsync: any,
     lsdTokenName: string,
     lsdTokenSymbol: string,
     ownerAddress: string,
@@ -68,7 +59,7 @@ export const createLrtNetworkStandard =
   async (dispatch) => {
     dispatch(
       createLrtNetwork(
-        'createLrdNetwork',
+        writeAsync,
         [lsdTokenName, lsdTokenSymbol, operatorAddress, ownerAddress],
         cb
       )
@@ -77,6 +68,7 @@ export const createLrtNetworkStandard =
 
 export const createLrtNetworkCustom =
   (
+    writeAsync: any,
     lrtTokenAddress: string,
     ownerAddress: string,
     operatorAddress: string,
@@ -85,7 +77,7 @@ export const createLrtNetworkCustom =
   async (dispatch) => {
     dispatch(
       createLrtNetwork(
-        'createLrdNetworkWithLrdToken',
+        writeAsync,
         [lrtTokenAddress, operatorAddress, ownerAddress],
         cb
       )
@@ -93,7 +85,7 @@ export const createLrtNetworkCustom =
   };
 
 const createLrtNetwork =
-  (method: string, params: any[], cb?: (success: boolean) => void): AppThunk =>
+  (writeAsync: any, params: any[], cb?: (success: boolean) => void): AppThunk =>
   async (dispatch, getState) => {
     const metaMaskAccount = getState().wallet.metaMaskAccount;
     if (!metaMaskAccount) {
@@ -110,48 +102,36 @@ const createLrtNetwork =
     );
 
     try {
-      const viemPublicClient = createPublicClient({
-        chain: isDev() ? holesky : mainnet,
-        transport: http(),
-      });
-      const viemWalletClient = createWalletClient({
-        chain: isDev() ? holesky : mainnet,
-        transport: custom(window.ethereum!),
+      const result = await writeAsync({
+        args: [...params],
+        from: metaMaskAccount,
       });
 
-      const { request } = await viemPublicClient.simulateContract({
-        account: metaMaskAccount as `0x${string}`,
-        address: getLrtFactoryContract().address,
-        abi: getLrtFactoryContract().abi,
-        functionName: method,
-        args: params,
-      });
-      const txHash = await viemWalletClient.writeContract(request);
-      const transaction = await fetchTransactionReceipt(
-        viemPublicClient,
-        txHash
+      const withdrawTransactionReceipt = await fetchTransactionReceiptWithWeb3(
+        getEthWeb3(),
+        result.hash
       );
 
-      if (transaction?.status === 'success') {
+      if (withdrawTransactionReceipt?.status) {
         dispatch(
           setSubmitLoadingParams({
             status: 'success',
             modalOpened: true,
-            txHash,
+            txHash: withdrawTransactionReceipt?.transactionHash,
             msg: 'Creating LRT network successfully',
           })
         );
         cb && cb(true);
       } else {
         throw new Error(
-          transaction?.logs
-            ? JSON.stringify(transaction?.logs)
+          withdrawTransactionReceipt?.logs
+            ? JSON.stringify(withdrawTransactionReceipt?.logs)
             : TRANSACTION_FAILED_MESSAGE
         );
       }
     } catch (err: any) {
       console.log(err);
-      if (err.code === 4001) {
+      if (isMetaMaskCancelError(err)) {
         dispatch(
           setSubmitLoadingParams({
             status: 'error',

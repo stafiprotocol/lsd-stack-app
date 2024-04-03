@@ -12,6 +12,11 @@ export const NETWORK_ERR_MESSAGE = 'Network exception, please try again later.';
 export const KEPLR_ERROR_REJECT = 'Request rejected';
 export const KEPLR_NOT_INSTALLED_MESSAGE = 'Keplr not installed';
 
+export const CANCELLED_ERR_MESSAGE1 = 'User rejected the transaction';
+export const CANCELLED_ERR_MESSAGE2 = 'User rejected the request';
+export const CANCELLED_ERR_MESSAGE3 =
+  "Cannot read properties of undefined (reading 'symbol')";
+
 // creation steps
 export const ETH_STANDARD_CREATION_STEPS = [
   'ETH Eco',

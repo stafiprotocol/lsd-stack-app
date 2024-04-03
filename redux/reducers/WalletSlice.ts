@@ -18,7 +18,7 @@ import { queryAccountBalances } from '@stafihub/apps-wallet';
 
 export interface WalletState {
   metaMaskAccount: string | undefined;
-  metaMaskChainId: string | undefined;
+  metaMaskChainId: number | undefined;
   metaMaskDisconnected: boolean;
   cosmosAccounts: CosmosAccountMap;
 }
@@ -42,7 +42,7 @@ export const walletSlice = createSlice({
     },
     setMetaMaskChainId: (
       state: WalletState,
-      action: PayloadAction<string | undefined>
+      action: PayloadAction<number | undefined>
     ) => {
       state.metaMaskChainId = action.payload;
     },

@@ -11,9 +11,9 @@ import { SnackbarUtilsConfigurator } from 'utils/snackbarUtils';
 import 'styles/globals.css';
 
 import { MaterialDesignContent } from 'notistack';
-import { WagmiProvider } from 'wagmi';
-import { config } from 'config/wagmiConfig';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { WagmiConfig } from 'wagmi';
+import { wagmiConfig } from 'config/walletConnect';
 
 const queryClient = new QueryClient();
 
@@ -96,12 +96,12 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
           warning: StyledMaterialDesignContent,
         }}
       >
-        <WagmiProvider config={config}>
+        <WagmiConfig config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             <SnackbarUtilsConfigurator />
             <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
           </QueryClientProvider>
-        </WagmiProvider>
+        </WagmiConfig>
       </SnackbarProvider>
     </ThemeProvider>
   );

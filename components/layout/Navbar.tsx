@@ -355,7 +355,8 @@ const ConnectButton = () => {
 
   const clickConnectWallet = async () => {
     if (appEco === AppEco.Eth) {
-      const metamaskConnector = connectors.find((c) => c.id === 'io.metamask');
+      console.log({ connectors });
+      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
       if (!metamaskConnector) {
         return;
       }
