@@ -152,16 +152,14 @@ const ReviewPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
-              Relay is an off-chain service responsible for interacting with Eth
-              LSD contracts, synchronizing blocks and events, handling tasks
-              related to validators and balances, and other off-chain
-              operations. Go through with these steps to run a relay service:
+              Relay is an off-chain service responsible for interacting with LRT
+              contracts. Go through with these steps to run a relay service:
               <br />
               - Prepare servers
               <br />
               - Install Relay binary from source code
               <br />
-              - Import voter account
+              - Import account
               <br />- Start relay service
             </div>
 
