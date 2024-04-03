@@ -27,6 +27,9 @@ export const useLrtDeployInfo = () => {
 
   const fetchDeployInfo = useCallback(async () => {
     try {
+      if (!metaMaskAccount) {
+        return;
+      }
       const web3 = getEthWeb3();
       const contract = new web3.eth.Contract(
         getLrtFactoryContract().abi,

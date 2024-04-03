@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from 'redux/store';
 import { setSubmitLoadingParams } from './AppSlice';
-import { createWeb3, getEthWeb3 } from 'utils/web3Utils';
+import {
+  createWeb3,
+  fetchTransactionReceipt,
+  getEthWeb3,
+} from 'utils/web3Utils';
 import { getFactoryContract } from 'config/eth/contract';
 import {
   CANCELLED_MESSAGE,
@@ -10,6 +14,16 @@ import {
 } from 'constants/common';
 import snackbarUtil from 'utils/snackbarUtils';
 import { getLrtFactoryContract } from 'config/lrt/contract';
+import {
+  createPublicClient,
+  createWalletClient,
+  custom,
+  getAddress,
+  getContract,
+  http,
+} from 'viem';
+import { holesky, mainnet } from 'viem/chains';
+import { isDev } from 'config/common';
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
@@ -96,16 +110,29 @@ const createLrtNetwork =
     );
 
     try {
-      const web3 = createWeb3();
-      const contract = new web3.eth.Contract(
-        getLrtFactoryContract().abi,
-        getLrtFactoryContract().address,
-        { from: metaMaskAccount }
+      const viemPublicClient = createPublicClient({
+        chain: isDev() ? holesky : mainnet,
+        transport: http(),
+      });
+      const viemWalletClient = createWalletClient({
+        chain: isDev() ? holesky : mainnet,
+        transport: custom(window.ethereum!),
+      });
+
+      const { request } = await viemPublicClient.simulateContract({
+        account: metaMaskAccount as `0x${string}`,
+        address: getLrtFactoryContract().address,
+        abi: getLrtFactoryContract().abi,
+        functionName: method,
+        args: params,
+      });
+      const txHash = await viemWalletClient.writeContract(request);
+      const transaction = await fetchTransactionReceipt(
+        viemPublicClient,
+        txHash
       );
 
-      const result = await contract.methods[method](...params).send();
-      if (result && result.status) {
-        const txHash = result.transactionHash;
+      if (transaction?.status === 'success') {
         dispatch(
           setSubmitLoadingParams({
             status: 'success',
@@ -116,7 +143,11 @@ const createLrtNetwork =
         );
         cb && cb(true);
       } else {
-        throw new Error(TRANSACTION_FAILED_MESSAGE);
+        throw new Error(
+          transaction?.logs
+            ? JSON.stringify(transaction?.logs)
+            : TRANSACTION_FAILED_MESSAGE
+        );
       }
     } catch (err: any) {
       console.log(err);
@@ -169,6 +200,9 @@ export const queryLrdTokenInWhiteList =
         { from: metaMaskAccount }
       );
       const result = await contract.methods.authorizedLrdToken(lsdToken).call();
+
+      // console.log({ result });
+
       if (result) {
         dispatch(
           setLrtTokenInWhiteListInfo({

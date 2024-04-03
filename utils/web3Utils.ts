@@ -1,6 +1,8 @@
 import Web3 from 'web3';
 import { getEthereumRpc } from 'config/eth/env';
 import { AbiItem } from 'web3-utils';
+import { PublicClient } from 'viem';
+import { sleep } from './commonUtils';
 
 declare const window: any;
 
@@ -50,4 +52,29 @@ export async function getErc20AssetBalance(
 
 export function validateAddress(address: string) {
   return Web3.utils.isAddress(address);
+}
+
+export async function fetchTransactionReceipt(
+  publicClient: PublicClient,
+  hash: `0x${string}`
+) {
+  if (!hash) {
+    return undefined;
+  }
+  for (let i = 0; i < 10; i++) {
+    let transactionReceipt;
+    try {
+      transactionReceipt = await publicClient.waitForTransactionReceipt({
+        hash,
+      });
+    } catch {}
+
+    if (transactionReceipt) {
+      return transactionReceipt;
+    } else {
+      await sleep(6000);
+    }
+  }
+
+  return undefined;
 }

@@ -5,11 +5,14 @@ import { TipBar } from 'components/common/TipBar';
 import { DeployReadyModal } from 'components/modal/DeployReadyModal';
 import { getDocHost } from 'config/common';
 import { getFactoryContract } from 'config/eth/contract';
+import { ETH_STANDARD_CREATION_STEPS } from 'constants/common';
+import { useAppDispatch } from 'hooks/common';
 import { useDeployInfo } from 'hooks/useDeployInfo';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { setCreationStepInfo } from 'redux/reducers/AppSlice';
 
 export function getStaticProps() {
   return { props: {} };
@@ -29,6 +32,7 @@ export function getStaticPaths() {
 }
 
 const ReviewPage = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const { fetchLoading, deployInfo } = useDeployInfo('standard');
@@ -38,6 +42,15 @@ const ReviewPage = () => {
   const onBack = () => {
     router.replace('/');
   };
+
+  useEffect(() => {
+    dispatch(
+      setCreationStepInfo({
+        steps: ETH_STANDARD_CREATION_STEPS,
+        activedIndex: 3,
+      })
+    );
+  }, [dispatch]);
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">

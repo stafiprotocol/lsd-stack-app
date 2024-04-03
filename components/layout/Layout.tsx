@@ -14,9 +14,11 @@ import {
   setMetaMaskAccount,
   setMetaMaskChainId,
 } from 'redux/reducers/WalletSlice';
-import { useAccount } from 'wagmi';
+import { WagmiProvider, useAccount } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const Navbar = dynamic(() => import('./Navbar'), { ssr: false });
+const queryClient = new QueryClient();
 
 export const MyLayoutContext = React.createContext<{
   navigation: NavigationItem[] | undefined;

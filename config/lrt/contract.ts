@@ -15,7 +15,7 @@ export function getLrtFactoryContract() {
   return {
     abi: factoryContractAbi as AbiItem[],
     address: isDev()
-      ? devConfig.factoryContractAddress
+      ? (devConfig.factoryContractAddress as `0x${string}`)
       : (prodConfig.factoryContractAddress as `0x${string}`),
   };
 }
