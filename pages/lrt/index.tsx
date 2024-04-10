@@ -83,7 +83,7 @@ const LrtTokenTypeSelector = () => {
                   once it is set.
                 </div>
               }
-              link={`${getDocHost()}/docs/developethlsd/deploy.html#why-lsd-token-could-not-be-changed`}
+              link={`${getDocHost()}/docs/developlrt/deploy.html#why-lrd-token-could-not-be-changed`}
             />
           </div>
         </div>
@@ -93,7 +93,7 @@ const LrtTokenTypeSelector = () => {
         <div className="flex items-center gap-[.12rem]">
           <a
             className="text-[.24rem] text-text1 leading-[.36rem] underline"
-            href={`${getDocHost()}/docs/developethlsd/deploy.html#which-token-type-should-i-choose`}
+            href={`${getDocHost()}/docs/developlrt/deploy.html#which-token-type-should-i-choose`}
             target="_blank"
           >
             Compare Token Types
@@ -113,7 +113,7 @@ const LrtTokenTypeSelector = () => {
           - Ready to use
           <br />
           <br />
-          Several Precedures required before using Custom LRT:
+          Several Procedures required before using Custom LRT:
           <br />
           1. Implement your own LRT logic which comply with Stack&apos;s
           standards.

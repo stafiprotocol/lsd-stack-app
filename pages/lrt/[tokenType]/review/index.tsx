@@ -69,7 +69,7 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link={`${getDocHost()}/docs/developethlsd/deploy.html#save-all-the-information-generated`}
+                  link={`${getDocHost()}/docs/developlrt/deploy.html#save-all-the-information-generated`}
                   isWarning
                 />
               </div>
@@ -141,7 +141,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/developethlsd/deploy.html#step2-run-relay-service`}
+                href={`${getDocHost()}/docs/developlrt/deploy.html#step2-run-relay-service`}
                 target="_blank"
               >
                 How to run your relay service
@@ -166,10 +166,10 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/developethlsd/ethlsdapp.html`}
+                href={`${getDocHost()}/docs/developlrt/app.html`}
                 target="_blank"
               >
-                How to deploy your own LRT APP
+                How to build your own LRT App
               </a>
               <div className="relative w-[.12rem] h-[.12rem]">
                 <Image src={ExternalLinkImg} alt="link" layout="fill" />
@@ -177,12 +177,12 @@ const ReviewPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
-              - Fork the LRT App on GitHub
+              - Web3 frontend development technologies required
               <br />
-              - Config contract address
+              - Follow the instructions of the documentation to build your own LRT App
               <br />
-              - Change branding related text and links
-              <br />- Build and deploy it to Static Web Hosting Services
+              - Reach out StaFi Stack Team if you need help
+              <br />
             </div>
           </div>
         </div>
