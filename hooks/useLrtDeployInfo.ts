@@ -37,18 +37,18 @@ export const useLrtDeployInfo = () => {
         { from: metaMaskAccount }
       );
 
-      const lrdTokensOfCreater = await contract.methods
-        .lrdTokensOfCreater(metaMaskAccount)
+      const lrdTokensOfCreator = await contract.methods
+        .lrdTokensOfCreator(metaMaskAccount)
         .call();
       if (
-        !Array.isArray(lrdTokensOfCreater) ||
-        lrdTokensOfCreater.length === 0
+        !Array.isArray(lrdTokensOfCreator) ||
+        lrdTokensOfCreator.length === 0
       ) {
         setFetchLoading(false);
         return;
       }
 
-      const latestLrdToken = lrdTokensOfCreater[lrdTokensOfCreater.length - 1];
+      const latestLrdToken = lrdTokensOfCreator[lrdTokensOfCreator.length - 1];
       const networkContractsOfLrdToken = await contract.methods
         .networkContractsOfLrdToken(latestLrdToken)
         .call();

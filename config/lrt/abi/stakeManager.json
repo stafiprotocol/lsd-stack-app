@@ -71,19 +71,6 @@
   },
   {
     "type": "function",
-    "name": "MIN_RATE_CHANGE_LIMIT",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "UNSTAKE_TIMES_LIMIT",
     "inputs": [],
     "outputs": [
@@ -268,6 +255,19 @@
   },
   {
     "type": "function",
+    "name": "factoryCommissionRate",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getBondedPools",
     "inputs": [],
     "outputs": [
@@ -283,6 +283,67 @@
     "type": "function",
     "name": "getRate",
     "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getSharesByTokenAmount",
+    "inputs": [
+      {
+        "name": "_lsdToken",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_tokenAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getSupportedLsts",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "lsts",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getTokenAmountByShares",
+    "inputs": [
+      {
+        "name": "_lsdToken",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_shares",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
     "outputs": [
       {
         "name": "",
@@ -336,14 +397,14 @@
         "internalType": "address"
       },
       {
-        "name": "_lstForStakeEth",
+        "name": "_lsdManagerAddress",
         "type": "address",
         "internalType": "address"
       },
       {
-        "name": "_lstAddresses",
-        "type": "address[]",
-        "internalType": "address[]"
+        "name": "_lstForStakeEth",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -371,6 +432,19 @@
         "name": "",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "lsdManager",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract ILsdManager"
       }
     ],
     "stateMutability": "view"
@@ -436,7 +510,7 @@
   },
   {
     "type": "function",
-    "name": "poolDelegate",
+    "name": "poolChangeOperator",
     "inputs": [
       {
         "name": "_poolAddr",
@@ -444,12 +518,12 @@
         "internalType": "address"
       },
       {
-        "name": "operator",
+        "name": "_newOperator",
         "type": "address",
         "internalType": "address"
       },
       {
-        "name": "approverSignatureAndExpiry",
+        "name": "_approverSignatureAndExpiry",
         "type": "tuple",
         "internalType": "struct ISignatureUtils.SignatureWithExpiry",
         "components": [
@@ -466,7 +540,47 @@
         ]
       },
       {
-        "name": "approverSalt",
+        "name": "_approverSalt",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "poolInitOperator",
+    "inputs": [
+      {
+        "name": "_poolAddr",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_operator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_approverSignatureAndExpiry",
+        "type": "tuple",
+        "internalType": "struct ISignatureUtils.SignatureWithExpiry",
+        "components": [
+          {
+            "name": "signature",
+            "type": "bytes",
+            "internalType": "bytes"
+          },
+          {
+            "name": "expiry",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      },
+      {
+        "name": "_approverSalt",
         "type": "bytes32",
         "internalType": "bytes32"
       }
@@ -512,19 +626,6 @@
       }
     ],
     "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "poolUndelegate",
-    "inputs": [
-      {
-        "name": "_poolAddr",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -611,6 +712,32 @@
         "name": "_eraOffset",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setFactoryCommissionRate",
+    "inputs": [
+      {
+        "name": "_factoryCommissionRate",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setLsdManagerAddress",
+    "inputs": [
+      {
+        "name": "_lsdManagerAddress",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -1003,6 +1130,25 @@
   },
   {
     "type": "event",
+    "name": "LsdManagerChanged",
+    "inputs": [
+      {
+        "name": "_before",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "_after",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "NewClaimedNonce",
     "inputs": [
       {
@@ -1110,6 +1256,12 @@
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
+      },
+      {
+        "name": "forStakeEth",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
       }
     ],
     "anonymous": false
@@ -1125,16 +1277,16 @@
         "internalType": "address"
       },
       {
-        "name": "validators",
-        "type": "string[]",
+        "name": "strategies",
+        "type": "address[]",
         "indexed": false,
-        "internalType": "string[]"
+        "internalType": "address[]"
       },
       {
-        "name": "amount",
-        "type": "uint256",
+        "name": "amounts",
+        "type": "uint256[]",
         "indexed": false,
-        "internalType": "uint256"
+        "internalType": "uint256[]"
       }
     ],
     "anonymous": false
@@ -1275,6 +1427,11 @@
   },
   {
     "type": "error",
+    "name": "CannotRemoveLstForStakeEth",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "ERC1967InvalidImplementation",
     "inputs": [
       {
@@ -1292,6 +1449,11 @@
   {
     "type": "error",
     "name": "EraNotMatch",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "FactoryCommissionRateInvalid",
     "inputs": []
   },
   {
@@ -1371,14 +1533,8 @@
   },
   {
     "type": "error",
-    "name": "LessThanMinRateChangeLimit",
-    "inputs": [
-      {
-        "name": "rateChangeLimit",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
+    "name": "LstNotClearOnStrategy",
+    "inputs": []
   },
   {
     "type": "error",
@@ -1526,6 +1682,16 @@
         "internalType": "bytes32"
       }
     ]
+  },
+  {
+    "type": "error",
+    "name": "UncompletedRedelegation",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "UnstakeTimesExceedLimit",
+    "inputs": []
   },
   {
     "type": "error",
