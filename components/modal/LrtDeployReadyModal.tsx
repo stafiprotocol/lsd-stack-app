@@ -70,7 +70,7 @@ export const LrtDeployReadyModal = ({ open, close, lrtTokenName }: Props) => {
             width="1.75rem"
             height=".46rem"
             onClick={() =>
-              openLink(`${getDocHost()}/docs/developethlsd/ethlsdapp.html`)
+              openLink(`${getDocHost()}/docs/developlrt/app.html`)
             }
             border="none"
             trRaidus="0"

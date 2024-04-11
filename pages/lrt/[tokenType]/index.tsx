@@ -340,7 +340,7 @@ const ParameterPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link={`${getDocHost()}/docs/developethlsd/deploy.html#rewards-distribution`}
+                  link={`${getDocHost()}/docs/developlrt/deploy.html#rewards-distribution`}
                 />
               </div>
 
@@ -371,7 +371,7 @@ const ParameterPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/developethlsd/deploy.html#parameter-tips`}
+                href={`${getDocHost()}/docs/developlrt/deploy.html#parameter-tips`}
                 target="_blank"
               >
                 Parameter Tips
@@ -393,23 +393,17 @@ const ParameterPage = () => {
               <br />
               - Adjust duration of era
               <br />
-              - Nominate voter manager
-              <br />- Adjust parameters
+              - Manage supported LSTs 
               <br />
               <br />
-              Operator Address: sets the owner of the LRT network being created.
+              Operator Address: must be registered operator on EigenLayer
               <br />
-              <br />
-              Operator Permissions:
-              <br />
-              - Upgrade contracts
-              <br />
-              - Adjust commission fee
-              <br />
-              - Adjust duration of era
-              <br />
-              - Nominate voter manager
-              <br />- Adjust parameters
+              - <a
+                href={getEthereumChainId() === 1 ? 'https://app.eigenlayer.xyz/operator' : 'https://holesky.eigenlayer.xyz/operator'}
+                target='_blank'
+              >
+                Go and find operators
+              </a>
             </div>
           </div>
         </div>
