@@ -1,5 +1,6 @@
 import { AddEthereumChainParameter } from '@web3-react/types';
 import { isDev } from 'config/common';
+import { getEtherScanUrl } from 'config/explorer';
 
 export function getEthereumChainId() {
   if (isDev()) {
@@ -22,32 +23,35 @@ export function getEthereumRpc() {
   return 'https://mainnet.infura.io/v3/b3611f564322439ab2491e04ddd55b39';
 }
 
-export function getEthereumChainInfo(): AddEthereumChainParameter {
-  if (isDev()) {
-    return {
-      chainId: 17000,
-      chainName: 'Holesky',
-      nativeCurrency: {
-        name: 'Holesky Ether',
-        symbol: 'ETH',
-        decimals: 18,
+export function getWagmiChainConfig() {
+  return {
+    id: getEthereumChainId(),
+    name: getEthereumChainName(),
+    network: getEthereumChainName(),
+    nativeCurrency: {
+      decimals: 18,
+      name: 'ETH',
+      symbol: 'ETH',
+    },
+    rpcUrls: {
+      default: {
+        http: [getEthereumRpc()],
       },
-      rpcUrls: ['https://ethereum-holesky.publicnode.com'],
-      blockExplorerUrls: ['https://holesky.etherscan.io'],
-    };
-  } else {
-    return {
-      chainId: 1,
-      chainName: 'Ethereum',
-      nativeCurrency: {
-        name: 'Ether',
-        symbol: 'ETH',
-        decimals: 18,
+      public: {
+        http: [getEthereumRpc()],
       },
-      rpcUrls: [
-        'https://mainnet.infura.io/v3/b3611f564322439ab2491e04ddd55b39',
-      ],
-      blockExplorerUrls: ['https://etherscan.io'],
-    };
-  }
+    },
+    blockExplorers: {
+      etherscan: {
+        name: '',
+        url: getEtherScanUrl(),
+      },
+      default: {
+        name: '',
+        url: getEtherScanUrl(),
+      },
+    },
+    contracts: {},
+    testnet: isDev(),
+  };
 }
