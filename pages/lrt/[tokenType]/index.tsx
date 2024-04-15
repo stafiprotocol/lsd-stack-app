@@ -19,8 +19,11 @@ import {
   createLrtNetworkCustom,
   createLrtNetworkStandard,
   queryLrdTokenInWhiteList,
+  queryLrtOperatorValid,
+  setLrtOperatorValidInfo,
   setLrtTokenInWhiteListInfo,
 } from 'redux/reducers/LrtSlice';
+import { RootState } from 'redux/store';
 import { validateAddress } from 'utils/web3Utils';
 import {
   useAccount,
@@ -58,6 +61,9 @@ const ParameterPage = () => {
 
   const dispatch = useAppDispatch();
   const { lrtTokenInWhiteListInfo } = useAppSelector((state) => state.lrt);
+  const lrtOperatorValidInfo = useAppSelector(
+    (state: RootState) => state.lrt.lrtOperatorValidInfo
+  );
   const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
   const { connectors, connectAsync } = useConnect();
   const { switchNetwork } = useSwitchNetwork();
@@ -84,8 +90,8 @@ const ParameterPage = () => {
   }, [ownerAddress]);
 
   const isOperatorAddressValid = useMemo(() => {
-    return Web3.utils.isAddress(operatorAddress);
-  }, [operatorAddress]);
+    return validateAddress(operatorAddress) && lrtOperatorValidInfo.isValid;
+  }, [operatorAddress, lrtOperatorValidInfo]);
 
   const btnType = useMemo(() => {
     if (metaMaskAccount && metaMaskChainId !== getEthereumChainId()) {
@@ -207,6 +213,12 @@ const ParameterPage = () => {
         queryLoading: false,
       })
     );
+    dispatch(
+      setLrtOperatorValidInfo({
+        isValid: true,
+        queryLoading: false,
+      })
+    );
   }, [dispatch]);
 
   useEffect(() => {
@@ -214,6 +226,12 @@ const ParameterPage = () => {
       dispatch(queryLrdTokenInWhiteList(lrtTokenAddress));
     }
   }, [dispatch, lrtTokenAddress]);
+
+  useEffect(() => {
+    if (!!operatorAddress && validateAddress(operatorAddress)) {
+      dispatch(queryLrtOperatorValid(operatorAddress));
+    }
+  }, [dispatch, operatorAddress]);
 
   useEffect(() => {
     if (!metaMaskAccount) {
@@ -243,8 +261,7 @@ const ParameterPage = () => {
           symbol.length <= 10 &&
           !!ownerAddress &&
           validateAddress(ownerAddress) &&
-          !!operatorAddress &&
-          validateAddress(operatorAddress)
+          isOperatorAddressValid
       );
     } else {
       setSubmittable(
@@ -252,8 +269,7 @@ const ParameterPage = () => {
           lrtTokenInWhiteListInfo.inWhiteList &&
           !!ownerAddress &&
           validateAddress(ownerAddress) &&
-          !!operatorAddress &&
-          validateAddress(operatorAddress)
+          isOperatorAddressValid
       );
     }
   }, [
@@ -264,8 +280,8 @@ const ParameterPage = () => {
     ownerAddress,
     tokenType,
     lrtTokenAddress,
-    operatorAddress,
     lrtTokenInWhiteListInfo,
+    isOperatorAddressValid,
   ]);
 
   return (
@@ -393,16 +409,21 @@ const ParameterPage = () => {
               <br />
               - Adjust duration of era
               <br />
-              - Manage supported LSTs 
+              - Manage supported LSTs
               <br />
               <br />
               Operator Address: must be registered operator on EigenLayer
-              <br />
-              - <a
-                href={getEthereumChainId() === 1 ? 'https://app.eigenlayer.xyz/operator' : 'https://holesky.eigenlayer.xyz/operator'}
-                target='_blank'
+              <br />- Go and find{' '}
+              <a
+                className="underline text-text1"
+                href={
+                  getEthereumChainId() === 1
+                    ? 'https://app.eigenlayer.xyz/operator'
+                    : 'https://holesky.eigenlayer.xyz/operator'
+                }
+                target="_blank"
               >
-                Go and find operators
+                operators
               </a>
             </div>
           </div>

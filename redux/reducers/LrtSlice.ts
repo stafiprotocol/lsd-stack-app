@@ -14,18 +14,30 @@ import {
   isMetaMaskCancelError,
 } from 'utils/web3Utils';
 import { setSubmitLoadingParams } from './AppSlice';
+import { BaseError, ContractFunctionRevertedError } from 'viem';
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
   queryLoading: boolean;
 }
+
+export interface LrtOperatorValidInfo {
+  isValid: boolean;
+  queryLoading: boolean;
+}
+
 export interface LsdState {
   lrtTokenInWhiteListInfo: LsdTokenInWhiteListInfo;
+  lrtOperatorValidInfo: LrtOperatorValidInfo;
 }
 
 const initialState: LsdState = {
   lrtTokenInWhiteListInfo: {
     inWhiteList: true,
+    queryLoading: false,
+  },
+  lrtOperatorValidInfo: {
+    isValid: true,
     queryLoading: false,
   },
 };
@@ -40,10 +52,17 @@ export const lsdSlice = createSlice({
     ) => {
       state.lrtTokenInWhiteListInfo = action.payload;
     },
+    setLrtOperatorValidInfo: (
+      state: LsdState,
+      action: PayloadAction<LrtOperatorValidInfo>
+    ) => {
+      state.lrtOperatorValidInfo = action.payload;
+    },
   },
 });
 
-export const { setLrtTokenInWhiteListInfo } = lsdSlice.actions;
+export const { setLrtTokenInWhiteListInfo, setLrtOperatorValidInfo } =
+  lsdSlice.actions;
 
 export default lsdSlice.reducer;
 
@@ -130,7 +149,18 @@ const createLrtNetwork =
         );
       }
     } catch (err: any) {
-      console.log(err);
+      if (err instanceof BaseError) {
+        const revertError = err.walk(
+          (err) => err instanceof ContractFunctionRevertedError
+        );
+        if (revertError instanceof ContractFunctionRevertedError) {
+          const errorName = revertError.data?.errorName ?? '';
+          // do something with `errorName`
+          console.log({ errorName });
+        }
+      }
+      // console.log(err);
+      console.log(err.message);
       if (isMetaMaskCancelError(err)) {
         dispatch(
           setSubmitLoadingParams({
@@ -198,6 +228,47 @@ export const queryLrdTokenInWhiteList =
       dispatch(
         setLrtTokenInWhiteListInfo({
           inWhiteList: false,
+          queryLoading: false,
+        })
+      );
+    }
+  };
+
+export const queryLrtOperatorValid =
+  (operator: string): AppThunk =>
+  async (dispatch, getState) => {
+    dispatch(
+      setLrtOperatorValidInfo({
+        isValid: false,
+        queryLoading: true,
+      })
+    );
+
+    try {
+      const web3 = createWeb3();
+      const contract = new web3.eth.Contract(
+        getLrtFactoryContract().abi,
+        getLrtFactoryContract().address
+      );
+      const result = await contract.methods.isValidOperatorArg(operator).call();
+
+      // console.log({ result });
+
+      if (result) {
+        dispatch(
+          setLrtOperatorValidInfo({
+            isValid: true,
+            queryLoading: false,
+          })
+        );
+      } else {
+        throw new Error('operator not valid');
+      }
+    } catch (err: any) {
+      console.error(err);
+      dispatch(
+        setLrtOperatorValidInfo({
+          isValid: false,
           queryLoading: false,
         })
       );
