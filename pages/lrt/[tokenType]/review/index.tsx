@@ -152,15 +152,19 @@ const ReviewPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
-              Relay is an off-chain service responsible for interacting with LRT
-              contracts. Go through with these steps to run a relay service:
+              Relay is an off-chain service responsible for interacting with LRT contracts. There are two ways to run the relay:
               <br />
-              - Prepare servers
+              1. <a
+                  className="underline"
+                  href='https://discord.com/invite/jB77etn'
+                  target='_blank'
+                >Contact with StaFi team</a> to whitelist your LRT, so that you do not have to maintain the Relay service by yourself
               <br />
-              - Install Relay binary from source code
-              <br />
-              - Import account
-              <br />- Start relay service
+              2. <a
+                  className="underline"
+                  href={`${getDocHost()}/docs/developlrt/deploy.html#step2-run-relay-service`}
+                  target='_blank'
+                >Follow our doc</a> to run your own Relay service
             </div>
 
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
