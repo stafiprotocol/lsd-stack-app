@@ -55,3 +55,11 @@ export function getWagmiChainConfig() {
     testnet: isDev(),
   };
 }
+
+export function getCosmosStackAppUrl() {
+  return 'https://test-neutron-lsd.stafi.io/';
+}
+
+export function getEthStackAppUrl() {
+  return 'https://www.google.com';
+}

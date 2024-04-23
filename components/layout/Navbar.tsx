@@ -32,6 +32,7 @@ import {
 } from 'redux/reducers/WalletSlice';
 import { useSelector } from 'react-redux';
 import { getDocHost } from 'config/common';
+import { LsaasSidebar } from 'components/modal/LsaasSidebar';
 
 const Navbar = () => {
   const router = useRouter();
@@ -163,6 +164,21 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div
+        className={classNames(
+          'fixed right-0 ',
+          showBackToHome ? 'top-[2.5rem]' : 'top-[1.85rem]',
+          {
+            hidden:
+              !router.pathname.includes('cosmos') &&
+              !router.pathname.includes('eth') &&
+              !router.pathname.includes('lrt'),
+          }
+        )}
+      >
+        <LsaasSidebar />
       </div>
     </div>
   );

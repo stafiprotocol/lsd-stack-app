@@ -12,6 +12,13 @@ import LogoImg from 'public/images/logo_text.svg';
 import RelayTypeImg from 'public/images/relay_type.png';
 import EcoEthImg from 'public/images/eco/eth.svg';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
+import arrowTrImg from 'public/images/arrow_tr.svg';
+import ethCaseImg from 'public/images/case/eth.png';
+import cosmosCaseImg from 'public/images/case/cosmos.png';
+import moveCaseImg from 'public/images/case/move.png';
+import lrtCaseImg from 'public/images/case/lrt.png';
+import solanaCaseImg from 'public/images/case/solana.png';
+import polkadotCaseImg from 'public/images/case/polkadot.png';
 import EcoLrtImg from 'public/images/eco/lrt.svg';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
@@ -23,6 +30,8 @@ import { openLink } from 'utils/commonUtils';
 import { getDocHost } from 'config/common';
 import { useEffect } from 'react';
 import { setAppEco } from 'redux/reducers/AppSlice';
+import { LsdCaseCard } from 'components/common/LsdCaseCard';
+import commonStyles from 'styles/Common.module.scss';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -71,8 +80,58 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="relative w-[7.03rem] h-[4.8rem] ml-[.2rem]">
+          {/* <div className="relative w-[7.03rem] h-[4.8rem] ml-[.2rem]">
             <Image src={RelayTypeImg} fill alt="lsaas" />
+          </div> */}
+          <div
+            className={classNames(
+              'relative ml-[.2rem] overflow-x-auto w-[7rem]',
+              commonStyles['hide-scrollbar']
+            )}
+          >
+            <div className="flex">
+              <LsdCaseCard
+                text="ETH LSD Case"
+                icon={ethCaseImg}
+                url={'https://www.google.com'}
+              />
+
+              <LsdCaseCard
+                text="COSMOS LSD Case"
+                icon={cosmosCaseImg}
+                url={'https://www.google.com'}
+                className="ml-[.12rem]"
+              />
+
+              <LsdCaseCard
+                text="MOVE LSD Case"
+                icon={moveCaseImg}
+                url={'https://www.google.com'}
+                className="ml-[.12rem]"
+              />
+            </div>
+
+            <div className="flex mt-[.12rem]">
+              <LsdCaseCard
+                text="LRT LSD Case"
+                icon={lrtCaseImg}
+                url={'https://www.google.com'}
+              />
+
+              <LsdCaseCard
+                text="Polkadot LSD Case"
+                icon={polkadotCaseImg}
+                url={'https://www.google.com'}
+                className="ml-[.12rem]"
+              />
+
+              <LsdCaseCard
+                text="Solana LSD Case"
+                icon={solanaCaseImg}
+                url={'https://www.google.com'}
+                className="ml-[.12rem]"
+              />
+            </div>
           </div>
         </div>
       </div>
