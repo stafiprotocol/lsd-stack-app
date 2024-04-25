@@ -107,7 +107,7 @@ const HomePage = () => {
               <LsdCaseCard
                 text="MOVE LSD Case"
                 icon={moveCaseImg}
-                url={'https://www.google.com'}
+                isComing
                 className="ml-[.12rem]"
               />
             </div>
@@ -123,6 +123,7 @@ const HomePage = () => {
                 text="Polkadot LSD Case"
                 icon={polkadotCaseImg}
                 url={'https://www.google.com'}
+                isComing
                 className="ml-[.12rem]"
               />
 
@@ -130,6 +131,7 @@ const HomePage = () => {
                 text="Solana LSD Case"
                 icon={solanaCaseImg}
                 url={'https://www.google.com'}
+                isComing
                 className="ml-[.12rem]"
               />
             </div>
