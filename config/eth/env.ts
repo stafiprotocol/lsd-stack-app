@@ -61,5 +61,5 @@ export function getCosmosStackAppUrl() {
 }
 
 export function getEthStackAppUrl() {
-  return 'https://www.google.com';
+  return 'https://test-eth-lsd.stafi.io';
 }

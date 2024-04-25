@@ -56,9 +56,9 @@ const Navbar = () => {
   }, [appEco, neutronChainAccount, address]);
 
   const showBackToHome = useMemo(() => {
-    if (appEco === AppEco.Cosmos) {
-      return creationStepInfo.activedIndex === 4;
-    }
+    // if (appEco === AppEco.Cosmos) {
+    //   return creationStepInfo.activedIndex === 4;
+    // }
     return router.pathname !== '/' || creationStepInfo.activedIndex > 0;
   }, [appEco, router, creationStepInfo]);
 
