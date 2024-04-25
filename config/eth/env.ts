@@ -63,3 +63,7 @@ export function getCosmosStackAppUrl() {
 export function getEthStackAppUrl() {
   return 'https://test-eth-lsd.stafi.io';
 }
+
+export function getLrtCaseUrl() {
+  return 'https://lsaas-docs.stafi.io/docs/architecture/el_lrt.html';
+}

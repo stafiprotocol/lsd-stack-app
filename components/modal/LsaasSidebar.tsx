@@ -1,6 +1,10 @@
 import classNames from 'classnames';
 import { Icomoon } from 'components/icon/Icomoon';
-import { getCosmosStackAppUrl, getEthStackAppUrl } from 'config/eth/env';
+import {
+  getCosmosStackAppUrl,
+  getEthStackAppUrl,
+  getLrtCaseUrl,
+} from 'config/eth/env';
 import { robotoBold } from 'config/font';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -23,6 +27,8 @@ export const LsaasSidebar = () => {
           openLink(getCosmosStackAppUrl());
         } else if (router.pathname.includes('eth')) {
           openLink(getEthStackAppUrl());
+        } else if (router.pathname.includes('lrt')) {
+          openLink(getLrtCaseUrl());
         }
       }}
     >

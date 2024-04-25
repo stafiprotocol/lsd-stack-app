@@ -32,7 +32,11 @@ import { useEffect } from 'react';
 import { setAppEco } from 'redux/reducers/AppSlice';
 import { LsdCaseCard } from 'components/common/LsdCaseCard';
 import commonStyles from 'styles/Common.module.scss';
-import { getCosmosStackAppUrl, getEthStackAppUrl } from 'config/eth/env';
+import {
+  getCosmosStackAppUrl,
+  getEthStackAppUrl,
+  getLrtCaseUrl,
+} from 'config/eth/env';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -116,13 +120,12 @@ const HomePage = () => {
               <LsdCaseCard
                 text="EL LRT Case"
                 icon={lrtCaseImg}
-                url={'https://www.google.com'}
+                url={getLrtCaseUrl()}
               />
 
               <LsdCaseCard
                 text="Polkadot LSD Case"
                 icon={polkadotCaseImg}
-                url={'https://www.google.com'}
                 isComing
                 className="ml-[.12rem]"
               />
@@ -130,7 +133,6 @@ const HomePage = () => {
               <LsdCaseCard
                 text="Solana LSD Case"
                 icon={solanaCaseImg}
-                url={'https://www.google.com'}
                 isComing
                 className="ml-[.12rem]"
               />
