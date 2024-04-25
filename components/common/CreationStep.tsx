@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { LsaasSidebar } from 'components/modal/LsaasSidebar';
 import { roboto, robotoBold } from 'config/font';
 
 interface CreationStepProps {

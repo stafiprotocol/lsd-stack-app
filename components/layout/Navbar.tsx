@@ -115,13 +115,17 @@ const Navbar = () => {
       )}
 
       <div
-        className={classNames('flex justify-center h-[1.86rem]')}
+        className={classNames('flex justify-center h-[1.86rem] relative')}
         style={{
           background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) -20.69%, rgba(255, 255, 255, 0.5) 103.45%)',
           boxShadow: '0px 1px 0px #FFFFFF',
         }}
       >
+        <div className="absolute right-0 top-0 mt-[.72rem]">
+          <LsaasSidebar />
+        </div>
+
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW flex flex-col">
           <div className="h-full w-smallContentW xl:w-contentW 2xl:w-largeContentW text-text2 text-[.14rem] leading-[.21rem]">
             {appEco === AppEco.Eth ? (
@@ -164,21 +168,6 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div
-        className={classNames(
-          'fixed right-0 ',
-          showBackToHome ? 'top-[2.5rem]' : 'top-[1.85rem]',
-          {
-            hidden:
-              !router.pathname.includes('cosmos') &&
-              !router.pathname.includes('eth') &&
-              !router.pathname.includes('lrt'),
-          }
-        )}
-      >
-        <LsaasSidebar />
       </div>
     </div>
   );

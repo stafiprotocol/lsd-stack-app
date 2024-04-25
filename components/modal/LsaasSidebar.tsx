@@ -17,7 +17,7 @@ export const LsaasSidebar = () => {
   return (
     <div
       className={classNames(
-        'rounded-l-[.16rem] h-[.64rem] w-[3.3rem] flex items-center cursor-pointer border-solid border-[0.01rem] border-[#222C3C1A] dark:border-[#6C86AD80]'
+        'rounded-l-[.16rem] h-[.64rem] w-[2.7rem] flex items-center cursor-pointer border-solid border-[0.01rem] border-[#222C3C1A] dark:border-[#6C86AD80]'
       )}
       style={{
         zIndex: 10,

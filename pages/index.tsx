@@ -10,7 +10,7 @@ import {
 import Image from 'next/image';
 import LogoImg from 'public/images/logo_text.svg';
 import RelayTypeImg from 'public/images/relay_type.png';
-import EcoEthImg from 'public/images/eco/eth.svg';
+import EcoEthImg from 'public/images/eco/eth.png';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import arrowTrImg from 'public/images/arrow_tr.svg';
 import ethCaseImg from 'public/images/case/eth.png';
@@ -19,7 +19,7 @@ import moveCaseImg from 'public/images/case/move.png';
 import lrtCaseImg from 'public/images/case/lrt.png';
 import solanaCaseImg from 'public/images/case/solana.png';
 import polkadotCaseImg from 'public/images/case/polkadot.png';
-import EcoLrtImg from 'public/images/eco/lrt.svg';
+import EcoLrtImg from 'public/images/eco/lrt.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import { AppEco } from 'interfaces/common';
@@ -242,7 +242,7 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
         dispatch(setAppEco(eco));
         setTimeout(() => {
           router.push(eco.toLowerCase());
-        }, 1000);
+        }, 100);
       }}
     >
       <div className="relative w-[.28rem] h-[.28rem]">

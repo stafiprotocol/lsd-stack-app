@@ -36,21 +36,24 @@ export const LsdCaseCard = (props: LsdCaseCardProps) => {
 
       <div
         className={classNames(
-          'ml-[.12rem] mr-[.12rem] self-stretch mt-[.1rem] flex items-center justify-between'
+          'ml-[.12rem] mr-[.12rem] self-stretch mt-[.1rem] flex items-center',
+          isComing ? '' : 'justify-between'
         )}
       >
         <div
           className={classNames(
             ' text-[.2rem]',
             robotoBold.className,
-            isComing ? 'text-text2 h-[.38rem] flex items-center' : 'text-text1'
+            isComing
+              ? 'text-text1 h-[.38rem] flex items-center opacity-50'
+              : 'text-text1'
           )}
         >
           {text}
         </div>
 
         {isComing ? (
-          <div className="w-[.38rem] flex items-center justify-center py-[.02rem] rounded-[.04rem] bg-text2 text-blue text-[.12rem]">
+          <div className="opacity-50 ml-[.06rem] w-[.38rem] flex items-center justify-center py-[.02rem] rounded-[.04rem] bg-text1 text-blue text-[.12rem]">
             soon
           </div>
         ) : (
