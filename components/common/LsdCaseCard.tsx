@@ -36,8 +36,7 @@ export const LsdCaseCard = (props: LsdCaseCardProps) => {
 
       <div
         className={classNames(
-          'ml-[.12rem] mr-[.12rem] self-stretch mt-[.1rem] flex items-center ',
-          isComing ? 'justify-center' : 'justify-between'
+          'ml-[.12rem] mr-[.12rem] self-stretch mt-[.1rem] flex items-center justify-between'
         )}
       >
         <div
@@ -47,10 +46,14 @@ export const LsdCaseCard = (props: LsdCaseCardProps) => {
             isComing ? 'text-text2 h-[.38rem] flex items-center' : 'text-text1'
           )}
         >
-          {isComing ? 'COMING SOON' : text}
+          {text}
         </div>
 
-        {!isComing && (
+        {isComing ? (
+          <div className="w-[.38rem] flex items-center justify-center py-[.02rem] rounded-[.04rem] bg-text2 text-blue text-[.12rem]">
+            soon
+          </div>
+        ) : (
           <div className="w-[.38rem] h-[.38rem] rounded-full p-[.1rem] group-hover:bg-[#ffffff]">
             <div className="w-full h-full relative">
               <Image src={arrowTrImg} layout="fill" alt="icon" />
