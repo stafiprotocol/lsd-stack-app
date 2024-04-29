@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { EcoSelectorBtn } from 'components/eco/EcoSelectorBtn';
 import { robotoBold, robotoSemiBold } from 'config/font';
 import {
+  bindHover,
   bindPopover,
   bindTrigger,
   usePopupState,
@@ -37,6 +38,7 @@ import {
   getEthStackAppUrl,
   getLrtCaseUrl,
 } from 'config/eth/env';
+import Link from 'next/link';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -46,96 +48,100 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <div className="relative bg-blue h-screen">
-      <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto ">
+    <div className="relative bg-blue h-screen flex flex-col ">
+      <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
         <LogoBar />
+      </div>
 
-        <div className="flex gap-[.3rem] pt-[.67rem]">
-          <div>
-            <div
-              className={classNames(
-                robotoBold.className,
-                'text-[.64rem] leading-[.75rem] uppercase w-[4.25rem] text-black'
-              )}
-            >
-              welcome to
-              <br />
-              stafi lsaas
+      <div className="flex-1 bg-blue flex flex-col justify-center pb-[.6rem]">
+        <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto ">
+          <div className="flex gap-[.3rem] pt-[.67rem]">
+            <div>
+              <div
+                className={classNames(
+                  robotoBold.className,
+                  'text-[.64rem] leading-[.75rem] uppercase w-[4.25rem] text-black'
+                )}
+              >
+                welcome to
+                <br />
+                stafi lsaas
+              </div>
+
+              <div className="text-[.16rem] leading-normal text-black capitalize mt-[.28rem] w-[3.8rem]">
+                Please Choose the Ecosystem of your LST/LRT before Deploying
+                your own protocol
+              </div>
+
+              <div className="mt-[.68rem]">
+                <EcoSelector />
+              </div>
+
+              <div
+                className={classNames(
+                  'mt-[.24rem] ml-[1.4rem] text-text1 cursor-pointer',
+                  robotoSemiBold.className
+                )}
+                onClick={() => {
+                  openLink(`${getDocHost()}`);
+                }}
+              >
+                Learn More
+              </div>
             </div>
 
-            <div className="text-[.16rem] leading-normal text-black capitalize mt-[.28rem] w-[3.8rem]">
-              Please Choose the Ecosystem of your LST/LRT before Deploying your
-              own protocol
-            </div>
-
-            <div className="mt-[.68rem]">
-              <EcoSelector />
-            </div>
-
-            <div
-              className={classNames(
-                'mt-[.24rem] ml-[1.4rem] text-text1 cursor-pointer',
-                robotoSemiBold.className
-              )}
-              onClick={() => {
-                openLink(`${getDocHost()}`);
-              }}
-            >
-              Learn More
-            </div>
-          </div>
-
-          {/* <div className="relative w-[7.03rem] h-[4.8rem] ml-[.2rem]">
+            {/* <div className="relative w-[7.03rem] h-[4.8rem] ml-[.2rem]">
             <Image src={RelayTypeImg} fill alt="lsaas" />
           </div> */}
-          <div
-            className={classNames(
-              'relative ml-[.2rem] overflow-x-auto ',
-              commonStyles['hide-scrollbar']
-            )}
-          >
-            <div className="flex">
-              <LsdCaseCard
-                text="ETH LSD Case"
-                icon={ethCaseImg}
-                url={getEthStackAppUrl()}
-              />
+            <div
+              className={classNames(
+                'relative ml-[.2rem] overflow-x-auto ',
+                commonStyles['hide-scrollbar']
+              )}
+            >
+              <div className="flex">
+                <LsdCaseCard
+                  text="ETH LSD Case"
+                  icon={ethCaseImg}
+                  url={getEthStackAppUrl()}
+                />
 
-              <LsdCaseCard
-                text="COSMOS LSD Case"
-                icon={cosmosCaseImg}
-                url={getCosmosStackAppUrl()}
-                className="ml-[.12rem]"
-              />
+                <LsdCaseCard
+                  text="COSMOS LSD Case"
+                  icon={cosmosCaseImg}
+                  url={getCosmosStackAppUrl()}
+                  className="ml-[.12rem]"
+                />
 
-              <LsdCaseCard
-                text="MOVE LSD Case"
-                icon={moveCaseImg}
-                isComing
-                className="ml-[.12rem]"
-              />
-            </div>
+                <LsdCaseCard
+                  text="MOVE LSD Case"
+                  icon={moveCaseImg}
+                  isComing
+                  className="ml-[.12rem]"
+                />
+              </div>
 
-            <div className="flex mt-[.12rem]">
-              <LsdCaseCard
-                text="EL LRT Case"
-                icon={lrtCaseImg}
-                url={getLrtCaseUrl()}
-              />
+              <div className="flex mt-[.12rem]">
+                <LsdCaseCard
+                  text="EL LRT Case"
+                  icon={lrtCaseImg}
+                  url={getLrtCaseUrl()}
+                />
 
-              <LsdCaseCard
-                text="Polkadot LSD Case"
-                icon={polkadotCaseImg}
-                isComing
-                className="ml-[.12rem]"
-              />
+                <LsdCaseCard
+                  text="Polkadot LSD Case"
+                  icon={polkadotCaseImg}
+                  isComing
+                  className="ml-[.12rem]"
+                />
 
-              <LsdCaseCard
-                text="Solana LSD Case"
-                icon={solanaCaseImg}
-                isComing
-                className="ml-[.12rem]"
-              />
+                <LsdCaseCard
+                  text="Solana LSD Case"
+                  icon={solanaCaseImg}
+                  isComing
+                  className="ml-[.12rem]"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -147,6 +153,21 @@ const HomePage = () => {
 export default HomePage;
 
 const LogoBar = () => {
+  const ecosystemPopoverState = usePopupState({
+    variant: 'popover',
+    popupId: 'address',
+  });
+
+  const governancePopoverState = usePopupState({
+    variant: 'popover',
+    popupId: 'address',
+  });
+
+  const resourcePopoverState = usePopupState({
+    variant: 'popover',
+    popupId: 'address',
+  });
+
   return (
     <div className=" pt-[.47rem] flex items-center gap-[.1rem]">
       <div className="relative w-[.82rem] h-[.2rem]  ">
@@ -161,6 +182,183 @@ const LogoBar = () => {
       >
         LSAAS
       </div>
+
+      <Link href="https://www.stafi.io/" target="_blank">
+        <div className="ml-[1.85rem] text-text1 cursor-pointer text-[.16rem] hover:opacity-70">
+          StaFi 2.0
+        </div>
+      </Link>
+
+      <div
+        className="ml-[.56rem] text-text1 text-[.16rem] hover:opacity-70 cursor-pointer"
+        {...bindHover(ecosystemPopoverState)}
+      >
+        Ecosystem
+      </div>
+
+      <div
+        className="ml-[.56rem] text-text1 cursor-pointer text-[.16rem] hover:opacity-70 "
+        {...bindHover(governancePopoverState)}
+      >
+        Governance
+      </div>
+
+      <div
+        className="ml-[.56rem] text-text1 cursor-pointer text-[.16rem] hover:opacity-70"
+        {...bindHover(resourcePopoverState)}
+      >
+        Resources
+      </div>
+
+      <Popover
+        {...bindPopover(ecosystemPopoverState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#000000',
+            border: '0.01rem solid #000000',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div
+          className={classNames(
+            'p-[.16rem] w-[1.3rem] flex flex-col items-center'
+          )}
+        >
+          <Link href="https://app.stafi.io/gallery/all/" target="_blank">
+            <div className="  cursor-pointer text-text1Dark hover:opacity-70">
+              rToken APP
+            </div>
+          </Link>
+        </div>
+      </Popover>
+
+      <Popover
+        {...bindPopover(governancePopoverState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#000000',
+            border: '0.01rem solid #000000',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div
+          className={classNames(
+            'p-[.16rem] w-[1.3rem] flex flex-col items-center'
+          )}
+        >
+          <Link href="https://classic.stafi.io/dao/" target="_blank">
+            <div className="  cursor-pointer text-text1Dark hover:opacity-70">
+              DAO
+            </div>
+          </Link>
+
+          <Link href="https://docs.stafi.io/fistoken/" target="_blank">
+            <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
+              FIS
+            </div>
+          </Link>
+
+          <Link href="https://classic.stafi.io/treasury/" target="_blank">
+            <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
+              Treasury
+            </div>
+          </Link>
+
+          <Link href="https://classic.stafi.io/rlaunchpad/" target="_blank">
+            <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
+              rLaunchpad
+            </div>
+          </Link>
+        </div>
+      </Popover>
+
+      <Popover
+        {...bindPopover(resourcePopoverState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#000000',
+            border: '0.01rem solid #000000',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div
+          className={classNames(
+            'p-[.16rem] w-[1.3rem] flex flex-col items-center'
+          )}
+        >
+          <Link href="https://docs.stafi.io/" target="_blank">
+            <div className="cursor-pointer text-text1Dark hover:opacity-70">
+              Docs
+            </div>
+          </Link>
+
+          <Link href="https://www.stafi.io/campaign/" target="_blank">
+            <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
+              Campaigns
+            </div>
+          </Link>
+
+          <Link href="https://github.com/stafiprotocol" target="_blank">
+            <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
+              Github
+            </div>
+          </Link>
+        </div>
+      </Popover>
     </div>
   );
 };

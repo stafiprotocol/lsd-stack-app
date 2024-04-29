@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     let html = document.documentElement;
     let clientW = html.clientWidth;
     let htmlRem = (clientW * 100) / designSize;
-    html.style.fontSize = Math.min(htmlRem, 110) + 'px';
+    html.style.fontSize = Math.min(htmlRem, clientW > 1900 ? 160 : 100) + 'px';
   };
 
   useEffect(() => {
