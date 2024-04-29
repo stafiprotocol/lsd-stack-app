@@ -90,7 +90,7 @@ const HomePage = () => {
           </div> */}
           <div
             className={classNames(
-              'relative ml-[.2rem] overflow-x-auto w-[7rem]',
+              'relative ml-[.2rem] overflow-x-auto ',
               commonStyles['hide-scrollbar']
             )}
           >

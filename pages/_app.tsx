@@ -28,11 +28,11 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const resizeListener = () => {
     // 1rem:100px
-    let designSize = 1280;
+    let designSize = 1512;
     let html = document.documentElement;
     let clientW = html.clientWidth;
     let htmlRem = (clientW * 100) / designSize;
-    html.style.fontSize = Math.min(htmlRem, 100) + 'px';
+    html.style.fontSize = Math.min(htmlRem, 110) + 'px';
   };
 
   useEffect(() => {
