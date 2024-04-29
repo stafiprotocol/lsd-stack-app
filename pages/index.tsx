@@ -346,11 +346,11 @@ const LogoBar = () => {
             </div>
           </Link>
 
-          <Link href="https://www.stafi.io/campaign/" target="_blank">
+          {/* <Link href="https://www.stafi.io/campaign/" target="_blank">
             <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
               Campaigns
             </div>
-          </Link>
+          </Link> */}
 
           <Link href="https://github.com/stafiprotocol" target="_blank">
             <div className="mt-[.32rem] cursor-pointer text-text1Dark hover:opacity-70">
