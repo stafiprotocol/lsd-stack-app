@@ -34,7 +34,7 @@ export function getNetworkBalanceContractAbi() {
 export function getFactoryContract() {
   return {
     abi: factoryContractAbi as AbiItem[],
-    address: '0xf9bb59107e293951205cdeef8b482f48f35e5cc1' as `0x${string}`,
+    address: '0xd9f4f1474f7609D77379324C69b577DD7C8B266f' as `0x${string}`,
   };
 }
 
