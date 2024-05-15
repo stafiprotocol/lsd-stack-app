@@ -101,20 +101,20 @@ const HomePage = () => {
             >
               <div className="flex">
                 <LsdCaseCard
-                  text="ETH LSD Case"
+                  text="ETH LST"
                   icon={ethCaseImg}
                   url={getEthStackAppUrl()}
                 />
 
                 <LsdCaseCard
-                  text="COSMOS LSD Case"
+                  text="COSMOS LST"
                   icon={cosmosCaseImg}
                   url={getCosmosStackAppUrl()}
                   className="ml-[.12rem]"
                 />
 
                 <LsdCaseCard
-                  text="MOVE LSD Case"
+                  text="MOVE LST"
                   icon={moveCaseImg}
                   isComing
                   className="ml-[.12rem]"
@@ -137,7 +137,7 @@ const HomePage = () => {
                 />
 
                 <LsdCaseCard
-                  text="Solana LSD Case"
+                  text="Solana LST"
                   icon={solanaCaseImg}
                   isComing
                   className="ml-[.12rem]"
@@ -458,7 +458,9 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
         />
       </div>
 
-      <div className="ml-[.12rem] text-[.16rem] text-white">{eco}</div>
+      <div className="ml-[.12rem] text-[.16rem] text-white">
+        {eco === AppEco.Lrt ? 'Eigenlayer LRT' : eco}
+      </div>
 
       {appEco === eco ? (
         <div className="relative w-[.18rem] h-[.18rem] ml-auto mr-[.05rem]">

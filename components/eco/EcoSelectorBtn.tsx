@@ -59,7 +59,7 @@ export const EcoSelectorBtn = ({ active }: Props) => {
               active ? 'text-text1' : 'text-white'
             )}
           >
-            {appEco}
+            {appEco === AppEco.Lrt ? 'Eigenlayer LRT' : appEco}
           </div>
         </div>
       )}
