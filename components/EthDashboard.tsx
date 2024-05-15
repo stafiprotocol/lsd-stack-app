@@ -40,6 +40,7 @@ import { UpdateMinDepositModal } from './modal/eth/UpdateMinDepositModal';
 import { UpdateVotersModal } from './modal/eth/UpdateVotersModal';
 import { UpdateRewardPeriodModal } from './modal/eth/updateRewardPeriodModal';
 import { EmptyContent } from './common/EmptyContent';
+import snackbarUtil from 'utils/snackbarUtils';
 
 export const EthDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -473,7 +474,7 @@ const DashboardItem = (props: { address: string }) => {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getEtherScanAccountUrl(metaMaskAccount || '')}
+                href={getEtherScanAccountUrl(dashboardInfo?._admin || '')}
                 target="_blank"
               >
                 <div className="flex item-center cursor-pointer">
@@ -629,6 +630,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               setUpdateNodeFeeModalOpen(true);
               settingsPopupState.close();
             }}
@@ -645,6 +652,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setStackFeeModalOpen(true);
             }}
@@ -661,6 +674,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setMinDepositModalOpen(true);
             }}
@@ -677,6 +696,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setRewardPeriodModalOpen(true);
             }}
@@ -693,6 +718,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setVotersModalOpen(true);
             }}
@@ -709,6 +740,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setTrustEnabledModalOpen(true);
             }}
@@ -725,6 +762,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setSoloEnabledModalOpen(true);
             }}
@@ -741,6 +784,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setSoloDepositModalOpen(true);
             }}

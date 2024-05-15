@@ -40,6 +40,8 @@ import { UpdateLrtOperatorModal } from './modal/lrt/UpdateLrtOperatorModal';
 import { LstItem } from 'interfaces/common';
 import { UpdateLstForStakeModal } from './modal/lrt/UpdateLstForStakeModal';
 import { UpdateSupportedLstsModal } from './modal/lrt/UpdateSupportedLstsModal';
+import { UpdateLrtPlatformFeeModal } from './modal/lrt/UpdateLrtPlatformFeeModal';
+import snackbarUtil from 'utils/snackbarUtils';
 
 export const LrtDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -133,6 +135,7 @@ const DashboardItem = (props: { address: string }) => {
   });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [stackFeeModalOpen, setStackFeeModalOpen] = useState(false);
+  const [platformFeeModalOpen, setPlatformFeeModalOpen] = useState(false);
   const [minDepositModalOpen, setMinDepositModalOpen] = useState(false);
   const [updateLsdManagerModalOpen, setUpdateLsdManagerModalOpen] =
     useState(false);
@@ -582,6 +585,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setStackFeeModalOpen(true);
             }}
@@ -598,6 +607,34 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
+              settingsPopupState.close();
+              setPlatformFeeModalOpen(true);
+            }}
+          >
+            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+              Platform Fee
+            </div>
+
+            <div className="w-[.13rem] h-[.13rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setMinDepositModalOpen(true);
             }}
@@ -614,6 +651,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setUpdateOperatorModalOpen(true);
             }}
@@ -628,8 +671,14 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="py-[.1rem] cursor-pointer  items-center justify-between hidden"
             onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setUpdateLsdManagerModalOpen(true);
             }}
@@ -646,6 +695,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setUpdateLstForStakeModalOpen(true);
             }}
@@ -662,6 +717,12 @@ const DashboardItem = (props: { address: string }) => {
           <div
             className="py-[.1rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
+              if (dashboardInfo?._owner !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
               settingsPopupState.close();
               setUpdateSupportedLstsModalOpen(true);
             }}
@@ -685,6 +746,21 @@ const DashboardItem = (props: { address: string }) => {
         open={stackFeeModalOpen}
         close={() => {
           setStackFeeModalOpen(false);
+        }}
+        onConnectWallet={connectWallet}
+        onRefresh={() => {
+          updateData();
+        }}
+      />
+
+      <UpdateLrtPlatformFeeModal
+        contractAddress={dashboardInfo?._stakeManager || ''}
+        placeholder={
+          dashboardInfo ? dashboardInfo.formatPlatformFeeCommission : ''
+        }
+        open={platformFeeModalOpen}
+        close={() => {
+          setPlatformFeeModalOpen(false);
         }}
         onConnectWallet={connectWallet}
         onRefresh={() => {
