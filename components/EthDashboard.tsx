@@ -337,7 +337,7 @@ const DashboardItem = (props: { address: string }) => {
             'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
             settingsPopupState.isOpen ? 'bg-color-selected' : ''
           )}
-          {...bindTrigger(settingsPopupState)}
+          {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
         >
           <Icomoon icon="more" size=".24rem" color="#6C86AD" />
         </div>
