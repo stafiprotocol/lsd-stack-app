@@ -56,7 +56,8 @@ export const CustomButton = (props: ButtonProps) => {
           ? styles['button-modal-bottom']
           : styles['button'],
         { 'opacity-50': props.loading },
-        'px-[.28rem] cursor-pointer overflow-hidden',
+        'cursor-pointer overflow-hidden',
+        props.width ? '' : 'px-[.28rem]',
         props.className || '',
         'active:opacity-50'
       )}

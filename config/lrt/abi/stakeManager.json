@@ -374,6 +374,50 @@
   },
   {
     "type": "function",
+    "name": "getUnstakeInfoAtIndex",
+    "inputs": [
+      {
+        "name": "_unstakeIndex",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "era",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "pool",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "receiver",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "lrtAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lstAddresses",
+        "type": "address[]",
+        "internalType": "address[]"
+      },
+      {
+        "name": "lstAmounts",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "initialize",
     "inputs": [
       {
@@ -943,40 +987,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "unstakeAtIndex",
-    "inputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "era",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "pool",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "receiver",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "lrtAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
   },
   {
     "type": "function",

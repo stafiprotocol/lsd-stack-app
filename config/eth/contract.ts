@@ -1,9 +1,11 @@
-import networkBalanceContractAbi from "./abi/networkBalance.json";
-import networkWithdrawContractAbi from "./abi/networkWithdraw.json";
-import { AbiItem } from "web3-utils";
-import factoryContractAbi from "./abi/factory.json";
-import networkProposalAbi from "./abi/networkProposal.json";
-import lsdTokenContractAbi from "./abi/lsdToken.json";
+import networkBalanceContractAbi from './abi/networkBalance.json';
+import networkWithdrawContractAbi from './abi/networkWithdraw.json';
+import { AbiItem } from 'web3-utils';
+import factoryContractAbi from './abi/factory.json';
+import networkProposalAbi from './abi/networkProposal.json';
+import lsdTokenContractAbi from './abi/lsdToken.json';
+import nodeDepositContractAbi from './abi/nodeDeposit.json';
+import userDepositContractAbi from './abi/userDeposit.json';
 
 /**
  * get lsd token contract ABI
@@ -32,7 +34,7 @@ export function getNetworkBalanceContractAbi() {
 export function getFactoryContract() {
   return {
     abi: factoryContractAbi as AbiItem[],
-    address: "0xf9bb59107e293951205cdeef8b482f48f35e5cc1" as `0x${string}`,
+    address: '0xf9bb59107e293951205cdeef8b482f48f35e5cc1' as `0x${string}`,
   };
 }
 
@@ -41,4 +43,18 @@ export function getFactoryContract() {
  */
 export function getNetworkProposalContractAbi() {
   return networkProposalAbi as AbiItem[];
+}
+
+/**
+ * get network node deposit abi
+ */
+export function getEthNodeDepositContractAbi() {
+  return nodeDepositContractAbi as AbiItem[];
+}
+
+/**
+ * get network user deposit abi
+ */
+export function getEthUserDepositContractAbi() {
+  return userDepositContractAbi as AbiItem[];
 }

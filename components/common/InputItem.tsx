@@ -72,13 +72,13 @@ export const InputItem = ({
       <div
         className={classNames(
           robotoBold.className,
-          'text-[.16rem] leading-[.18rem] text-text2 w-[1.2rem]'
+          'text-[.16rem] leading-[.18rem] text-text2 w-[1.4rem] break-words'
         )}
       >
         {label}
       </div>
 
-      <div className="w-[4.23rem] h-[.5rem] relative">
+      <div className="flex-1 w-full h-[.5rem] relative">
         <input
           value={value}
           onChange={(e) => {

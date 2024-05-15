@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 interface Props {
   isWarning?: boolean;
-  link: string;
+  link?: string;
   content: JSX.Element | string;
   className?: string;
 }
@@ -35,7 +35,12 @@ export const TipBar = ({ isWarning, link, content, className }: Props) => {
         </div>
       </div>
 
-      <div className="relative h-[.1116rem] w-[.07rem] min-w-[.07rem]">
+      <div
+        className={classNames(
+          'relative h-[.1116rem] w-[.07rem] min-w-[.07rem]',
+          link ? '' : 'invisible'
+        )}
+      >
         <Image src={LinkArrowImg} alt="link" layout="fill" />
       </div>
     </a>

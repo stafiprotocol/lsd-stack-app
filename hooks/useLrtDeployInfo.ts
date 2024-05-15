@@ -52,6 +52,7 @@ export const useLrtDeployInfo = () => {
       const networkContractsOfLrdToken = await contract.methods
         .networkContractsOfLrdToken(latestLrdToken)
         .call();
+      console.log({ networkContractsOfLrdToken });
       if (!networkContractsOfLrdToken) {
         setFetchLoading(false);
         return;

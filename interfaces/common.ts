@@ -59,3 +59,8 @@ export interface LsdTokenConfig {
   bech32PrefixValAddr: string;
   icon: string;
 }
+
+export interface LstItem {
+  address: string;
+  symbol: string;
+}

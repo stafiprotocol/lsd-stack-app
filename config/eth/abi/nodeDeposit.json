@@ -5,21 +5,40 @@
     "stateMutability": "nonpayable"
   },
   {
-    "type": "receive",
-    "stateMutability": "payable"
+    "type": "function",
+    "name": "addTrustNode",
+    "inputs": [
+      {
+        "name": "_trustNodeAddress",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
-    "name": "currentWithdrawCycle",
-    "inputs": [],
-    "outputs": [
+    "name": "deposit",
+    "inputs": [
       {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
+        "name": "_validatorPubkeys",
+        "type": "bytes[]",
+        "internalType": "bytes[]"
+      },
+      {
+        "name": "_validatorSignatures",
+        "type": "bytes[]",
+        "internalType": "bytes[]"
+      },
+      {
+        "name": "_depositDataRoots",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
       }
     ],
-    "stateMutability": "view"
+    "outputs": [],
+    "stateMutability": "payable"
   },
   {
     "type": "function",
@@ -30,89 +49,7 @@
   },
   {
     "type": "function",
-    "name": "depositEthAndUpdateTotalMissingAmount",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "distribute",
-    "inputs": [
-      {
-        "name": "_distributeType",
-        "type": "uint8",
-        "internalType": "enum INetworkWithdraw.DistributeType"
-      },
-      {
-        "name": "_dealedHeight",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_userAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_nodeAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_platformAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_maxClaimableWithdrawIndex",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "ejectedStartCycle",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "ejectedValidatorsAtCycle",
-    "inputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "factoryAddress",
+    "name": "ethDepositAddress",
     "inputs": [],
     "outputs": [
       {
@@ -125,42 +62,47 @@
   },
   {
     "type": "function",
-    "name": "feePoolAddress",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getEjectedValidatorsAtCycle",
+    "name": "getNodes",
     "inputs": [
       {
-        "name": "cycle",
+        "name": "_start",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_end",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
     "outputs": [
       {
-        "name": "",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "name": "nodeList",
+        "type": "address[]",
+        "internalType": "address[]"
       }
     ],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "getUnclaimedWithdrawalsOfUser",
+    "name": "getNodesLength",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPubkeysOfNode",
     "inputs": [
       {
-        "name": "user",
+        "name": "_node",
         "type": "address",
         "internalType": "address"
       }
@@ -168,8 +110,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "type": "bytes[]",
+        "internalType": "bytes[]"
       }
     ],
     "stateMutability": "view"
@@ -179,12 +121,12 @@
     "name": "init",
     "inputs": [
       {
-        "name": "_lsdTokenAddress",
+        "name": "_userDepositAddress",
         "type": "address",
         "internalType": "address"
       },
       {
-        "name": "_userDepositAddress",
+        "name": "_ethDepositAddress",
         "type": "address",
         "internalType": "address"
       },
@@ -194,114 +136,13 @@
         "internalType": "address"
       },
       {
-        "name": "_networkBalancesAddress",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "_feePoolAddress",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "_factoryAddress",
-        "type": "address",
-        "internalType": "address"
+        "name": "_withdrawCredentials",
+        "type": "bytes",
+        "internalType": "bytes"
       }
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "latestDistributePriorityFeeHeight",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "latestDistributeWithdrawalsHeight",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "latestMerkleRootEpoch",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "lsdTokenAddress",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "maxClaimableWithdrawIndex",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "merkleRoot",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "networkBalancesAddress",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -318,62 +159,22 @@
   },
   {
     "type": "function",
-    "name": "nextWithdrawIndex",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "nodeClaim",
+    "name": "nodeInfoOf",
     "inputs": [
       {
-        "name": "_index",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_account",
+        "name": "",
         "type": "address",
         "internalType": "address"
-      },
-      {
-        "name": "_totalRewardAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_totalExitDepositAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_merkleProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      },
-      {
-        "name": "_claimType",
-        "type": "uint8",
-        "internalType": "enum INetworkWithdraw.ClaimType"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "nodeClaimEnabled",
-    "inputs": [],
     "outputs": [
       {
-        "name": "",
+        "name": "_nodeType",
+        "type": "uint8",
+        "internalType": "enum INodeDeposit.NodeType"
+      },
+      {
+        "name": "_removed",
         "type": "bool",
         "internalType": "bool"
       }
@@ -382,75 +183,19 @@
   },
   {
     "type": "function",
-    "name": "nodeCommissionRate",
-    "inputs": [],
-    "outputs": [
+    "name": "nodes",
+    "inputs": [
       {
         "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "nodeRewardsFileCid",
-    "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "notifyValidatorExit",
-    "inputs": [
-      {
-        "name": "_withdrawCycle",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_ejectedStartCycle",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_validatorIndexList",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "platformClaim",
-    "inputs": [
-      {
-        "name": "_recipient",
         "type": "address",
         "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "platformCommissionRate",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -470,6 +215,64 @@
   },
   {
     "type": "function",
+    "name": "pubkeyInfoOf",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "_status",
+        "type": "uint8",
+        "internalType": "enum INodeDeposit.PubkeyStatus"
+      },
+      {
+        "name": "_owner",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_nodeDepositAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_depositBlock",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "pubkeysOfNode",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "reinit",
     "inputs": [],
     "outputs": [],
@@ -477,22 +280,12 @@
   },
   {
     "type": "function",
-    "name": "setMerkleRoot",
+    "name": "removeTrustNode",
     "inputs": [
       {
-        "name": "_dealedEpoch",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "_merkleRoot",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "_nodeRewardsFileCid",
-        "type": "string",
-        "internalType": "string"
+        "name": "_trustNodeAddress",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -500,7 +293,38 @@
   },
   {
     "type": "function",
-    "name": "setNodeClaimEnabled",
+    "name": "setNodePubkeyStatus",
+    "inputs": [
+      {
+        "name": "_validatorPubkey",
+        "type": "bytes",
+        "internalType": "bytes"
+      },
+      {
+        "name": "_status",
+        "type": "uint8",
+        "internalType": "enum INodeDeposit.PubkeyStatus"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setSoloNodeDepositAmount",
+    "inputs": [
+      {
+        "name": "_amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setSoloNodeDepositEnabled",
     "inputs": [
       {
         "name": "_value",
@@ -513,30 +337,87 @@
   },
   {
     "type": "function",
-    "name": "setPlatformAndNodeCommissionRate",
+    "name": "setTrustNodeDepositEnabled",
     "inputs": [
       {
-        "name": "_platformCommissionRate",
+        "name": "_value",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setTrustNodePubkeyLimit",
+    "inputs": [
+      {
+        "name": "_value",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setWithdrawCredentials",
+    "inputs": [
+      {
+        "name": "_withdrawCredentials",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "soloNodeDepositAmount",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "soloNodeDepositEnabled",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "stake",
+    "inputs": [
+      {
+        "name": "_validatorPubkeys",
+        "type": "bytes[]",
+        "internalType": "bytes[]"
       },
       {
-        "name": "_nodeCommissionRate",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setStackCommissionRate",
-    "inputs": [
+        "name": "_validatorSignatures",
+        "type": "bytes[]",
+        "internalType": "bytes[]"
+      },
       {
-        "name": "_stackCommissionRate",
-        "type": "uint256",
-        "internalType": "uint256"
+        "name": "_depositDataRoots",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
       }
     ],
     "outputs": [],
@@ -544,20 +425,20 @@
   },
   {
     "type": "function",
-    "name": "setWithdrawCycleSeconds",
-    "inputs": [
+    "name": "trustNodeDepositEnabled",
+    "inputs": [],
+    "outputs": [
       {
-        "name": "_withdrawCycleSeconds",
-        "type": "uint256",
-        "internalType": "uint256"
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
+    "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "stackCommissionRate",
+    "name": "trustNodePubkeyNumberLimit",
     "inputs": [],
     "outputs": [
       {
@@ -567,96 +448,6 @@
       }
     ],
     "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalClaimedDepositOfNode",
-    "inputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalClaimedRewardOfNode",
-    "inputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalMissingAmountForWithdraw",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalPlatformClaimedAmount",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalPlatformCommission",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "unstake",
-    "inputs": [
-      {
-        "name": "_lsdTokenAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -717,12 +508,17 @@
   },
   {
     "type": "function",
-    "name": "withdraw",
+    "name": "voteWithdrawCredentials",
     "inputs": [
       {
-        "name": "_withdrawalIndexList",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "name": "_pubkey",
+        "type": "bytes",
+        "internalType": "bytes"
+      },
+      {
+        "name": "_match",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "outputs": [],
@@ -730,37 +526,13 @@
   },
   {
     "type": "function",
-    "name": "withdrawCycleSeconds",
+    "name": "withdrawCredentials",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "withdrawalAtIndex",
-    "inputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "_address",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "_amount",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "bytes",
+        "internalType": "bytes"
       }
     ],
     "stateMutability": "view"
@@ -799,46 +571,34 @@
   },
   {
     "type": "event",
-    "name": "DistributeRewards",
+    "name": "Deposited",
     "inputs": [
       {
-        "name": "distributeType",
+        "name": "node",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "nodeType",
         "type": "uint8",
         "indexed": false,
-        "internalType": "enum INetworkWithdraw.DistributeType"
+        "internalType": "enum INodeDeposit.NodeType"
       },
       {
-        "name": "dealedHeight",
-        "type": "uint256",
+        "name": "pubkey",
+        "type": "bytes",
         "indexed": false,
-        "internalType": "uint256"
+        "internalType": "bytes"
       },
       {
-        "name": "userAmount",
-        "type": "uint256",
+        "name": "validatorSignature",
+        "type": "bytes",
         "indexed": false,
-        "internalType": "uint256"
+        "internalType": "bytes"
       },
       {
-        "name": "nodeAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "platformAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "maxClaimableWithdrawIndex",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "mvAmount",
+        "name": "amount",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -886,137 +646,38 @@
   },
   {
     "type": "event",
-    "name": "NodeClaimed",
+    "name": "SetPubkeyStatus",
     "inputs": [
       {
-        "name": "index",
-        "type": "uint256",
+        "name": "pubkey",
+        "type": "bytes",
         "indexed": false,
-        "internalType": "uint256"
+        "internalType": "bytes"
       },
       {
-        "name": "account",
-        "type": "address",
-        "indexed": false,
-        "internalType": "address"
-      },
-      {
-        "name": "claimableReward",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "claimableDeposit",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "claimType",
+        "name": "status",
         "type": "uint8",
         "indexed": false,
-        "internalType": "enum INetworkWithdraw.ClaimType"
+        "internalType": "enum INodeDeposit.PubkeyStatus"
       }
     ],
     "anonymous": false
   },
   {
     "type": "event",
-    "name": "NotifyValidatorExit",
+    "name": "Staked",
     "inputs": [
       {
-        "name": "withdrawCycle",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "ejectedStartWithdrawCycle",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "ejectedValidators",
-        "type": "uint256[]",
-        "indexed": false,
-        "internalType": "uint256[]"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "SetMerkleRoot",
-    "inputs": [
-      {
-        "name": "dealedEpoch",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "merkleRoot",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "nodeRewardsFileCid",
-        "type": "string",
-        "indexed": false,
-        "internalType": "string"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "SetWithdrawCycleSeconds",
-    "inputs": [
-      {
-        "name": "cycleSeconds",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Unstake",
-    "inputs": [
-      {
-        "name": "from",
+        "name": "node",
         "type": "address",
-        "indexed": true,
+        "indexed": false,
         "internalType": "address"
       },
       {
-        "name": "lsdTokenAmount",
-        "type": "uint256",
+        "name": "pubkey",
+        "type": "bytes",
         "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "ethAmount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "withdrawIndex",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "instantly",
-        "type": "bool",
-        "indexed": false,
-        "internalType": "bool"
+        "internalType": "bytes"
       }
     ],
     "anonymous": false
@@ -1030,25 +691,6 @@
         "type": "address",
         "indexed": true,
         "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "Withdraw",
-    "inputs": [
-      {
-        "name": "from",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "withdrawIndexList",
-        "type": "uint256[]",
-        "indexed": false,
-        "internalType": "uint256[]"
       }
     ],
     "anonymous": false

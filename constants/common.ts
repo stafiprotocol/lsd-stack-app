@@ -1,3 +1,6 @@
+export const HashZero =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
+
 export const COMMON_ERROR_MESSAGE =
   'Something went wrong, please try again later';
 export const CANCELLED_MESSAGE = 'Cancelled';
