@@ -1,9 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
-import { InputErrorTip } from 'components/common/InputErrorTip';
-import { InputItem } from 'components/common/InputItem';
-import { getEthUserDepositContractAbi } from 'config/eth/contract';
 import { getEthereumChainId } from 'config/eth/env';
 import { getLrtStakeManagerAbi } from 'config/lrt/contract';
 import { useWalletAccount } from 'hooks/useWalletAccount';
@@ -17,7 +14,6 @@ import {
   getEthWeb3,
   validateAddress,
 } from 'utils/web3Utils';
-import { parseEther } from 'viem';
 import { useContractWrite } from 'wagmi';
 
 interface Props {

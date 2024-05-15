@@ -152,6 +152,7 @@ const DashboardItem = (props: { address: string }) => {
         getFactoryContract().abi,
         getFactoryContract().address
       );
+
       const entrustedLsdTokens: string[] = await factoryContract.methods
         .getEntrustedLsdTokens()
         .call();
@@ -180,7 +181,6 @@ const DashboardItem = (props: { address: string }) => {
         address
       );
       const tokenSymbol = await lsdTokenContract.methods.symbol().call();
-
       const networkWithdrawContract = new web3.eth.Contract(
         getEthWithdrawContractAbi(),
         networkContractsOfLsdToken._networkWithdraw
@@ -552,6 +552,7 @@ const DashboardItem = (props: { address: string }) => {
                   <div className="text-link mr-[.06rem]">
                     Node Deposit Address
                   </div>
+
                   <Icomoon icon="share" size=".12rem" />
                 </div>
               </Link>

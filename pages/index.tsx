@@ -123,15 +123,16 @@ const HomePage = () => {
 
               <div className="flex mt-[.12rem]">
                 <LsdCaseCard
-                  text="EL LRT Case"
+                  text="Eigenlayer LRT"
                   icon={lrtCaseImg}
                   url={getLrtCaseUrl()}
                 />
 
                 <LsdCaseCard
-                  text="Polkadot LSD Case"
+                  text="Karak LRT Beta"
                   icon={polkadotCaseImg}
                   isComing
+                  isKarak
                   className="ml-[.12rem]"
                 />
 
