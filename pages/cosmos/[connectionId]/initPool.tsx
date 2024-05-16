@@ -633,13 +633,13 @@ const ReviewPage = (props: {
       <div className="h-[4.5rem] overflow-auto max-h-[4.5rem]">
         <div
           className={classNames(
-            'mt-[.3rem] text-[.14rem] text-text1 flex items-center'
+            'mt-[.3rem] text-[.14rem] text-text1 flex items-start'
           )}
         >
           <div className="mr-[.06rem] min-w-[1.1rem]">Pool Address:</div>
 
           {poolAddr ? (
-            <span className={'text-text2'}>{poolAddr}</span>
+            <span className={'text-text2 break-all'}>{poolAddr}</span>
           ) : (
             <DataLoading height=".14rem" width="1rem" />
           )}
