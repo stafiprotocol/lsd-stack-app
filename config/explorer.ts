@@ -1,5 +1,5 @@
 import { isDev } from './common';
-import { neutronChainConfig } from './cosmos/chain';
+import { cosmosExplorerUrl, neutronChainConfig } from './cosmos/chain';
 
 export function getEtherScanUrl() {
   if (isDev()) {
@@ -29,40 +29,43 @@ export function getEtherScanErc20TxUrl(address: any) {
   return `https://etherscan.io/address/${address}#tokentxns`;
 }
 
-export function getCosmosExplorerUrl() {
+export function getNeutronExplorerUrl() {
   return neutronChainConfig.explorerUrl;
 }
 
-export function getCosmosExplorerTxUrl(
+export function getNeutronExplorerTxUrl(
   txHash: string | undefined,
   chainId?: string
 ) {
   if (isDev()) {
-    return `${getCosmosExplorerUrl()}/tx/${txHash}`;
+    return `${getNeutronExplorerUrl()}/tx/${txHash}`;
   }
-  return `${getCosmosExplorerUrl()}/tx/${txHash}`;
+  return `${getNeutronExplorerUrl()}/tx/${txHash}`;
 }
 
-export function getCosmosExplorerAccountUrl(account: string, chainId?: string) {
+export function getNeutronExplorerAccountUrl(
+  account: string,
+  chainId?: string
+) {
   if (isDev()) {
-    return `${getCosmosExplorerUrl()}/accounts/${account}`;
+    return `${getNeutronExplorerUrl()}/accounts/${account}`;
   }
-  return `${getCosmosExplorerUrl()}/accounts/${account}`;
+  return `${getNeutronExplorerUrl()}/accounts/${account}`;
 }
 
-export function getCosmosExplorerContractUrl(
+export function getNeutronExplorerContractUrl(
   contractAddress: string,
   chainId?: string
 ) {
   if (isDev()) {
-    return `${getCosmosExplorerUrl()}/contracts/${contractAddress}`;
+    return `${getNeutronExplorerUrl()}/contracts/${contractAddress}`;
   }
-  return `${getCosmosExplorerUrl()}/contracts/${contractAddress}`;
+  return `${getNeutronExplorerUrl()}/contracts/${contractAddress}`;
 }
 
-export function getCosmosExplorerTokenTxUrl(address: any, chainId?: string) {
+export function getCosmosExplorerAccountUrl(account: string) {
   if (isDev()) {
-    return `${getCosmosExplorerUrl()}/address/${address}#tokentxns`;
+    return `${cosmosExplorerUrl}/account/${account}`;
   }
-  return `${getCosmosExplorerUrl()}/address/${address}#tokentxns`;
+  return `${cosmosExplorerUrl}/account/${account}`;
 }

@@ -1,6 +1,7 @@
 {
   "stakeManagerContract": "neutron1humx752uqvxn2jfenh5524md0ta23usm8m2lesaxw47fps28yx5syztnk5",
   "poolAddress": "cosmos193sx2unjy8u8kyrg247k7evcanmcktk88shv934066wlhm7aqljsng9593",
+  "cosmosExplorerUrl": "https://testnet-explorer.stafihub.io/cosmos-testnet",
   "chains": {
     "neutron": {
       "chainName": "Neutron Testnet",

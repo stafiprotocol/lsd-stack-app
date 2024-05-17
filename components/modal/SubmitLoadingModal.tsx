@@ -2,7 +2,7 @@ import { Box, Modal } from '@mui/material';
 import classNames from 'classnames';
 import { PrimaryLoading } from 'components/common/PrimaryLoading';
 import { Icomoon } from 'components/icon/Icomoon';
-import { getCosmosExplorerTxUrl, getEtherScanTxUrl } from 'config/explorer';
+import { getNeutronExplorerTxUrl, getEtherScanTxUrl } from 'config/explorer';
 import { roboto } from 'config/font';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { AppEco } from 'interfaces/common';
@@ -129,7 +129,7 @@ export const SubmitLoadingModal = () => {
               className="mb-[.32rem] flex items-center"
               href={
                 appEco === AppEco.Cosmos
-                  ? getCosmosExplorerTxUrl(submitLoadingParams.txHash)
+                  ? getNeutronExplorerTxUrl(submitLoadingParams.txHash)
                   : getEtherScanTxUrl(submitLoadingParams.txHash)
               }
               target="_blank"

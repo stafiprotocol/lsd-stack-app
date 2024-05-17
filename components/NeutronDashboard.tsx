@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { neutronChainConfig } from 'config/cosmos/chain';
 import {
   getCosmosExplorerAccountUrl,
-  getCosmosExplorerContractUrl,
+  getNeutronExplorerAccountUrl,
+  getNeutronExplorerContractUrl,
 } from 'config/explorer';
 import { robotoBold, robotoSemiBold } from 'config/font';
 import { LsdToken } from 'gen/neutron';
@@ -215,7 +216,9 @@ const DashboardItem = (props: { ica: string }) => {
 
           {dashboardInfo ? (
             <Link
-              href={getCosmosExplorerAccountUrl(dashboardInfo?._lsdToken || '')}
+              href={getNeutronExplorerAccountUrl(
+                dashboardInfo?._lsdToken || ''
+              )}
               target="_blank"
             >
               <div className="flex items-center cursor-pointer">
@@ -335,7 +338,7 @@ const DashboardItem = (props: { ica: string }) => {
           <div>
             <div className="flex items-center">
               <Link
-                href={getCosmosExplorerContractUrl(
+                href={getNeutronExplorerContractUrl(
                   dashboardInfo?._lsdToken || ''
                 )}
                 target="_blank"
@@ -349,7 +352,7 @@ const DashboardItem = (props: { ica: string }) => {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getCosmosExplorerAccountUrl(dashboardInfo?._admin || '')}
+                href={getNeutronExplorerAccountUrl(dashboardInfo?._admin || '')}
                 target="_blank"
               >
                 <div className="flex item-center cursor-pointer">
@@ -361,7 +364,7 @@ const DashboardItem = (props: { ica: string }) => {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getCosmosExplorerAccountUrl(
+                href={getNeutronExplorerAccountUrl(
                   dashboardInfo?._platformFeeReceiver || ''
                 )}
                 target="_blank"
@@ -379,7 +382,7 @@ const DashboardItem = (props: { ica: string }) => {
           <div>
             <div className="flex items-center">
               <Link
-                href={getCosmosExplorerContractUrl(
+                href={getCosmosExplorerAccountUrl(
                   dashboardInfo?._poolAddress || ''
                 )}
                 target="_blank"
@@ -393,7 +396,7 @@ const DashboardItem = (props: { ica: string }) => {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getCosmosExplorerContractUrl(
+                href={getNeutronExplorerContractUrl(
                   getNeutronStakeManagerContract()
                 )}
                 target="_blank"

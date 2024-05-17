@@ -10,3 +10,7 @@ export const neutronChainConfig: CosmosChainConfig = isDev()
 export const lsdTokenConfigs: LsdTokenConfig[] = isDev()
   ? devConfig.lsdTokens
   : prodConfig.lsdTokens;
+
+export const cosmosExplorerUrl = isDev()
+  ? devConfig.cosmosExplorerUrl
+  : prodConfig.cosmosExplorerUrl;
