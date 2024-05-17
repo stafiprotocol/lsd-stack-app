@@ -112,7 +112,7 @@ const EthPage = () => {
                   </div>
                 </div>
 
-                <Link href="https://www.google.com" target="_blank">
+                <Link href={getDocHost()} target="_blank">
                   <CustomButton
                     type="stroke"
                     width="1.62rem"

@@ -1,7 +1,10 @@
 import { Popover } from '@mui/material';
 import classNames from 'classnames';
 import { neutronChainConfig } from 'config/cosmos/chain';
-import { getCosmosExplorerAccountUrl } from 'config/explorer';
+import {
+  getCosmosExplorerAccountUrl,
+  getCosmosExplorerContractUrl,
+} from 'config/explorer';
 import { robotoBold, robotoSemiBold } from 'config/font';
 import { LsdToken } from 'gen/neutron';
 import { useAppDispatch } from 'hooks/common';
@@ -32,6 +35,7 @@ import { UpdateCosmosLsmSupportModal } from './modal/cosmos/UpdateCosmosLsmSuppo
 import { UpdateCosmosMinDepositModal } from './modal/cosmos/UpdateCosmosMinDepositModal';
 import { UpdateCosmosPlatformFeeModal } from './modal/cosmos/UpdateCosmosPlatformFeeModal';
 import { UpdateCosmosUnbondFeeModal } from './modal/cosmos/UpdateCosmosUnbondFeeModal';
+import { getNeutronStakeManagerContract } from 'config/cosmos/contract';
 
 export const NeutronDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -246,7 +250,7 @@ const DashboardItem = (props: { ica: string }) => {
       <div
         className="mt-[.17rem] grid text-[.14rem] items-start"
         style={{
-          gridTemplateColumns: '45% 1px 55%',
+          gridTemplateColumns: '55% 1px 45%',
         }}
       >
         <div
@@ -255,7 +259,7 @@ const DashboardItem = (props: { ica: string }) => {
             gridTemplateColumns: '50% 50%',
           }}
         >
-          <div className="flex items-center">
+          <div className=" items-center hidden">
             <div className="text-text2">Status:</div>
             <div className="text-text1 ml-[.06rem] ">
               {dashboardInfo ? dashboardInfo.status : '--'}
@@ -263,14 +267,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div className="flex items-center">
-            <div className="text-text2">Unbond Commission:</div>
-            <div className="text-text1 ml-[.06rem] ">
-              {dashboardInfo ? dashboardInfo.formatUnbondCommission : '--'}%
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            <div className="text-text2">Lsm Support:</div>
+            <div className="text-text2">LSM Support:</div>
             <div className="text-text1 ml-[.06rem] ">
               {dashboardInfo ? (dashboardInfo.lsmSupport ? 'Y' : 'N') : '--'}
             </div>
@@ -338,7 +335,7 @@ const DashboardItem = (props: { ica: string }) => {
           <div>
             <div className="flex items-center">
               <Link
-                href={getCosmosExplorerAccountUrl(
+                href={getCosmosExplorerContractUrl(
                   dashboardInfo?._lsdToken || ''
                 )}
                 target="_blank"
@@ -356,23 +353,7 @@ const DashboardItem = (props: { ica: string }) => {
                 target="_blank"
               >
                 <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Admin Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <Link
-                href={getCosmosExplorerAccountUrl(
-                  dashboardInfo?._poolAddress || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Pool Address</div>
+                  <div className="text-link mr-[.06rem]">Owner Address</div>
                   <Icomoon icon="share" size=".12rem" />
                 </div>
               </Link>
@@ -388,6 +369,38 @@ const DashboardItem = (props: { ica: string }) => {
                 <div className="flex item-center cursor-pointer">
                   <div className="text-link mr-[.06rem]">
                     Fee Receiver Address
+                  </div>
+                  <Icomoon icon="share" size=".12rem" />
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center">
+              <Link
+                href={getCosmosExplorerContractUrl(
+                  dashboardInfo?._poolAddress || ''
+                )}
+                target="_blank"
+              >
+                <div className="flex item-center cursor-pointer">
+                  <div className="text-link mr-[.06rem]">Pool Address</div>
+                  <Icomoon icon="share" size=".12rem" />
+                </div>
+              </Link>
+            </div>
+
+            <div className="mt-[.24rem] flex items-center">
+              <Link
+                href={getCosmosExplorerContractUrl(
+                  getNeutronStakeManagerContract()
+                )}
+                target="_blank"
+              >
+                <div className="flex item-center cursor-pointer">
+                  <div className="text-link mr-[.06rem]">
+                    Stake Manager Address
                   </div>
                   <Icomoon icon="share" size=".12rem" />
                 </div>
@@ -498,7 +511,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="py-[.1rem] cursor-pointer items-center justify-between hidden"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -532,7 +545,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="py-[.1rem] cursor-pointer hidden items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(

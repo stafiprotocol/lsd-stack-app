@@ -45,9 +45,19 @@ export function getCosmosExplorerTxUrl(
 
 export function getCosmosExplorerAccountUrl(account: string, chainId?: string) {
   if (isDev()) {
-    return `${getCosmosExplorerUrl()}/address/${account}`;
+    return `${getCosmosExplorerUrl()}/accounts/${account}`;
   }
-  return `${getCosmosExplorerUrl()}/address/${account}`;
+  return `${getCosmosExplorerUrl()}/accounts/${account}`;
+}
+
+export function getCosmosExplorerContractUrl(
+  contractAddress: string,
+  chainId?: string
+) {
+  if (isDev()) {
+    return `${getCosmosExplorerUrl()}/contracts/${contractAddress}`;
+  }
+  return `${getCosmosExplorerUrl()}/contracts/${contractAddress}`;
 }
 
 export function getCosmosExplorerTokenTxUrl(address: any, chainId?: string) {

@@ -18,7 +18,7 @@
         "bech32PrefixConsAddr": "neutronvalcons",
         "bech32PrefixConsPub": "neutronvalconspub"
       },
-      "explorerUrl": "https://www.mintscan.io/neutron-testnet",
+      "explorerUrl": "https://neutron.celat.one/pion-1",
       "gasLimit": "80000",
       "isNativeKeplrChain": false
     }

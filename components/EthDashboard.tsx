@@ -694,7 +694,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="py-[.1rem] cursor-pointer hidden items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(

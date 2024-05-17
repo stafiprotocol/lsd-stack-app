@@ -146,7 +146,7 @@ const CosmosPage = () => {
                   }}
                 >
                   {lsdTokenConfigs.map((lsdTokenConfig, index) => (
-                    <>
+                    <div key={index}>
                       <div
                         key={index}
                         className="h-[.58rem] flex items-center justify-between cursor-pointer"
@@ -184,7 +184,7 @@ const CosmosPage = () => {
                       </div>
 
                       <div className="bg-[#E8EFFD] h-[1px] mx-[.3rem]" />
-                    </>
+                    </div>
                   ))}
 
                   <div className="h-[.58rem] flex items-center justify-between">
@@ -278,7 +278,7 @@ const CosmosPage = () => {
                   </div>
                 </div>
 
-                <Link href="https://www.google.com" target="_blank">
+                <Link href={getDocHost()} target="_blank">
                   <CustomButton
                     type="stroke"
                     width="1.62rem"

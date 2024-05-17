@@ -7,6 +7,7 @@ import TipImg from 'public/images/tooltip.svg';
 import { Tooltip } from '@mui/material';
 import { Icomoon } from 'components/icon/Icomoon';
 import Link from 'next/link';
+import { getDocHost } from 'config/common';
 
 interface LsdCaseCardProps {
   icon: any;
@@ -54,7 +55,7 @@ export const LsdCaseCard = (props: LsdCaseCardProps) => {
                   by for the Karak official testnet launch
                 </div>
 
-                <Link href={'https://www.google.com'} target="_blank">
+                <Link href={getDocHost()} target="_blank">
                   <div className="mt-[.1rem] flex item-center cursor-pointer justify-center">
                     <div
                       className={classNames(
