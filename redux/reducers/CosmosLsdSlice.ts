@@ -19,7 +19,7 @@ import {
   chainAmountToHuman,
   formatNumber,
 } from 'utils/numberUtils';
-import { LsdTokenConfig } from 'interfaces/common';
+import { CosmosLsdTokenConfig } from 'interfaces/common';
 
 export interface LsdState {
   cosmosEcoLoading: boolean;
@@ -224,7 +224,7 @@ export const cosmosInitPool =
     realFeeCommision: string,
     feeReceiver: string,
     validatorAddrs: string[],
-    lsdTokenConfig: LsdTokenConfig,
+    lsdTokenConfig: CosmosLsdTokenConfig,
     cb?: (poolAddr: string) => void
   ): AppThunk =>
   async (dispatch, getState) => {

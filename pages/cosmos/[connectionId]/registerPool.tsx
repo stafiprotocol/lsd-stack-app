@@ -10,7 +10,7 @@ import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { usePrice } from 'hooks/usePrice';
-import { LsdTokenConfig } from 'interfaces/common';
+import { CosmosLsdTokenConfig } from 'interfaces/common';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -43,7 +43,7 @@ const RegisterPoolPage = () => {
   const [interChainAccountId, setInterChainAccountId] = useState('');
   const [registerFee, setRegisterFee] = useState<string>();
   const [lsdTokenChainConfig, setLsdTokenChainConfig] =
-    useState<LsdTokenConfig>();
+    useState<CosmosLsdTokenConfig>();
 
   const { cosmosEcoLoading } = useAppSelector((state: RootState) => {
     return {

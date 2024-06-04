@@ -1,0 +1,335 @@
+[
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  { "inputs": [], "name": "AddressNotAllowed", "type": "error" },
+  { "inputs": [], "name": "AlreadyInitialized", "type": "error" },
+  { "inputs": [], "name": "CallerNotAllowed", "type": "error" },
+  { "inputs": [], "name": "CommissionRateInvalid", "type": "error" },
+  { "inputs": [], "name": "FailedToCall", "type": "error" },
+  { "inputs": [], "name": "NotAuthorizedLsdToken", "type": "error" },
+  { "inputs": [], "name": "NotInitialized", "type": "error" },
+  { "inputs": [], "name": "ValidatorsEmpty", "type": "error" },
+  { "inputs": [], "name": "ValidatorsLenExceedLimit", "type": "error" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "previousAdmin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "AdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beacon",
+        "type": "address"
+      }
+    ],
+    "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "_stakeManager",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_stakePool",
+            "type": "address"
+          },
+          { "internalType": "address", "name": "_lsdToken", "type": "address" },
+          { "internalType": "uint256", "name": "_block", "type": "uint256" }
+        ],
+        "indexed": false,
+        "internalType": "struct ILsdNetworkFactory.NetworkContracts",
+        "name": "contracts",
+        "type": "tuple"
+      }
+    ],
+    "name": "LsdNetwork",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "implementation",
+        "type": "address"
+      }
+    ],
+    "name": "Upgraded",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lsdToken", "type": "address" }
+    ],
+    "name": "addAuthorizedLsdToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lsdToken", "type": "address" }
+    ],
+    "name": "addEntrustedLsdToken",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "authorizedLsdToken",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "_lsdTokenName", "type": "string" },
+      { "internalType": "string", "name": "_lsdTokenSymbol", "type": "string" },
+      { "internalType": "string[]", "name": "_validators", "type": "string[]" },
+      { "internalType": "address", "name": "_networkAdmin", "type": "address" }
+    ],
+    "name": "createLsdNetwork",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lsdToken", "type": "address" },
+      { "internalType": "string[]", "name": "_validators", "type": "string[]" },
+      { "internalType": "address", "name": "_networkAdmin", "type": "address" }
+    ],
+    "name": "createLsdNetworkWithLsdToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "_lsdTokenName", "type": "string" },
+      { "internalType": "string", "name": "_lsdTokenSymbol", "type": "string" },
+      { "internalType": "string[]", "name": "_validators", "type": "string[]" },
+      { "internalType": "uint256", "name": "minDelay", "type": "uint256" },
+      { "internalType": "address[]", "name": "proposers", "type": "address[]" }
+    ],
+    "name": "createLsdNetworkWithTimelock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "factoryAdmin",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lsdToken", "type": "address" },
+      { "internalType": "address", "name": "_recipient", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "factoryClaim",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEntrustedLsdTokens",
+    "outputs": [
+      { "internalType": "address[]", "name": "", "type": "address[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_factoryAdmin", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "_stakeManagerLogicAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_stakePoolLogicAddress",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_creater", "type": "address" }
+    ],
+    "name": "lsdTokensOfCreater",
+    "outputs": [
+      { "internalType": "address[]", "name": "", "type": "address[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "networkContractsOfLsdToken",
+    "outputs": [
+      { "internalType": "address", "name": "_stakeManager", "type": "address" },
+      { "internalType": "address", "name": "_stakePool", "type": "address" },
+      { "internalType": "address", "name": "_lsdToken", "type": "address" },
+      { "internalType": "uint256", "name": "_block", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lsdToken", "type": "address" }
+    ],
+    "name": "removeAuthorizedLsdToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_lsdToken", "type": "address" }
+    ],
+    "name": "removeEntrustedLsdToken",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stakeManagerLogicAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setStakeManagerLogicAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stakePoolLogicAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setStakePoolLogicAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stakeManagerLogicAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stakePoolLogicAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "totalClaimedLsdToken",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_newAdmin", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]

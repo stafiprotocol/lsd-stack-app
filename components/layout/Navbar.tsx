@@ -33,6 +33,7 @@ import {
 import { useSelector } from 'react-redux';
 import { getDocHost } from 'config/common';
 import { LsaasSidebar } from 'components/modal/LsaasSidebar';
+import { evmLsdTokens } from 'config/evm';
 
 const Navbar = () => {
   const router = useRouter();
@@ -47,7 +48,7 @@ const Navbar = () => {
   const { address } = useAccount();
 
   const walletNotConnected = useMemo(() => {
-    if (appEco === AppEco.Eth) {
+    if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
       return !address;
     } else if (appEco === AppEco.Cosmos) {
       return !neutronChainAccount?.bech32Address;
@@ -187,7 +188,7 @@ const UserInfo = () => {
   const { disconnectAsync } = useDisconnect();
 
   const displayAddress = useMemo(() => {
-    if (appEco === AppEco.Eth) {
+    if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
       return address;
     } else if (appEco === AppEco.Cosmos) {
       return neutronChainAccount?.bech32Address;
@@ -204,6 +205,8 @@ const UserInfo = () => {
     switch (appEco) {
       case AppEco.Eth:
         return ethereumLogo;
+      // case AppEco.Evm:
+      //   return seiLogo;
       case AppEco.Cosmos:
         return neutronLogo;
     }
@@ -350,6 +353,7 @@ const UserInfo = () => {
 };
 
 const ConnectButton = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { appEco } = useAppSelector((state: RootState) => {
     return {
@@ -359,16 +363,27 @@ const ConnectButton = () => {
   const { connectors, connectAsync } = useConnect();
 
   const clickConnectWallet = async () => {
-    if (appEco === AppEco.Eth) {
+    if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
       // console.log({ connectors });
       const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
       if (!metamaskConnector) {
         return;
       }
       try {
+        let chainId;
+        if (appEco === AppEco.Eth) {
+          chainId = getEthereumChainId();
+        } else {
+          const { token } = router.query;
+          const matchedLsdToken = evmLsdTokens.find(
+            (item) => item.symbol === token
+          );
+          const lsdTokenConfig = matchedLsdToken || evmLsdTokens[0];
+          chainId = lsdTokenConfig.chainId;
+        }
         await connectAsync({
           connector: metamaskConnector,
-          chainId: getEthereumChainId(),
+          chainId: chainId,
         });
       } catch (err: any) {
         if (err.code === 4001) {

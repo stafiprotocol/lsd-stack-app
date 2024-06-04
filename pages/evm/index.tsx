@@ -1,32 +1,32 @@
 import { Popover } from '@mui/material';
 import classNames from 'classnames';
+import { NeutronDashboard } from 'components/NeutronDashboard';
 import { CustomButton } from 'components/common/CustomButton';
 import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
 import { TipBar } from 'components/common/TipBar';
 import { Icomoon } from 'components/icon/Icomoon';
 import { getDocHost } from 'config/common';
-import { lsdTokenConfigs, neutronChainConfig } from 'config/cosmos/chain';
-import { COSMOS_CREATION_STEPS } from 'constants/common';
+import { neutronChainConfig } from 'config/cosmos/chain';
+import { evmLsdTokens } from 'config/evm';
+import { EVM_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch } from 'hooks/common';
-import { CosmosLsdTokenConfig } from 'interfaces/common';
-import empty from 'public/images/empty_bird.svg';
+import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
+import { EvmLsdTokenConfig } from 'interfaces/common';
 import {
   bindPopover,
   bindTrigger,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
+import empty from 'public/images/empty_bird.svg';
+import others from 'public/images/tokens/others.svg';
 import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
-import { openLink } from 'utils/commonUtils';
-import others from 'public/images/tokens/others.svg';
-import { useWalletAccount } from 'hooks/useWalletAccount';
-import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
-import { NeutronDashboard } from 'components/NeutronDashboard';
 import { connectKeplrAccount } from 'redux/reducers/WalletSlice';
-import Link from 'next/link';
+import { openLink } from 'utils/commonUtils';
 
 const CosmosPage = () => {
   const router = useRouter();
@@ -34,8 +34,7 @@ const CosmosPage = () => {
   const dispatch = useAppDispatch();
   const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
 
-  const [selectedLsdToken, setSelectedLsdToken] =
-    useState<CosmosLsdTokenConfig>();
+  const [selectedLsdToken, setSelectedLsdToken] = useState<EvmLsdTokenConfig>();
 
   const popupState = usePopupState({
     variant: 'popover',
@@ -43,15 +42,15 @@ const CosmosPage = () => {
   });
 
   useEffect(() => {
-    if (lsdTokenConfigs.length > 0) {
-      setSelectedLsdToken(lsdTokenConfigs[0]);
+    if (evmLsdTokens.length > 0) {
+      setSelectedLsdToken(evmLsdTokens[0]);
     }
   }, []);
 
   useEffect(() => {
     dispatch(
       setCreationStepInfo({
-        steps: COSMOS_CREATION_STEPS,
+        steps: EVM_CREATION_STEPS,
         activedIndex: 1,
       })
     );
@@ -68,8 +67,8 @@ const CosmosPage = () => {
         }}
       >
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto pb-[1rem]">
-          <div className="flex justify-center mt-[.42rem] items-start">
-            <FormCard title="Choose LSD Token">
+          <div className="flex mt-[.42rem]">
+            <FormCard title="Choose Network">
               <>
                 <TipBar
                   content={
@@ -84,7 +83,7 @@ const CosmosPage = () => {
                   className="bg-[#DEE6F780] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center mt-[.24rem] h-[.49rem] cursor-pointer"
                   {...bindTrigger(popupState)}
                 >
-                  {selectedLsdToken?.displayName}
+                  {selectedLsdToken?.symbol}
                 </div>
 
                 <div
@@ -97,9 +96,7 @@ const CosmosPage = () => {
                     type="primary"
                     height=".56rem"
                     onClick={() =>
-                      router.push(
-                        `/cosmos/${selectedLsdToken?.connectionId}/registerPool`
-                      )
+                      router.push(`/evm/${selectedLsdToken?.symbol}`)
                     }
                   >
                     Next
@@ -107,7 +104,7 @@ const CosmosPage = () => {
                 </div>
 
                 <div className="text-[.14rem] leading-[.21rem] text-[#6C86AD] mt-[.15rem] text-center mb-[.36rem]">
-                  We currently only support ATOM. To deploy other LSD, please{' '}
+                  We currently only support SEI. To deploy other LSD, please{' '}
                   <a
                     href="https://discord.com/invite/jB77etn"
                     target="_blank"
@@ -142,7 +139,7 @@ const CosmosPage = () => {
                     '& .MuiBox-root': {},
                   }}
                 >
-                  {lsdTokenConfigs.map((lsdTokenConfig, index) => (
+                  {evmLsdTokens.map((lsdTokenConfig, index) => (
                     <div key={index}>
                       <div
                         key={index}
@@ -162,13 +159,13 @@ const CosmosPage = () => {
                           </div>
 
                           <div className="ml-[.12rem] text-[.16rem]">
-                            {lsdTokenConfig.displayName}
+                            {lsdTokenConfig.symbol}
                           </div>
                         </div>
 
                         <div className="mr-[.3rem]">
-                          {lsdTokenConfig.connectionId ===
-                          selectedLsdToken?.connectionId ? (
+                          {lsdTokenConfig.symbol ===
+                          selectedLsdToken?.symbol ? (
                             <Icomoon
                               icon="checked-circle"
                               size=".18rem"
@@ -237,7 +234,7 @@ const CosmosPage = () => {
         </div>
       </div>
 
-      <div className="bg-bgPage pt-[.56rem] pb-[1.05rem]">
+      <div className="bg-bgPage pt-[.56rem] pb-[1.05rem] hidden">
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
           {neutronChainAccount?.bech32Address ? (
             <NeutronDashboard />

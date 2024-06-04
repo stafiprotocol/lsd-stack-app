@@ -17,6 +17,23 @@ export function createWeb3(provider?: any) {
 
 let ethWeb3: Web3 | undefined = undefined;
 
+let web3Cache: { [key: string]: Web3 } = {};
+
+export function getWeb3(rpc: string) {
+  let web3Instance = web3Cache[rpc];
+
+  if (!web3Instance) {
+    const useWebsocket = rpc.startsWith('wss');
+    web3Instance = createWeb3(
+      useWebsocket
+        ? new Web3.providers.WebsocketProvider(rpc)
+        : new Web3.providers.HttpProvider(rpc)
+    );
+    web3Cache[rpc] = web3Instance;
+  }
+  return web3Instance;
+}
+
 /**
  * get Ethereum web3 instance singleton
  */

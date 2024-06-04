@@ -12,6 +12,7 @@ export interface SubmitLoadingParams {
   status: 'loading' | 'success' | 'error';
   modalOpened: boolean;
   txHash: string;
+  explorerUrl?: string;
   msg?: string;
 }
 

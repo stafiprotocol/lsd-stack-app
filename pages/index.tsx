@@ -21,6 +21,7 @@ import lrtCaseImg from 'public/images/case/lrt.png';
 import solanaCaseImg from 'public/images/case/solana.png';
 import polkadotCaseImg from 'public/images/case/polkadot.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
+import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import { AppEco } from 'interfaces/common';
@@ -400,7 +401,7 @@ const EcoSelector = () => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Lrt, AppEco.Cosmos].map((eco) => (
+        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos].map((eco) => (
           <div key={eco}>
             <EcoItem
               eco={eco}
@@ -451,6 +452,8 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
               ? EcoCosmosImg
               : eco === AppEco.Lrt
               ? EcoLrtImg
+              : eco === AppEco.Evm
+              ? EcoEvmImg
               : EcoEthImg
           }
           fill

@@ -128,9 +128,10 @@ export const SubmitLoadingModal = () => {
             <a
               className="mb-[.32rem] flex items-center"
               href={
-                appEco === AppEco.Cosmos
+                submitLoadingParams.explorerUrl ||
+                (appEco === AppEco.Cosmos
                   ? getNeutronExplorerTxUrl(submitLoadingParams.txHash)
-                  : getEtherScanTxUrl(submitLoadingParams.txHash)
+                  : getEtherScanTxUrl(submitLoadingParams.txHash))
               }
               target="_blank"
               rel="noreferrer"

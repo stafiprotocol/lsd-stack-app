@@ -15,7 +15,7 @@ import { LsdToken } from 'gen/neutron';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { usePrice } from 'hooks/usePrice';
-import { LsdTokenConfig } from 'interfaces/common';
+import { CosmosLsdTokenConfig } from 'interfaces/common';
 import _ from 'lodash';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
@@ -56,7 +56,7 @@ const InitPoolPage = () => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const [interChainAccountId, setInterChainAccountId] = useState('');
   const [lsdTokenChainConfig, setLsdTokenChainConfig] =
-    useState<LsdTokenConfig>();
+    useState<CosmosLsdTokenConfig>();
   const [feeReceiver, setFeeReceiver] = useState(
     ''
     // 'neutron1gn54y6lmkhchan2cy9fxzt8v6j6crq6huays6m'

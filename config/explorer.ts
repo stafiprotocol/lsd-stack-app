@@ -29,6 +29,16 @@ export function getEtherScanErc20TxUrl(address: any) {
   return `https://etherscan.io/address/${address}#tokentxns`;
 }
 
+export function getEvmScanTxUrl(symbol: string, txHash: string | undefined) {
+  if (symbol === 'SEI') {
+    if (isDev()) {
+      return `https://seitrace.com/tx/${txHash}?chain=arctic-1`;
+    }
+    return `https://seitrace.com/tx/${txHash}?chain=pacific-1`;
+  }
+  return '';
+}
+
 export function getNeutronExplorerUrl() {
   return neutronChainConfig.explorerUrl;
 }

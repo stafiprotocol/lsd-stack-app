@@ -2,6 +2,7 @@ export enum AppEco {
   Eth = 'ETH',
   Cosmos = 'COSMOS',
   Lrt = 'LRT',
+  Evm = 'EVM',
   Polkadot = 'Polkadot',
   Others = 'Others',
 }
@@ -48,7 +49,7 @@ export interface CosmosChainConfig {
   stakeIbcChannel?: string;
 }
 
-export interface LsdTokenConfig {
+export interface CosmosLsdTokenConfig {
   displayName: string;
   connectionId: string;
   defaultFeeCommission: number;
@@ -63,4 +64,12 @@ export interface LsdTokenConfig {
 export interface LstItem {
   address: string;
   symbol: string;
+}
+
+export interface EvmLsdTokenConfig {
+  symbol: string;
+  rpc: string;
+  chainId: number;
+  icon: string;
+  factoryContract: string;
 }

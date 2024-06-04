@@ -36,6 +36,14 @@ export const ETH_CUSTOMIZE_CREATION_STEPS = [
   'Deploy',
 ];
 
+export const EVM_CREATION_STEPS = [
+  'EVM Eco',
+  'Choose Network',
+  'Token Standard',
+  'Parameters',
+  'Deploy',
+];
+
 export const COSMOS_CREATION_STEPS = [
   'COSMOS Eco',
   'Choose Token',

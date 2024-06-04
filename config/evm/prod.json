@@ -1,0 +1,15 @@
+{
+  "stakeManagerContract": "neutron1humx752uqvxn2jfenh5524md0ta23usm8m2lesaxw47fps28yx5syztnk5",
+  "poolAddress": "cosmos193sx2unjy8u8kyrg247k7evcanmcktk88shv934066wlhm7aqljsng9593",
+  "cosmosExplorerUrl": "https://testnet-explorer.stafihub.io/cosmos-testnet",
+  "lsdTokens": [
+    {
+      "symbol": "SEI",
+      "chainId": 1329,
+      "rpc": "https://evm-rpc.sei-apis.com/",
+      "explorerUrl": "https://seitrace.com",
+      "icon": "/images/tokens/sei.png",
+      "factoryContract": "0xfa27cde707Ee341BC4fdc6FB89A67d6381eA6AB5"
+    }
+  ]
+}

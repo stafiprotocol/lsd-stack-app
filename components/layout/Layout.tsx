@@ -50,6 +50,8 @@ export const Layout = (props: React.PropsWithChildren) => {
     }
     if (router.pathname.includes('cosmos')) {
       dispatch(setAppEco(AppEco.Cosmos));
+    } else if (router.pathname.includes('evm')) {
+      dispatch(setAppEco(AppEco.Evm));
     } else {
       dispatch(setAppEco(AppEco.Eth));
     }
