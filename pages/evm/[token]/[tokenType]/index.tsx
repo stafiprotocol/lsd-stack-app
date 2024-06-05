@@ -1,3 +1,4 @@
+import { checkAddress } from '@stafihub/apps-wallet';
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
@@ -313,7 +314,7 @@ const ParameterPage = () => {
       }
     } else {
       for (let addr of votersAddrs) {
-        if (!addr || !validateAddress(addr)) {
+        if (!addr || !checkAddress(addr, 'seivaloper')) {
           setSubmittable(false);
           return;
         }
@@ -342,7 +343,7 @@ const ParameterPage = () => {
           <div className={classNames('flex-1 min-w-[6.2rem] w-[6.2rem]')}>
             <div className="bg-color-bg2 rounded-[.3rem] pb-[.14rem] border-[.01rem] border-color-border1">
               <div className="text-[.28rem] leading-[.42rem] font-[700] text-text1 text-center mt-[.24rem]">
-                {voterParamsOpened ? 'Voter Address' : 'Set Parameters'}
+                {voterParamsOpened ? 'Validator Address' : 'Set Parameters'}
               </div>
 
               {!voterParamsOpened ? (
@@ -353,7 +354,7 @@ const ParameterPage = () => {
                         label="Token Name"
                         value={tokenName}
                         onChange={(v) => setTokenName(v)}
-                        placeholder="Example: StaFi rETH"
+                        placeholder={`Example: StaFi r${lsdTokenConfig.symbol}`}
                       />
                       {tokenName.length > 50 && (
                         <InputErrorTip msg="Token name must be less than 50 character" />
@@ -362,7 +363,7 @@ const ParameterPage = () => {
                         label="Symbol"
                         value={symbol}
                         onChange={(v) => setSymbol(v)}
-                        placeholder="Example: rETH"
+                        placeholder={`Example: r${lsdTokenConfig.symbol}`}
                       />
                       {symbol.length > 10 && (
                         <InputErrorTip msg="Symbol must be less than 10 character" />
@@ -396,10 +397,10 @@ const ParameterPage = () => {
 
                   <InputItem
                     isNumber
-                    label="Vote Number"
+                    label="Validator Number"
                     value={voteNumber}
                     onChange={(v) => setVoteNumber(v)}
-                    placeholder="Suggest to set more than 8"
+                    placeholder="Suggest to set more than 1"
                   />
                   {voteNumber !== '' && Number(voteNumber) === 0 && (
                     <InputErrorTip msg="Vote number must be greater than 0" />
@@ -409,23 +410,27 @@ const ParameterPage = () => {
                 <div className="px-[.26rem] mx-auto mt-[.32rem] gap-[.16rem] flex flex-col max-h-[3.6rem] overflow-y-auto">
                   <InputItem
                     disabled
-                    label="Voter Number"
+                    label="Validator Number"
                     value={voteNumber}
                     onChange={() => {}}
-                    placeholder="At least voters / 2, no more than all voters' number"
+                    placeholder="At least validators / 2, no more than all validators' number"
                   />
 
                   {votersAddrs.map((item, index) => (
                     <div key={index} className="flex flex-col gap-[.16rem]">
                       <InputItem
-                        label={`Voter ${index + 1} Addr`}
+                        label={`Validator ${index + 1} Addr`}
                         value={item}
                         onChange={(v) => changeVotersAddrs(v, index)}
-                        placeholder="Example: 0x0000000000000000"
+                        placeholder={
+                          lsdTokenConfig.symbol === 'SEI'
+                            ? 'Example: seivaloper...'
+                            : 'Example: 0x0000000000000000'
+                        }
                       />
-                      {!!item && !validateAddress(item) && (
+                      {!!item && !checkAddress(item, 'seivaloper') && (
                         <div className="pl-[.2rem]">
-                          <InputErrorTip msg="Voter address is invalid" />
+                          <InputErrorTip msg="Validator address is invalid" />
                         </div>
                       )}
                     </div>
@@ -490,31 +495,20 @@ const ParameterPage = () => {
               <br />
               - Adjust duration of era
               <br />
-              - Nominate voter manager
-              <br />
               - Adjust parameters
               <br />
               <br />
-              Voter Number:
+              Validator Number:
               <br />
-              - How many voters you intend to set
+              - How many validators you intend to set
               <br />
               - Minimum number is 3, highly recommend to set more than 8
               <br />
-              - Each voter proposes new states of the network
+              - Each validator proposes new states of the network
               <br />
-              - The more voters you set the more decentralized advantages the
-              network gets
+              - The more validators you set the more decentralized advantages
+              the network gets
               <br />
-              <br />
-              Threshold:
-              <br />
-              - The minimum number of votes required to approve a proposal
-              <br />
-              - Recommended value is (voter number*2/3)
-              <br />
-              - Minimum number is (voter number+1)/2
-              <br />- Maximum number is voter number which is not recommended
             </div>
           </div>
         </div>

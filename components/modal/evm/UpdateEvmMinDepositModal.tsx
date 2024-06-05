@@ -1,38 +1,39 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputItem } from 'components/common/InputItem';
-import { getEthWithdrawContractAbi } from 'config/eth/contract';
+import { getEthUserDepositContractAbi } from 'config/eth/contract';
 import { getEthereumChainId } from 'config/eth/env';
+import { getEvmStakeManagerAbi } from 'config/evm';
 import { getLrtStakeManagerAbi } from 'config/lrt/contract';
 import { useWalletAccount } from 'hooks/useWalletAccount';
+import { EvmLsdTokenConfig } from 'interfaces/common';
 import Image from 'next/image';
 import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import snackbarUtil from 'utils/snackbarUtils';
 import {
-  createWeb3,
   fetchTransactionReceiptWithWeb3,
   getEthWeb3,
+  getWeb3,
 } from 'utils/web3Utils';
 import { parseEther } from 'viem';
 import { useContractWrite } from 'wagmi';
-import { AbiItem } from 'web3-utils';
 
 interface Props {
   open: boolean;
   close: () => void;
+  lsdTokenConfig: EvmLsdTokenConfig;
   contractAddress: string;
-  contractAbi?: AbiItem[];
   placeholder: string;
   onConnectWallet: () => void;
   onRefresh: () => void;
 }
 
-export const UpdateLrtPlatformFeeModal = ({
+export const UpdateEvmMinDepositModal = ({
   open,
   close,
   contractAddress,
-  contractAbi,
+  lsdTokenConfig,
   placeholder,
   onConnectWallet,
   onRefresh,
@@ -49,24 +50,30 @@ export const UpdateLrtPlatformFeeModal = ({
     if (!metaMaskAccount) {
       return [false, 'Connect Wallet'];
     }
-    if (metaMaskChainId !== getEthereumChainId()) {
+    if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
     if (!value || Number(value) === 0 || !contractAddress) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, value, contractAddress]);
+  }, [
+    metaMaskAccount,
+    metaMaskChainId,
+    value,
+    lsdTokenConfig,
+    contractAddress,
+  ]);
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
-    abi: contractAbi || getLrtStakeManagerAbi(),
-    functionName: 'setProtocolFeeCommission',
+    abi: getEvmStakeManagerAbi(),
+    functionName: 'setMinStakeAmount',
     args: [],
   });
 
   const submit = async () => {
-    if (!metaMaskAccount || metaMaskChainId !== getEthereumChainId()) {
+    if (!metaMaskAccount || metaMaskChainId !== lsdTokenConfig.chainId) {
       onConnectWallet();
       return;
     }
@@ -74,14 +81,12 @@ export const UpdateLrtPlatformFeeModal = ({
     setLoading(true);
 
     try {
-      const realNodeValue = Number(value) / 100 + '';
-
       const result = await writeAsync({
-        args: [parseEther(realNodeValue as `${number}`)],
+        args: [parseEther(value as `${number}`)],
       });
 
       const transactionReceipt = await fetchTransactionReceiptWithWeb3(
-        getEthWeb3(),
+        getWeb3(lsdTokenConfig.rpc),
         result.hash
       );
 
@@ -126,9 +131,9 @@ export const UpdateLrtPlatformFeeModal = ({
         <div className="mx-[.24rem] mt-[.16rem]">
           <InputItem
             disabled={loading}
-            label="Platform Fee"
+            label="Min Deposit Amount"
             placeholder={placeholder}
-            suffix="%"
+            suffix="ETH"
             isNumber
             value={value}
             onChange={setValue}

@@ -67,7 +67,7 @@ const CosmosPage = () => {
         }}
       >
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto pb-[1rem]">
-          <div className="flex mt-[.42rem]">
+          <div className="flex mt-[.42rem] items-start">
             <FormCard title="Choose Network">
               <>
                 <TipBar
@@ -76,11 +76,11 @@ const CosmosPage = () => {
                   }
                   isWarning
                   link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#neutron-risks-awareness`}
-                  className="mt-[.24rem]"
+                  className="mt-[.24rem] hidden"
                 />
 
                 <div
-                  className="bg-[#DEE6F780] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center mt-[.24rem] h-[.49rem] cursor-pointer"
+                  className="mt-[.48rem] bg-[#DEE6F780] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center h-[.49rem] cursor-pointer"
                   {...bindTrigger(popupState)}
                 >
                   {selectedLsdToken?.symbol}
@@ -205,7 +205,7 @@ const CosmosPage = () => {
             </FormCard>
 
             <FaqCard
-              title="Neutron vs Native contract"
+              title="Choose Network"
               link={`${getDocHost()}/docs/develop_cosmos_lsd/getstarted.html`}
             >
               <>

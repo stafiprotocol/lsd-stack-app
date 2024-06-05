@@ -15,5 +15,5 @@ export function getShortAddress(
     address.length
   );
 
-  return sFrontPart + "..." + sTailPart;
+  return sFrontPart + '...' + sTailPart;
 }

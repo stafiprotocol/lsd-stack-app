@@ -144,6 +144,19 @@ const Navbar = () => {
                 </a>
                 .
               </div>
+            ) : appEco === AppEco.Evm ? (
+              <div>
+                Current liquid staking supports chains like SEI. We&apos;ll
+                support more in the future. Please check the{' '}
+                <a
+                  href={`${getDocHost()}/docs/architecture/evmlsd.html`}
+                  target="_blank"
+                  className="underline text-text1"
+                >
+                  documentation
+                </a>{' '}
+                for details and customization.
+              </div>
             ) : (
               <div>
                 Current liquid staking supports chains like ATOM (Neutron

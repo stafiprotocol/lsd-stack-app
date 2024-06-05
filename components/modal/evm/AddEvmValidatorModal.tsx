@@ -1,38 +1,40 @@
 import { Box, Modal } from '@mui/material';
+import { checkAddress } from '@stafihub/apps-wallet';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
-import { getEthWithdrawContractAbi } from 'config/eth/contract';
-import { getEthereumChainId } from 'config/eth/env';
-import { getLrtStakeManagerAbi } from 'config/lrt/contract';
+import { getEvmStakeManagerAbi } from 'config/evm';
 import { useWalletAccount } from 'hooks/useWalletAccount';
+import { EvmLsdTokenConfig } from 'interfaces/common';
 import Image from 'next/image';
 import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import snackbarUtil from 'utils/snackbarUtils';
 import {
-  createWeb3,
   fetchTransactionReceiptWithWeb3,
   getEthWeb3,
+  getWeb3,
 } from 'utils/web3Utils';
 import { parseEther } from 'viem';
 import { useContractWrite } from 'wagmi';
-import { AbiItem } from 'web3-utils';
 
 interface Props {
   open: boolean;
   close: () => void;
+  lsdTokenConfig: EvmLsdTokenConfig;
+  poolAddress: string;
   contractAddress: string;
-  contractAbi?: AbiItem[];
   placeholder: string;
   onConnectWallet: () => void;
   onRefresh: () => void;
 }
 
-export const UpdateLrtPlatformFeeModal = ({
+export const AddEvmValidatorModal = ({
   open,
   close,
+  lsdTokenConfig,
+  poolAddress,
   contractAddress,
-  contractAbi,
   placeholder,
   onConnectWallet,
   onRefresh,
@@ -40,6 +42,8 @@ export const UpdateLrtPlatformFeeModal = ({
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('');
   const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
+
+  const addressInvalid = !!value && !checkAddress(value, 'seivaloper');
 
   useEffect(() => {
     setValue('');
@@ -49,24 +53,24 @@ export const UpdateLrtPlatformFeeModal = ({
     if (!metaMaskAccount) {
       return [false, 'Connect Wallet'];
     }
-    if (metaMaskChainId !== getEthereumChainId()) {
+    if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
-    if (!value || Number(value) === 0 || !contractAddress) {
+    if (!value || Number(value) === 0 || !lsdTokenConfig.factoryContract) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, value, contractAddress]);
+  }, [metaMaskAccount, metaMaskChainId, value, lsdTokenConfig]);
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
-    abi: contractAbi || getLrtStakeManagerAbi(),
-    functionName: 'setProtocolFeeCommission',
+    abi: getEvmStakeManagerAbi(),
+    functionName: 'addValidator',
     args: [],
   });
 
   const submit = async () => {
-    if (!metaMaskAccount || metaMaskChainId !== getEthereumChainId()) {
+    if (!metaMaskAccount || metaMaskChainId !== lsdTokenConfig.chainId) {
       onConnectWallet();
       return;
     }
@@ -74,14 +78,12 @@ export const UpdateLrtPlatformFeeModal = ({
     setLoading(true);
 
     try {
-      const realNodeValue = Number(value) / 100 + '';
-
       const result = await writeAsync({
-        args: [parseEther(realNodeValue as `${number}`)],
+        args: [poolAddress, value],
       });
 
       const transactionReceipt = await fetchTransactionReceiptWithWeb3(
-        getEthWeb3(),
+        getWeb3(lsdTokenConfig.rpc),
         result.hash
       );
 
@@ -120,21 +122,25 @@ export const UpdateLrtPlatformFeeModal = ({
         </div>
 
         <div className="text-[.28rem] leading-[.42rem] font-[700] mt-[.28rem] text-center">
-          Set parameter
+          Add Validator
         </div>
 
         <div className="mx-[.24rem] mt-[.16rem]">
           <InputItem
             disabled={loading}
-            label="Platform Fee"
+            label="Validator"
             placeholder={placeholder}
-            suffix="%"
-            isNumber
             value={value}
             onChange={setValue}
             className="mt-[.16rem]"
           />
         </div>
+
+        {addressInvalid && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Validator address is invalid" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton
