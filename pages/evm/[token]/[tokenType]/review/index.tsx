@@ -117,7 +117,7 @@ const ReviewPage = () => {
                     name="Stake Pool address"
                     value={deployInfo.stakePoolAddress}
                   />
-                  <DeployInfoItem name="Voters" value={deployInfo.voters} />
+                  <DeployInfoItem name="Validators" value={deployInfo.voters} />
                 </div>
               )}
 
