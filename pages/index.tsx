@@ -37,6 +37,7 @@ import commonStyles from 'styles/Common.module.scss';
 import {
   getCosmosStackAppUrl,
   getEthStackAppUrl,
+  getEvmCaseUrl,
   getLrtCaseUrl,
 } from 'config/eth/env';
 import Link from 'next/link';
@@ -108,25 +109,25 @@ const HomePage = () => {
                 />
 
                 <LsdCaseCard
-                  text="COSMOS LST"
-                  icon={cosmosCaseImg}
-                  url={getCosmosStackAppUrl()}
+                  text="Eigenlayer LRT"
+                  icon={lrtCaseImg}
+                  url={getLrtCaseUrl()}
                   className="ml-[.12rem]"
                 />
 
                 <LsdCaseCard
-                  text="MOVE LST"
+                  text="EVM LST"
                   icon={moveCaseImg}
-                  isComing
+                  url={getEvmCaseUrl()}
                   className="ml-[.12rem]"
                 />
               </div>
 
               <div className="flex mt-[.12rem]">
                 <LsdCaseCard
-                  text="Eigenlayer LRT"
-                  icon={lrtCaseImg}
-                  url={getLrtCaseUrl()}
+                  text="COSMOS LST"
+                  icon={cosmosCaseImg}
+                  url={getCosmosStackAppUrl()}
                 />
 
                 <LsdCaseCard
