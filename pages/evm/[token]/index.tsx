@@ -178,7 +178,7 @@ const ParameterPage = () => {
               </div>
 
               <div className="mt-[.16rem] text-[.14rem] text-color-text2">
-                Please connect your wallet to view your LSD deploy history
+                Please connect your wallet to view your EVM deploy history
               </div>
 
               <div className="mt-[.32rem] flex items-center">
