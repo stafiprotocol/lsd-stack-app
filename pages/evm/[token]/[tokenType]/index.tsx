@@ -413,7 +413,7 @@ const ParameterPage = () => {
                     label="Validator Number"
                     value={voteNumber}
                     onChange={() => {}}
-                    placeholder="At least validators / 2, no more than all validators' number"
+                    placeholder="Suggest to set more than 1"
                   />
 
                   {votersAddrs.map((item, index) => (
@@ -441,7 +441,7 @@ const ParameterPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link={`${getDocHost()}/docs/developethlsd/deploy.html#rewards-distribution`}
+                  link={`${getDocHost()}/docs/develop_evm_lsd/deploy.html#rewards-distribution`}
                 />
               </div>
 
@@ -473,7 +473,7 @@ const ParameterPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/developethlsd/deploy.html#parameter-tips`}
+                href={`${getDocHost()}/docs/develop_evm_lsd/deploy.html#parameter-tips`}
                 target="_blank"
               >
                 Parameter Tips
@@ -502,9 +502,7 @@ const ParameterPage = () => {
               <br />
               - How many validators you intend to set
               <br />
-              - Minimum number is 3, highly recommend to set more than 8
-              <br />
-              - Each validator proposes new states of the network
+              - Highly recommend to set more than 1
               <br />
               - The more validators you set the more decentralized advantages
               the network gets
