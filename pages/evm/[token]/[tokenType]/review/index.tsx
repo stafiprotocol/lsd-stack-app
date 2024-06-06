@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { TipBar } from 'components/common/TipBar';
 import { DeployReadyModal } from 'components/modal/DeployReadyModal';
+import { EvmDeployReadyModal } from 'components/modal/EvmDeployReadyModal';
 import { getDocHost } from 'config/common';
 import { getFactoryContract } from 'config/eth/contract';
 import { evmLsdTokens } from 'config/evm';
@@ -46,6 +47,8 @@ const ReviewPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { token } = router.query;
+  const lsdTokenConfig =
+    evmLsdTokens.find((item) => item.symbol === token) || evmLsdTokens[0];
 
   const { fetchLoading, deployInfo } = useEvmDeployInfo(token as string);
 
@@ -196,7 +199,8 @@ const ReviewPage = () => {
       </div>
 
       {deployInfo && readyModalOpened && (
-        <DeployReadyModal
+        <EvmDeployReadyModal
+          lsdTokenConfig={lsdTokenConfig}
           open={readyModalOpened}
           close={() => setReadyModalOpened(false)}
           lsdTokenName={deployInfo.lsdTokenName}

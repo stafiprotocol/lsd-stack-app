@@ -1,17 +1,15 @@
 import { Popover } from '@mui/material';
 import classNames from 'classnames';
 import {
-  getEthNodeDepositContractAbi,
-  getEthUserDepositContractAbi,
-  getEthWithdrawContractAbi,
   getFactoryContract,
   getLsdTokenContractAbi,
-  getNetworkBalanceContractAbi,
-  getNetworkProposalContractAbi,
 } from 'config/eth/contract';
-import { getEtherScanAccountUrl } from 'config/explorer';
+import { getEthereumChainId } from 'config/eth/env';
+import { getEvmFactoryAbi, getEvmStakeManagerAbi } from 'config/evm';
+import { getEvmScanAccountUrl, getEvmScanValidatorUrl } from 'config/explorer';
 import { robotoBold, robotoSemiBold } from 'config/font';
 import { useWalletAccount } from 'hooks/useWalletAccount';
+import { EvmLsdTokenConfig } from 'interfaces/common';
 import {
   bindPopover,
   bindTrigger,
@@ -19,39 +17,24 @@ import {
 } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
-import edit from 'public/images/edit.svg';
 import cup from 'public/images/cup.svg';
+import edit from 'public/images/edit.svg';
 import eth from 'public/images/tokens/eth.svg';
 import { useCallback, useEffect, useState } from 'react';
 import { formatNumber } from 'utils/numberUtils';
-import { getEthWeb3, getWeb3 } from 'utils/web3Utils';
-import { formatEther } from 'viem';
-import { DataLoading } from './common/DataLoading';
-import { Icomoon } from './icon/Icomoon';
-import { formatDuration } from 'utils/timeUtils';
-import { UpdateNodePlatformFeeModal } from './modal/eth/UpdateNodePlatformFeeModal';
-import { useConnect } from 'wagmi';
-import { getEthereumChainId } from 'config/eth/env';
-import { UpdateStackFeeModal } from './modal/eth/UpdateStackFeeModal';
-import { UpdateTrustEnabledModal } from './modal/eth/UpdateTrustEnabledModal';
-import { UpdateSoloEnabledModal } from './modal/eth/UpdateSoloEnabledModal';
-import { UpdateSoloDepositModal } from './modal/eth/UpdateSoloDepositModal';
-import { UpdateMinDepositModal } from './modal/eth/UpdateMinDepositModal';
-import { UpdateVotersModal } from './modal/eth/UpdateVotersModal';
-import { UpdateRewardPeriodModal } from './modal/eth/updateRewardPeriodModal';
-import { EmptyContent } from './common/EmptyContent';
 import snackbarUtil from 'utils/snackbarUtils';
-import { getEvmFactoryAbi, getEvmStakeManagerAbi } from 'config/evm';
-import { EvmLsdTokenConfig } from 'interfaces/common';
-import { UpdateSupportedLstsModal } from './modal/lrt/UpdateSupportedLstsModal';
-import { UpdateLrtOperatorModal } from './modal/lrt/UpdateLrtOperatorModal';
-import { UpdateLrtMinDepositModal } from './modal/lrt/UpdateLrtMinDepositModal';
-import { UpdateLrtPlatformFeeModal } from './modal/lrt/UpdateLrtPlatformFeeModal';
-import { UpdateEvmPlatformFeeModal } from './modal/evm/UpdateEvmPlatformFeeModal';
-import { UpdateEvmMinDepositModal } from './modal/evm/UpdateEvmMinDepositModal';
-import { getLrtStakePoolAbi } from 'config/lrt/contract';
+import { formatDuration } from 'utils/timeUtils';
+import { getWeb3 } from 'utils/web3Utils';
+import { formatEther } from 'viem';
+import { useConnect } from 'wagmi';
+import { DataLoading } from './common/DataLoading';
+import { EmptyContent } from './common/EmptyContent';
+import { Icomoon } from './icon/Icomoon';
 import { AddEvmValidatorModal } from './modal/evm/AddEvmValidatorModal';
 import { RemoveEvmValidatorModal } from './modal/evm/RemoveEvmValidatorModal';
+import { UpdateEvmMinDepositModal } from './modal/evm/UpdateEvmMinDepositModal';
+import { UpdateEvmPlatformFeeModal } from './modal/evm/UpdateEvmPlatformFeeModal';
+import { UpdateEvmFactoryFeeModal } from './modal/evm/UpdateEvmFactoryFeeModal';
 
 interface Props {
   lsdTokenConfig: EvmLsdTokenConfig;
@@ -136,6 +119,7 @@ interface DashboardInfo {
   _admin: string;
   isEntrusted: boolean;
   formatPlatformFeeCommission: string;
+  formatFactoryFeeCommission: string;
   eraSeconds: string;
   unbondingDuration: string;
   formatMinStakeAmount: string;
@@ -154,17 +138,11 @@ const DashboardItem = (props: {
   });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [platformFeeModalOpen, setPlatformFeeModalOpen] = useState(false);
-  const [updateNodeFeeModalOpen, setUpdateNodeFeeModalOpen] = useState(false);
   const [stackFeeModalOpen, setStackFeeModalOpen] = useState(false);
-  const [trustEnabledModalOpen, setTrustEnabledModalOpen] = useState(false);
-  const [soloEnabledModalOpen, setSoloEnabledModalOpen] = useState(false);
-  const [soloDepositModalOpen, setSoloDepositModalOpen] = useState(false);
   const [minDepositModalOpen, setMinDepositModalOpen] = useState(false);
-  const [votersModalOpen, setVotersModalOpen] = useState(false);
   const [addValidatorModalOpen, setAddValidatorModalOpen] = useState(false);
   const [removeValidatorModalOpen, setRemoveValidatorModalOpen] =
     useState(false);
-  const [rewardPeriodModalOpen, setRewardPeriodModalOpen] = useState(false);
 
   const updateData = useCallback(async () => {
     try {
@@ -209,6 +187,9 @@ const DashboardItem = (props: {
       const protocolFeeCommission = await stakeManagerContract.methods
         .protocolFeeCommission()
         .call();
+      const factoryFeeCommission = await stakeManagerContract.methods
+        .factoryFeeCommission()
+        .call();
       const eraSeconds = await stakeManagerContract.methods.eraSeconds().call();
       const unbondingDuration = await stakeManagerContract.methods
         .unbondingDuration()
@@ -228,6 +209,16 @@ const DashboardItem = (props: {
         formatPlatformFeeCommission: formatNumber(
           Number(
             formatEther(BigInt(protocolFeeCommission) * BigInt(100))
+          ).toString(),
+          {
+            decimals: 2,
+            fixedDecimals: false,
+            roundMode: 'round',
+          }
+        ),
+        formatFactoryFeeCommission: formatNumber(
+          Number(
+            formatEther(BigInt(factoryFeeCommission) * BigInt(100))
           ).toString(),
           {
             decimals: 2,
@@ -284,7 +275,10 @@ const DashboardItem = (props: {
           </div>
 
           {dashboardInfo ? (
-            <Link href={getEtherScanAccountUrl(address)} target="_blank">
+            <Link
+              href={getEvmScanAccountUrl(lsdTokenConfig.symbol, address)}
+              target="_blank"
+            >
               <div className="flex items-center cursor-pointer">
                 <div
                   className={classNames(
@@ -335,9 +329,17 @@ const DashboardItem = (props: {
           </div>
 
           <div className="flex items-center">
+            <div className="text-text2">Stack Fee Commission:</div>
+            <div className="text-text1 ml-[.06rem] ">
+              {dashboardInfo ? dashboardInfo.formatFactoryFeeCommission : '--'}%
+            </div>
+          </div>
+
+          <div className="flex items-center">
             <div className="text-text2">Min Deposit Amount:</div>
             <div className="text-text1 ml-[.06rem] ">
-              {dashboardInfo ? dashboardInfo.formatMinStakeAmount : '--'} ETH
+              {dashboardInfo ? dashboardInfo.formatMinStakeAmount : '--'}{' '}
+              {lsdTokenConfig.symbol}
             </div>
           </div>
 
@@ -379,7 +381,10 @@ const DashboardItem = (props: {
         >
           <div>
             <div className="flex items-center">
-              <Link href={getEtherScanAccountUrl(address)} target="_blank">
+              <Link
+                href={getEvmScanAccountUrl(lsdTokenConfig.symbol, address)}
+                target="_blank"
+              >
                 <div className="flex item-center cursor-pointer">
                   <div className="text-link mr-[.06rem]">LSD Token Address</div>
                   <Icomoon icon="share" size=".12rem" />
@@ -389,7 +394,10 @@ const DashboardItem = (props: {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getEtherScanAccountUrl(getFactoryContract().address)}
+                href={getEvmScanAccountUrl(
+                  lsdTokenConfig.symbol,
+                  getFactoryContract().address
+                )}
                 target="_blank"
               >
                 <div className="flex item-center cursor-pointer">
@@ -403,7 +411,10 @@ const DashboardItem = (props: {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getEtherScanAccountUrl(dashboardInfo?._admin || '')}
+                href={getEvmScanAccountUrl(
+                  lsdTokenConfig.symbol,
+                  dashboardInfo?._admin || ''
+                )}
                 target="_blank"
               >
                 <div className="flex item-center cursor-pointer">
@@ -417,7 +428,10 @@ const DashboardItem = (props: {
           <div>
             <div className="flex items-center">
               <Link
-                href={getEtherScanAccountUrl(dashboardInfo?._stakePool || '')}
+                href={getEvmScanAccountUrl(
+                  lsdTokenConfig.symbol,
+                  dashboardInfo?._stakePool || ''
+                )}
                 target="_blank"
               >
                 <div className="flex item-center cursor-pointer">
@@ -431,7 +445,8 @@ const DashboardItem = (props: {
 
             <div className="mt-[.24rem] flex items-center">
               <Link
-                href={getEtherScanAccountUrl(
+                href={getEvmScanAccountUrl(
+                  lsdTokenConfig.symbol,
                   dashboardInfo?._stakeManager || ''
                 )}
                 target="_blank"
@@ -451,7 +466,10 @@ const DashboardItem = (props: {
 
             {dashboardInfo?._voters?.map((voter, index) => (
               <div key={index} className="flex items-center mt-[.24rem]">
-                <Link href={getEtherScanAccountUrl(voter)} target="_blank">
+                <Link
+                  href={getEvmScanValidatorUrl(lsdTokenConfig.symbol, voter)}
+                  target="_blank"
+                >
                   <div className="flex item-center cursor-pointer">
                     <div className="text-link mr-[.06rem]">
                       Validator-{index + 1}
@@ -512,6 +530,28 @@ const DashboardItem = (props: {
           >
             <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
               Platform Fee
+            </div>
+
+            <div className="w-[.13rem] h-[.13rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
+              setStackFeeModalOpen(true);
+              settingsPopupState.close();
+            }}
+          >
+            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+              Stack Fee
             </div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
@@ -600,6 +640,22 @@ const DashboardItem = (props: {
         open={platformFeeModalOpen}
         close={() => {
           setPlatformFeeModalOpen(false);
+        }}
+        onConnectWallet={connectWallet}
+        onRefresh={() => {
+          updateData();
+        }}
+      />
+
+      <UpdateEvmFactoryFeeModal
+        lsdTokenConfig={lsdTokenConfig}
+        contractAddress={dashboardInfo?._stakeManager || ''}
+        placeholder={
+          dashboardInfo ? dashboardInfo.formatFactoryFeeCommission : ''
+        }
+        open={stackFeeModalOpen}
+        close={() => {
+          setStackFeeModalOpen(false);
         }}
         onConnectWallet={connectWallet}
         onRefresh={() => {

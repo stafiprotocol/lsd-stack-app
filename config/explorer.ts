@@ -39,6 +39,33 @@ export function getEvmScanTxUrl(symbol: string, txHash: string | undefined) {
   return '';
 }
 
+export function getEvmScanAccountUrl(
+  symbol: string,
+  address: string | undefined
+) {
+  if (symbol === 'SEI') {
+    if (isDev()) {
+      return `https://seitrace.com/address/${address}?chain=atlantic-2`;
+    }
+    return `https://seitrace.com/address/${address}?chain=pacific-1`;
+  }
+  return '';
+}
+
+export function getEvmScanValidatorUrl(
+  symbol: string,
+  address: string | undefined
+) {
+  if (symbol === 'SEI') {
+    if (isDev()) {
+      return `https://seitrace.com/validator/${address}?chain=atlantic-2`;
+    }
+    return `https://seitrace.com/validator/${address}?chain=pacific-1`;
+  }
+
+  return getEvmScanAccountUrl(symbol, address);
+}
+
 export function getNeutronExplorerUrl() {
   return neutronChainConfig.explorerUrl;
 }
