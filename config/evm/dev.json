@@ -8,7 +8,7 @@
       "chainId": 1328,
       "chainName": "SEI Testnet",
       "rpc": "https://evm-rpc-testnet.sei-apis.com",
-      "explorerUrl": "https://seitrace.com?chain=arctic-2",
+      "explorerUrl": "https://seitrace.com?chain=atlantic-2",
       "icon": "/images/tokens/sei.png",
       "factoryContract": "0x2ed2C9f3CC1c69c82be35449d7C285dc30b97B5E"
     }
