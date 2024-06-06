@@ -56,11 +56,11 @@ export const AddEvmValidatorModal = ({
     if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
-    if (!value || Number(value) === 0 || !lsdTokenConfig.factoryContract) {
+    if (!value || addressInvalid || !lsdTokenConfig.factoryContract) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, value, lsdTokenConfig]);
+  }, [metaMaskAccount, metaMaskChainId, addressInvalid, lsdTokenConfig, value]);
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,

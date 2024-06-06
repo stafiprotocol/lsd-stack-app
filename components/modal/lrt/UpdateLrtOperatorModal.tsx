@@ -133,7 +133,7 @@ export const UpdateLrtOperatorModal = ({
           />
 
           {!!value && !validateAddress(value) && (
-            <div className="pl-[.2rem]">
+            <div className="mt-[.12rem]">
               <InputErrorTip msg="Address is invalid" />
             </div>
           )}

@@ -4,7 +4,6 @@ import {
   getFactoryContract,
   getLsdTokenContractAbi,
 } from 'config/eth/contract';
-import { getEthereumChainId } from 'config/eth/env';
 import { getEvmFactoryAbi, getEvmStakeManagerAbi } from 'config/evm';
 import { getEvmScanAccountUrl, getEvmScanValidatorUrl } from 'config/explorer';
 import { robotoBold, robotoSemiBold } from 'config/font';
@@ -26,15 +25,15 @@ import snackbarUtil from 'utils/snackbarUtils';
 import { formatDuration } from 'utils/timeUtils';
 import { getWeb3 } from 'utils/web3Utils';
 import { formatEther } from 'viem';
-import { useConnect } from 'wagmi';
+import { useConnect, useSwitchNetwork } from 'wagmi';
 import { DataLoading } from './common/DataLoading';
 import { EmptyContent } from './common/EmptyContent';
 import { Icomoon } from './icon/Icomoon';
 import { AddEvmValidatorModal } from './modal/evm/AddEvmValidatorModal';
 import { RemoveEvmValidatorModal } from './modal/evm/RemoveEvmValidatorModal';
+import { UpdateEvmFactoryFeeModal } from './modal/evm/UpdateEvmFactoryFeeModal';
 import { UpdateEvmMinDepositModal } from './modal/evm/UpdateEvmMinDepositModal';
 import { UpdateEvmPlatformFeeModal } from './modal/evm/UpdateEvmPlatformFeeModal';
-import { UpdateEvmFactoryFeeModal } from './modal/evm/UpdateEvmFactoryFeeModal';
 
 interface Props {
   lsdTokenConfig: EvmLsdTokenConfig;
@@ -247,15 +246,20 @@ const DashboardItem = (props: {
   }, [updateData]);
 
   const { connectors, connectAsync } = useConnect();
+  const { switchNetworkAsync } = useSwitchNetwork();
 
   const connectWallet = async () => {
+    if (metaMaskAccount && switchNetworkAsync) {
+      await switchNetworkAsync(lsdTokenConfig.chainId);
+      return;
+    }
     const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
     if (!metamaskConnector) {
       return;
     }
     try {
       await connectAsync({
-        chainId: getEthereumChainId(),
+        chainId: lsdTokenConfig.chainId,
         connector: metamaskConnector,
       });
     } catch (err: any) {

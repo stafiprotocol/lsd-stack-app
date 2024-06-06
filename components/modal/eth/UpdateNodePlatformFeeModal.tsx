@@ -1,5 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { getEthWithdrawContractAbi } from 'config/eth/contract';
 import { getEthereumChainId } from 'config/eth/env';
@@ -52,6 +53,9 @@ export const UpdateNodePlatformFeeModal = ({
     args: [],
   });
 
+  const nodeValueTooLarge = Number(nodeValue) >= 100;
+  const platformValueTooLarge = Number(platformValue) >= 100;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!metaMaskAccount) {
       return [false, 'Connect Wallet'];
@@ -63,12 +67,21 @@ export const UpdateNodePlatformFeeModal = ({
       !nodeValue ||
       Number(nodeValue) === 0 ||
       !platformValue ||
-      Number(platformValue) === 0
+      Number(platformValue) === 0 ||
+      nodeValueTooLarge ||
+      platformValueTooLarge
     ) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, nodeValue, platformValue]);
+  }, [
+    metaMaskAccount,
+    metaMaskChainId,
+    nodeValue,
+    platformValue,
+    platformValueTooLarge,
+    nodeValueTooLarge,
+  ]);
 
   const submit = async () => {
     if (!metaMaskAccount || metaMaskChainId !== getEthereumChainId()) {
@@ -84,8 +97,8 @@ export const UpdateNodePlatformFeeModal = ({
 
       const result = await writeAsync({
         args: [
-          parseEther(realNodeValue as `${number}`),
           parseEther(realPlatformValue as `${number}`),
+          parseEther(realNodeValue as `${number}`),
         ],
       });
 
@@ -135,7 +148,7 @@ export const UpdateNodePlatformFeeModal = ({
         <div className="mx-[.24rem] mt-[.16rem]">
           <InputItem
             disabled={loading}
-            label="Platform Fee"
+            label="Node Fee"
             placeholder={nodeCommissionPlaceholder}
             suffix="%"
             isNumber
@@ -145,10 +158,16 @@ export const UpdateNodePlatformFeeModal = ({
           />
         </div>
 
+        {nodeValueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Node Fee must be < 100" />
+          </div>
+        )}
+
         <div className="mt-[.16rem] mx-[.24rem]">
           <InputItem
             disabled={loading}
-            label="Node Fee"
+            label="Platform Fee"
             placeholder={platformCommissionPlaceholder}
             suffix="%"
             isNumber
@@ -157,6 +176,12 @@ export const UpdateNodePlatformFeeModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {platformValueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Platform Fee must be < 100" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

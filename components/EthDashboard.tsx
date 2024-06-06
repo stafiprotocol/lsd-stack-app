@@ -30,7 +30,7 @@ import { DataLoading } from './common/DataLoading';
 import { Icomoon } from './icon/Icomoon';
 import { formatDuration } from 'utils/timeUtils';
 import { UpdateNodePlatformFeeModal } from './modal/eth/UpdateNodePlatformFeeModal';
-import { useConnect } from 'wagmi';
+import { useConnect, useSwitchNetwork } from 'wagmi';
 import { getEthereumChainId } from 'config/eth/env';
 import { UpdateStackFeeModal } from './modal/eth/UpdateStackFeeModal';
 import { UpdateTrustEnabledModal } from './modal/eth/UpdateTrustEnabledModal';
@@ -285,8 +285,13 @@ const DashboardItem = (props: { address: string }) => {
   }, [updateData]);
 
   const { connectors, connectAsync } = useConnect();
+  const { switchNetworkAsync } = useSwitchNetwork();
 
   const connectWallet = async () => {
+    if (metaMaskAccount && switchNetworkAsync) {
+      await switchNetworkAsync(getEthereumChainId());
+      return;
+    }
     const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
     if (!metamaskConnector) {
       return;

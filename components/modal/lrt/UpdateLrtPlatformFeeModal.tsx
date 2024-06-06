@@ -1,5 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { getEthWithdrawContractAbi } from 'config/eth/contract';
 import { getEthereumChainId } from 'config/eth/env';
@@ -45,6 +46,8 @@ export const UpdateLrtPlatformFeeModal = ({
     setValue('');
   }, [open]);
 
+  const valueTooLarge = Number(value) >= 100;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!metaMaskAccount) {
       return [false, 'Connect Wallet'];
@@ -52,11 +55,11 @@ export const UpdateLrtPlatformFeeModal = ({
     if (metaMaskChainId !== getEthereumChainId()) {
       return [false, 'Switch Network'];
     }
-    if (!value || Number(value) === 0 || !contractAddress) {
+    if (!value || Number(value) === 0 || !contractAddress || valueTooLarge) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, value, contractAddress]);
+  }, [metaMaskAccount, metaMaskChainId, value, contractAddress, valueTooLarge]);
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
@@ -135,6 +138,12 @@ export const UpdateLrtPlatformFeeModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {valueTooLarge && (
+          <div className="mt-[.12rem]">
+            <InputErrorTip msg="Platform Fee must be < 100" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

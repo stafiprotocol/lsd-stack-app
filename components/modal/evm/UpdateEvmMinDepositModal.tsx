@@ -1,21 +1,15 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
-import { getEthUserDepositContractAbi } from 'config/eth/contract';
-import { getEthereumChainId } from 'config/eth/env';
 import { getEvmStakeManagerAbi } from 'config/evm';
-import { getLrtStakeManagerAbi } from 'config/lrt/contract';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { EvmLsdTokenConfig } from 'interfaces/common';
 import Image from 'next/image';
 import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import snackbarUtil from 'utils/snackbarUtils';
-import {
-  fetchTransactionReceiptWithWeb3,
-  getEthWeb3,
-  getWeb3,
-} from 'utils/web3Utils';
+import { fetchTransactionReceiptWithWeb3, getWeb3 } from 'utils/web3Utils';
 import { parseEther } from 'viem';
 import { useContractWrite } from 'wagmi';
 
@@ -46,6 +40,8 @@ export const UpdateEvmMinDepositModal = ({
     setValue('');
   }, [open]);
 
+  const valueTooLarge = Number(value) >= 1000000;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!metaMaskAccount) {
       return [false, 'Connect Wallet'];
@@ -53,7 +49,7 @@ export const UpdateEvmMinDepositModal = ({
     if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
-    if (!value || Number(value) === 0 || !contractAddress) {
+    if (!value || Number(value) === 0 || valueTooLarge || !contractAddress) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
@@ -63,6 +59,7 @@ export const UpdateEvmMinDepositModal = ({
     value,
     lsdTokenConfig,
     contractAddress,
+    valueTooLarge,
   ]);
 
   const { writeAsync } = useContractWrite({
@@ -133,13 +130,19 @@ export const UpdateEvmMinDepositModal = ({
             disabled={loading}
             label="Min Deposit Amount"
             placeholder={placeholder}
-            suffix="ETH"
+            suffix={lsdTokenConfig.symbol}
             isNumber
             value={value}
             onChange={setValue}
             className="mt-[.16rem]"
           />
         </div>
+
+        {valueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Min Deposit Amount must be < 1000000" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

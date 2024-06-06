@@ -1,5 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { getEvmStakeManagerAbi } from 'config/evm';
 import { useWalletAccount } from 'hooks/useWalletAccount';
@@ -43,6 +44,8 @@ export const UpdateEvmPlatformFeeModal = ({
     setValue('');
   }, [open]);
 
+  const valueTooLarge = Number(value) >= 100;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!metaMaskAccount) {
       return [false, 'Connect Wallet'];
@@ -50,11 +53,16 @@ export const UpdateEvmPlatformFeeModal = ({
     if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
-    if (!value || Number(value) === 0 || !lsdTokenConfig.factoryContract) {
+    if (
+      !value ||
+      Number(value) === 0 ||
+      valueTooLarge ||
+      !lsdTokenConfig.factoryContract
+    ) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, value, lsdTokenConfig]);
+  }, [metaMaskAccount, metaMaskChainId, value, lsdTokenConfig, valueTooLarge]);
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
@@ -133,6 +141,12 @@ export const UpdateEvmPlatformFeeModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {valueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Platform Fee must be < 100" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

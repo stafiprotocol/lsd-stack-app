@@ -1,5 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { neutronChainConfig } from 'config/cosmos/chain';
 import { getEthWithdrawContractAbi } from 'config/eth/contract';
@@ -45,15 +46,17 @@ export const UpdateCosmosPlatformFeeModal = ({
     setPlatformValue('');
   }, [open]);
 
+  const valueTooLarge = Number(platformValue) >= 100;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!neutronAccount?.bech32Address) {
       return [false, 'Connect Wallet'];
     }
-    if (!platformValue || !platformValue.replaceAll(' ', '')) {
+    if (!platformValue || !platformValue.replaceAll(' ', '') || valueTooLarge) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [neutronAccount?.bech32Address, platformValue]);
+  }, [neutronAccount?.bech32Address, platformValue, valueTooLarge]);
 
   const submit = async () => {
     setLoading(true);
@@ -139,6 +142,12 @@ export const UpdateCosmosPlatformFeeModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {valueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Platform Fee must be < 100" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

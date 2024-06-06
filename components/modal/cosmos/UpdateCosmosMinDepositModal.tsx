@@ -1,5 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { neutronChainConfig } from 'config/cosmos/chain';
 import { getEthUserDepositContractAbi } from 'config/eth/contract';
@@ -41,15 +42,17 @@ export const UpdateCosmosMinDepositModal = ({
     setValue('');
   }, [open]);
 
+  const valueTooLarge = Number(value) >= 1000000;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!neutronAccount?.bech32Address) {
       return [false, 'Connect Wallet'];
     }
-    if (!value || Number(value) === 0) {
+    if (!value || Number(value) === 0 || valueTooLarge) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [neutronAccount?.bech32Address, value]);
+  }, [neutronAccount?.bech32Address, value, valueTooLarge]);
 
   const submit = async () => {
     setLoading(true);
@@ -133,6 +136,12 @@ export const UpdateCosmosMinDepositModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {valueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Min Deposit Amount must be < 1000000" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

@@ -109,7 +109,7 @@ export const InputItem = ({
           placeholder={placeholder}
           disabled={!!disabled}
           className={classNames(
-            'w-full outline-none h-[.5rem] rounded-[.16rem] placeholder:text-text2/50 px-[.24rem] py-[.16rem] text-text2',
+            'w-full outline-none h-[.5rem] rounded-[.16rem] placeholder:text-text2/50 px-[.24rem] pl-[.16rem] pr-[.56rem] text-text2',
             disabled
               ? 'bg-bgPage/50'
               : 'border-[#6C86AD4D] bg-transparent border-solid border-[.01rem]'

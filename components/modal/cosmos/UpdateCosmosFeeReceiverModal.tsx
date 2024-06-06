@@ -131,7 +131,7 @@ export const UpdateCosmosFeeReceiverModal = ({
           />
 
           {addressInvalid && (
-            <div className="pl-[.2rem]">
+            <div className="mt-[.12rem] pl-[.rem]">
               <InputErrorTip msg="Address is invalid" />
             </div>
           )}

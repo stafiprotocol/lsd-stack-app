@@ -8,11 +8,7 @@ import Image from 'next/image';
 import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import snackbarUtil from 'utils/snackbarUtils';
-import {
-  fetchTransactionReceiptWithWeb3,
-  getWeb3,
-  validateAddress,
-} from 'utils/web3Utils';
+import { fetchTransactionReceiptWithWeb3, getWeb3 } from 'utils/web3Utils';
 import { useContractWrite } from 'wagmi';
 
 interface Props {
@@ -51,7 +47,7 @@ export const RemoveEvmValidatorModal = ({
     if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
-    if (!value || !validateAddress(value) || !contractAddress) {
+    if (!value || !contractAddress) {
       return [true, 'Remove'];
     }
     return [false, 'Remove'];
