@@ -6,8 +6,9 @@
     {
       "symbol": "SEI",
       "chainId": 1329,
+      "chainName": "SEI",
       "rpc": "https://evm-rpc.sei-apis.com/",
-      "explorerUrl": "https://seitrace.com",
+      "explorerUrl": "https://seitrace.com?chain=pacific-1",
       "icon": "/images/tokens/sei.png",
       "factoryContract": "0xfa27cde707Ee341BC4fdc6FB89A67d6381eA6AB5"
     }

@@ -9,14 +9,14 @@ import { bsc, bscTestnet, goerli, mainnet } from 'wagmi/chains';
 // import { LedgerConnector } from "wagmi/connectors/ledger";
 import { SafeConnector } from 'wagmi/connectors/safe';
 import { isDev } from './common';
-import { getWagmiChainConfig } from './eth/env';
+import { getSeiWagmiChainConfig, getWagmiChainConfig } from './eth/env';
 // import { WalletConnectModal } from "@walletconnect/modal";
 
 // 1. Get projectId
 // export const walletConnectProjectId = "b4a5e478100e2abc546807e8fd74dd7f";
 export const walletConnectProjectId = '49d39e856ab00fbe22d96b7a700a9739';
 // 2. Configure wagmi client
-const chains = [getWagmiChainConfig()];
+const chains = [getWagmiChainConfig(), getSeiWagmiChainConfig()];
 
 const { publicClient } = configureChains(chains, [
   w3mProvider({ projectId: walletConnectProjectId }),

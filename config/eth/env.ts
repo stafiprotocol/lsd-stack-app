@@ -1,5 +1,6 @@
 import { AddEthereumChainParameter } from '@web3-react/types';
 import { isDev } from 'config/common';
+import { evmLsdTokens } from 'config/evm';
 import { getEtherScanUrl } from 'config/explorer';
 
 export function getEthereumChainId() {
@@ -49,6 +50,42 @@ export function getWagmiChainConfig() {
       default: {
         name: '',
         url: getEtherScanUrl(),
+      },
+    },
+    contracts: {},
+    testnet: isDev(),
+  };
+}
+
+export function getSeiWagmiChainConfig() {
+  const seiConfig =
+    evmLsdTokens.find((item) => item.symbol === 'SEI') || evmLsdTokens[0];
+
+  return {
+    id: seiConfig.chainId,
+    name: seiConfig.chainName,
+    network: seiConfig.chainName,
+    nativeCurrency: {
+      decimals: 18,
+      name: 'SEI',
+      symbol: 'SEI',
+    },
+    rpcUrls: {
+      default: {
+        http: [seiConfig.rpc],
+      },
+      public: {
+        http: [seiConfig.rpc],
+      },
+    },
+    blockExplorers: {
+      etherscan: {
+        name: '',
+        url: seiConfig.explorerUrl,
+      },
+      default: {
+        name: '',
+        url: seiConfig.explorerUrl,
       },
     },
     contracts: {},

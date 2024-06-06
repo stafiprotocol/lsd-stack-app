@@ -70,6 +70,8 @@ export interface EvmLsdTokenConfig {
   symbol: string;
   rpc: string;
   chainId: number;
+  explorerUrl: string;
+  chainName: string;
   icon: string;
   factoryContract: string;
 }

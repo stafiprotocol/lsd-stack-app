@@ -5,11 +5,12 @@
   "lsdTokens": [
     {
       "symbol": "SEI",
-      "chainId": 713715,
-      "rpc": "https://evm-rpc-arctic-1.sei-apis.com",
-      "explorerUrl": "https://seitrace.com?chain=arctic-1",
+      "chainId": 1328,
+      "chainName": "SEI Testnet",
+      "rpc": "https://evm-rpc-testnet.sei-apis.com",
+      "explorerUrl": "https://seitrace.com?chain=arctic-2",
       "icon": "/images/tokens/sei.png",
-      "factoryContract": "0xfa27cde707Ee341BC4fdc6FB89A67d6381eA6AB5"
+      "factoryContract": "0x2ed2C9f3CC1c69c82be35449d7C285dc30b97B5E"
     }
   ]
 }
