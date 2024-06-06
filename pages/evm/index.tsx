@@ -206,28 +206,18 @@ const CosmosPage = () => {
 
             <FaqCard
               title="Choose Network"
-              link={`${getDocHost()}/docs/develop_cosmos_lsd/getstarted.html`}
+              link={`${getDocHost()}/docs/develop_evm_lsd/getstarted.html`}
             >
               <>
-                Neutron Contract:
-                <br />
-                - Require ICS-27 protocol support on the target chain
-                <br />
-                - Require trust in Neutron
-                <br />
-                - Support most chain
-                <br />
-                - High security implemented
-                <br />
-                - Ready to use
-                <br />
-                <br />
-                Native Contract:
-                <br />
-                - Require Native smart contract support on the target chain
-                <br />
-                - Top-tier security implemented
-                <br />- Coming soon
+                Supported Networks:
+                <br/>
+                - Sei
+                <br/>
+                - BNB Smart Chain
+                <br/>
+                - Polygon
+                <br/>
+                - And More are on the way
               </>
             </FaqCard>
           </div>
