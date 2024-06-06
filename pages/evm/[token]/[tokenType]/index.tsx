@@ -507,6 +507,12 @@ const ParameterPage = () => {
               - The more validators you set the more decentralized advantages
               the network gets
               <br />
+              - <a
+                href={lsdTokenConfig.validatorExplorerUrl}
+                target="_blank"
+                className="underline text-color-link"
+              >Browse all active validators</a>
+              <br />
             </div>
           </div>
         </div>
