@@ -72,10 +72,10 @@ const CosmosPage = () => {
               <>
                 <TipBar
                   content={
-                    'ATOM Liquid Staking utilizes Neutron infrastructure. Please acknowledge the inherent risks before proceeding.'
+                    'FIXME'
                   }
                   isWarning
-                  link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#neutron-risks-awareness`}
+                  link={`${getDocHost()}/docs/fixme`}
                   className="mt-[.24rem] hidden"
                 />
 
