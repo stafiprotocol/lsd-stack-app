@@ -389,7 +389,7 @@ const ParameterPage = () => {
                     label="Owner Address"
                     value={ownerAddress}
                     onChange={(v) => setOwnerAddress(v)}
-                    placeholder="control contract upgrades, parameter configuration"
+                    placeholder="Example: 0x..."
                   />
                   {!!ownerAddress && !isOwnerAddressValid && (
                     <InputErrorTip msg="Owner address is invalid" />
@@ -506,12 +506,14 @@ const ParameterPage = () => {
               <br />
               - The more validators you set the more decentralized advantages
               the network gets
-              <br />
-              - <a
+              <br />-{' '}
+              <a
                 href={lsdTokenConfig.validatorExplorerUrl}
                 target="_blank"
                 className="underline text-color-link"
-              >Browse all active validators</a>
+              >
+                Browse all active validators
+              </a>
               <br />
             </div>
           </div>
