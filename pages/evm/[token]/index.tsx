@@ -92,7 +92,7 @@ const ParameterPage = () => {
                   <div>
                     Standard LSD Token{' '}
                     <a
-                      href="https://github.com/stafiprotocol/eth-lsd-contracts/blob/main/contracts/LsdToken.sol"
+                      href="https://github.com/stafiprotocol/evm-lsd-contracts/blob/main/contracts/LsdToken.sol"
                       target="_blank"
                       className="underline text-color-link"
                     >
