@@ -13,7 +13,7 @@ import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
 import {
   createEvmLsdNetworkCustomCustom,
@@ -25,6 +25,7 @@ import snackbarUtil from 'utils/snackbarUtils';
 import { validateAddress } from 'utils/web3Utils';
 import { useConnect, useContractWrite, useSwitchNetwork } from 'wagmi';
 import Web3 from 'web3';
+import { isAddress } from 'web3-utils';
 
 export function getStaticProps() {
   return { props: {} };
@@ -121,6 +122,7 @@ const ParameterPage = () => {
     abi: getEvmFactoryAbi(),
     functionName: 'createLsdNetwork',
     args: [],
+    chainId: lsdTokenConfig.chainId,
   });
 
   const { writeAsync: customCustomWriteAsync } = useContractWrite({
@@ -128,7 +130,18 @@ const ParameterPage = () => {
     abi: getEvmFactoryAbi(),
     functionName: 'createLsdNetworkWithLsdToken',
     args: [],
+    chainId: lsdTokenConfig.chainId,
   });
+
+  const checkValidatorAddress = useCallback(
+    (address: string) => {
+      if (token === 'SEI') {
+        return checkAddress(address, 'seivaloper');
+      }
+      return isAddress(address);
+    },
+    [token]
+  );
 
   const submit = async () => {
     if (!metaMaskAccount) {
@@ -314,7 +327,7 @@ const ParameterPage = () => {
       }
     } else {
       for (let addr of votersAddrs) {
-        if (!addr || !checkAddress(addr, 'seivaloper')) {
+        if (!addr || !checkValidatorAddress(addr)) {
           setSubmittable(false);
           return;
         }
@@ -334,6 +347,7 @@ const ParameterPage = () => {
     votersAddrs,
     lsdTokenInWhiteListInfo.inWhiteList,
     lsdTokenConfig.chainId,
+    checkValidatorAddress,
   ]);
 
   return (
@@ -428,8 +442,8 @@ const ParameterPage = () => {
                             : 'Example: 0x0000000000000000'
                         }
                       />
-                      {!!item && !checkAddress(item, 'seivaloper') && (
-                        <div className="pl-[.2rem]">
+                      {!!item && !checkValidatorAddress(item) && (
+                        <div className="pl-[.0rem]">
                           <InputErrorTip msg="Validator address is invalid" />
                         </div>
                       )}

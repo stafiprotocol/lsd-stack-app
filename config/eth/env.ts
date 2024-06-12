@@ -93,6 +93,39 @@ export function getSeiWagmiChainConfig() {
   };
 }
 
+export function getEvmWagmiChainConfigs() {
+  return evmLsdTokens.map((lsdToken) => ({
+    id: lsdToken.chainId,
+    name: lsdToken.chainName,
+    network: lsdToken.chainName,
+    nativeCurrency: {
+      decimals: 18,
+      name: lsdToken.symbol,
+      symbol: lsdToken.symbol,
+    },
+    rpcUrls: {
+      default: {
+        http: [lsdToken.rpc],
+      },
+      public: {
+        http: [lsdToken.rpc],
+      },
+    },
+    blockExplorers: {
+      etherscan: {
+        name: '',
+        url: lsdToken.explorerUrl,
+      },
+      default: {
+        name: '',
+        url: lsdToken.explorerUrl,
+      },
+    },
+    contracts: {},
+    testnet: isDev(),
+  }));
+}
+
 export function getCosmosStackAppUrl() {
   return 'https://test-neutron-lsd.stafi.io/';
 }

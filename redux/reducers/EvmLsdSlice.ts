@@ -17,6 +17,7 @@ import {
 import { setSubmitLoadingParams } from './AppSlice';
 import { EvmLsdTokenConfig } from 'interfaces/common';
 import { getEvmScanTxUrl } from 'config/explorer';
+import { ethers } from 'ethers';
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
@@ -100,7 +101,7 @@ const createLsdNetwork =
   ): AppThunk =>
   async (dispatch, getState) => {
     const metaMaskAccount = getState().wallet.metaMaskAccount;
-    if (!metaMaskAccount) {
+    if (!metaMaskAccount || !window.ethereum) {
       snackbarUtil.error('Please connect MetaMask');
       return;
     }
@@ -114,12 +115,37 @@ const createLsdNetwork =
     );
 
     try {
-      const result = await writeAsync({
-        args: [...params],
-        from: metaMaskAccount,
-      });
+      console.log(...params);
+      console.log({ lsdTokenConfig });
 
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      console.log({ signer });
+
+      const contract = new ethers.Contract(
+        lsdTokenConfig.factoryContract,
+        getEvmFactoryAbi(lsdTokenConfig.symbol) as any,
+        provider
+      );
+
+      const contractWithSigner = contract.connect(signer);
+      const result = await contractWithSigner.createLsdNetwork(...params);
+      console.log({ result });
+
+      // const result = await writeAsync({
+      //   args: [...params],
+      //   from: metaMaskAccount,
+      // });
       const web3 = createWeb3();
+
+      // const contract = new web3.eth.Contract(
+      //   getEvmFactoryAbi(lsdTokenConfig.symbol),
+      //   lsdTokenConfig.factoryContract,
+      //   { from: metaMaskAccount }
+      // );
+      // const result = await contract.methods.createLsdNetwork(...params).call();
+      // console.log({ result });
+
       const withdrawTransactionReceipt = await fetchTransactionReceiptWithWeb3(
         web3,
         result.hash
@@ -178,8 +204,6 @@ const createLsdNetwork =
 export const queryEvmLsdTokenInWhiteList =
   (lsdTokenConfig: EvmLsdTokenConfig, lsdToken: string): AppThunk =>
   async (dispatch, getState) => {
-    console.log('11111');
-
     dispatch(
       setEvmLsdTokenInWhiteListInfo({
         inWhiteList: false,

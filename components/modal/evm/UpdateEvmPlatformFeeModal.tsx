@@ -3,6 +3,7 @@ import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { getEvmStakeManagerAbi } from 'config/evm';
+import { ethers } from 'ethers';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { EvmLsdTokenConfig } from 'interfaces/common';
 import Image from 'next/image';
@@ -66,13 +67,17 @@ export const UpdateEvmPlatformFeeModal = ({
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
-    abi: getEvmStakeManagerAbi(),
+    abi: getEvmStakeManagerAbi(lsdTokenConfig.symbol),
     functionName: 'setProtocolFeeCommission',
     args: [],
   });
 
   const submit = async () => {
-    if (!metaMaskAccount || metaMaskChainId !== lsdTokenConfig.chainId) {
+    if (
+      !metaMaskAccount ||
+      metaMaskChainId !== lsdTokenConfig.chainId ||
+      !window.ethereum
+    ) {
       onConnectWallet();
       return;
     }
@@ -81,6 +86,21 @@ export const UpdateEvmPlatformFeeModal = ({
 
     try {
       const realNodeValue = Number(value) / 100 + '';
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      console.log({ signer });
+
+      const contract = new ethers.Contract(
+        contractAddress as `0x${string}`,
+        getEvmStakeManagerAbi(lsdTokenConfig.symbol) as any,
+        provider
+      );
+
+      const contractWithSigner = contract.connect(signer);
+      // const result = await contractWithSigner.setProtocolFeeCommission(
+      //   parseEther(realNodeValue as `${number}`)
+      // );
 
       const result = await writeAsync({
         args: [parseEther(realNodeValue as `${number}`)],

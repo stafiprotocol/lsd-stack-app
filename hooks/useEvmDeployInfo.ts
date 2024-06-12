@@ -36,10 +36,13 @@ export const useEvmDeployInfo = (tokenSymbol: string) => {
   const [fetchLoading, setFetchLoading] = useState(true);
 
   const fetchDeployInfo = useCallback(async () => {
+    if (!metaMaskAccount) {
+      return;
+    }
     try {
       const web3 = getWeb3(lsdTokenConfig.rpc);
       const contract = new web3.eth.Contract(
-        getEvmFactoryAbi(),
+        getEvmFactoryAbi(lsdTokenConfig.symbol),
         lsdTokenConfig.factoryContract,
         { from: metaMaskAccount }
       );
@@ -66,9 +69,10 @@ export const useEvmDeployInfo = (tokenSymbol: string) => {
       }
 
       const stakeManagerContract = new web3.eth.Contract(
-        getEvmStakeManagerAbi(),
+        getEvmStakeManagerAbi(lsdTokenConfig.symbol),
         networkContractsOfLsdToken._stakeManager
       );
+
       let _voters: string[] = [];
       _voters = await stakeManagerContract.methods
         .getValidatorsOf(networkContractsOfLsdToken._stakePool)
@@ -97,7 +101,12 @@ export const useEvmDeployInfo = (tokenSymbol: string) => {
     } catch (err: any) {
       console.error(err);
     }
-  }, [metaMaskAccount, lsdTokenConfig.factoryContract, lsdTokenConfig.rpc]);
+  }, [
+    metaMaskAccount,
+    lsdTokenConfig.factoryContract,
+    lsdTokenConfig.rpc,
+    lsdTokenConfig.symbol,
+  ]);
 
   useEffect(() => {
     fetchDeployInfo();

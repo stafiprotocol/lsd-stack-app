@@ -147,7 +147,7 @@ const DashboardItem = (props: {
     try {
       const web3 = getWeb3(lsdTokenConfig.rpc);
       const factoryContract = new web3.eth.Contract(
-        getEvmFactoryAbi(),
+        getEvmFactoryAbi(lsdTokenConfig.symbol),
         lsdTokenConfig.factoryContract
       );
 
@@ -167,7 +167,7 @@ const DashboardItem = (props: {
       }
 
       const stakeManagerContract = new web3.eth.Contract(
-        getEvmStakeManagerAbi(),
+        getEvmStakeManagerAbi(lsdTokenConfig.symbol),
         networkContractsOfLsdToken._stakeManager
       );
 
@@ -685,7 +685,11 @@ const DashboardItem = (props: {
         poolAddress={dashboardInfo?._stakePool || ''}
         contractAddress={dashboardInfo?._stakeManager || ''}
         lsdTokenConfig={lsdTokenConfig}
-        placeholder={'Example: seivaloper...'}
+        placeholder={
+          lsdTokenConfig.symbol === 'SEI'
+            ? 'Example: seivaloper...'
+            : 'Example: 0x000000...'
+        }
         open={addValidatorModalOpen}
         close={() => {
           setAddValidatorModalOpen(false);

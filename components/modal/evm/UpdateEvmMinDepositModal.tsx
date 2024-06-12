@@ -64,7 +64,7 @@ export const UpdateEvmMinDepositModal = ({
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
-    abi: getEvmStakeManagerAbi(),
+    abi: getEvmStakeManagerAbi(lsdTokenConfig.symbol),
     functionName: 'setMinStakeAmount',
     args: [],
   });

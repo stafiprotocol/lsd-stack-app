@@ -71,9 +71,7 @@ const CosmosPage = () => {
             <FormCard title="Choose Network">
               <>
                 <TipBar
-                  content={
-                    'FIXME'
-                  }
+                  content={'FIXME'}
                   isWarning
                   link={`${getDocHost()}/docs/fixme`}
                   className="mt-[.24rem] hidden"
@@ -103,7 +101,12 @@ const CosmosPage = () => {
                   </CustomButton>
                 </div>
 
-                <div className="text-[.14rem] leading-[.21rem] text-[#6C86AD] mt-[.15rem] text-center mb-[.36rem]">
+                <div
+                  className={classNames(
+                    'text-[.14rem] leading-[.21rem] text-[#6C86AD] mt-[.15rem] text-center mb-[.36rem]',
+                    popupState.isOpen ? 'invisible' : ''
+                  )}
+                >
                   We currently only support SEI. To deploy other LSD, please{' '}
                   <a
                     href="https://discord.com/invite/jB77etn"
@@ -210,14 +213,13 @@ const CosmosPage = () => {
             >
               <>
                 Supported Networks:
-                <br/>
+                <br />
                 - Sei
-                <br/>
+                <br />
                 - BNB Smart Chain
-                <br/>
+                <br />
                 - Polygon
-                <br/>
-                - And More are on the way
+                <br />- And More are on the way
               </>
             </FaqCard>
           </div>

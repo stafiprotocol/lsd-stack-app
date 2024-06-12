@@ -1,7 +1,4 @@
 {
-  "stakeManagerContract": "neutron1humx752uqvxn2jfenh5524md0ta23usm8m2lesaxw47fps28yx5syztnk5",
-  "poolAddress": "cosmos193sx2unjy8u8kyrg247k7evcanmcktk88shv934066wlhm7aqljsng9593",
-  "cosmosExplorerUrl": "https://testnet-explorer.stafihub.io/cosmos-testnet",
   "lsdTokens": [
     {
       "symbol": "SEI",
@@ -12,6 +9,16 @@
       "validatorExplorerUrl": "https://seitrace.com/validators?chain=atlantic-2",
       "icon": "/images/tokens/sei.png",
       "factoryContract": "0x2ed2C9f3CC1c69c82be35449d7C285dc30b97B5E"
+    },
+    {
+      "symbol": "BNB",
+      "chainId": 97,
+      "chainName": "BSC Testnet",
+      "rpc": "https://bsc-testnet.blockpi.network/v1/rpc/public",
+      "explorerUrl": "https://testnet.bscscan.com",
+      "validatorExplorerUrl": "https://testnet-staking.bnbchain.org/en/bnb-staking",
+      "icon": "/images/tokens/bnb.svg",
+      "factoryContract": "0x30af9753905bd5c49e0a44b7357ca60dca11ab51"
     }
   ]
 }

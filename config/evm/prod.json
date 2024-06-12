@@ -1,7 +1,4 @@
 {
-  "stakeManagerContract": "neutron1humx752uqvxn2jfenh5524md0ta23usm8m2lesaxw47fps28yx5syztnk5",
-  "poolAddress": "cosmos193sx2unjy8u8kyrg247k7evcanmcktk88shv934066wlhm7aqljsng9593",
-  "cosmosExplorerUrl": "https://testnet-explorer.stafihub.io/cosmos-testnet",
   "lsdTokens": [
     {
       "symbol": "SEI",
@@ -11,6 +8,16 @@
       "explorerUrl": "https://seitrace.com?chain=pacific-1",
       "validatorExplorerUrl": "https://seitrace.com/validators?chain=pacific-1",
       "icon": "/images/tokens/sei.png",
+      "factoryContract": "0xfa27cde707Ee341BC4fdc6FB89A67d6381eA6AB5"
+    },
+    {
+      "symbol": "SEI",
+      "chainId": 56,
+      "chainName": "BSC",
+      "rpc": "https://bsc-dataseed.binance.org",
+      "explorerUrl": "https://bscscan.com",
+      "validatorExplorerUrl": "https://bscscan.com/validators",
+      "icon": "/images/tokens/bnb.svg",
       "factoryContract": "0xfa27cde707Ee341BC4fdc6FB89A67d6381eA6AB5"
     }
   ]

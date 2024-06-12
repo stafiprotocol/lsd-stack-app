@@ -17,6 +17,7 @@ import {
 } from 'utils/web3Utils';
 import { parseEther } from 'viem';
 import { useContractWrite } from 'wagmi';
+import { isAddress } from 'web3-utils';
 
 interface Props {
   open: boolean;
@@ -43,7 +44,10 @@ export const AddEvmValidatorModal = ({
   const [value, setValue] = useState('');
   const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
 
-  const addressInvalid = !!value && !checkAddress(value, 'seivaloper');
+  const addressInvalid =
+    !!value &&
+    ((lsdTokenConfig.symbol === 'SEI' && !checkAddress(value, 'seivaloper')) ||
+      !isAddress(value));
 
   useEffect(() => {
     setValue('');
@@ -64,7 +68,7 @@ export const AddEvmValidatorModal = ({
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
-    abi: getEvmStakeManagerAbi(),
+    abi: getEvmStakeManagerAbi(lsdTokenConfig.symbol),
     functionName: 'addValidator',
     args: [],
   });
