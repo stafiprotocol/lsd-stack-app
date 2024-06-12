@@ -275,7 +275,7 @@ const DashboardItem = (props: {
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-[.34rem] h-[.34rem] relative mr-[.12rem]">
-            <Image src={eth} layout="fill" alt="icon" />
+            <Image src={lsdTokenConfig.icon} layout="fill" alt="icon" />
           </div>
 
           {dashboardInfo ? (
@@ -685,6 +685,7 @@ const DashboardItem = (props: {
         poolAddress={dashboardInfo?._stakePool || ''}
         contractAddress={dashboardInfo?._stakeManager || ''}
         lsdTokenConfig={lsdTokenConfig}
+        currentValidators={dashboardInfo?._voters || []}
         placeholder={
           lsdTokenConfig.symbol === 'SEI'
             ? 'Example: seivaloper...'

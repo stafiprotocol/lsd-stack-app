@@ -24,6 +24,7 @@ interface Props {
   open: boolean;
   close: () => void;
   lsdTokenConfig: EvmLsdTokenConfig;
+  currentValidators: string[];
   poolAddress: string;
   contractAddress: string;
   placeholder: string;
@@ -34,6 +35,7 @@ interface Props {
 export const AddEvmValidatorModal = ({
   open,
   close,
+  currentValidators,
   lsdTokenConfig,
   poolAddress,
   contractAddress,
@@ -48,9 +50,13 @@ export const AddEvmValidatorModal = ({
 
   const addressInvalid =
     !!value &&
-    ((lsdTokenConfig.symbol === 'SEI' && !checkAddress(value, 'seivaloper')) ||
-      (lsdTokenConfig.symbol === 'BNB' && !bnbValidatorValid) ||
-      !isAddress(value));
+    (lsdTokenConfig.symbol === 'SEI'
+      ? !checkAddress(value, 'seivaloper')
+      : lsdTokenConfig.symbol === 'BNB'
+      ? !bnbValidatorValid
+      : !isAddress(value));
+
+  const addressRepeated = currentValidators.includes(value);
 
   useEffect(() => {
     setValue('');
@@ -93,11 +99,23 @@ export const AddEvmValidatorModal = ({
     if (metaMaskChainId !== lsdTokenConfig.chainId) {
       return [false, 'Switch Network'];
     }
-    if (!value || addressInvalid || !lsdTokenConfig.factoryContract) {
+    if (
+      !value ||
+      addressInvalid ||
+      !lsdTokenConfig.factoryContract ||
+      addressRepeated
+    ) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
-  }, [metaMaskAccount, metaMaskChainId, addressInvalid, lsdTokenConfig, value]);
+  }, [
+    metaMaskAccount,
+    metaMaskChainId,
+    addressInvalid,
+    lsdTokenConfig,
+    value,
+    addressRepeated,
+  ]);
 
   const { writeAsync } = useContractWrite({
     address: contractAddress as `0x${string}`,
@@ -173,11 +191,15 @@ export const AddEvmValidatorModal = ({
           />
         </div>
 
-        {addressInvalid && (
+        {addressRepeated ? (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="The validator already exists" />
+          </div>
+        ) : addressInvalid ? (
           <div className="mt-[.12rem] pl-[.2rem]">
             <InputErrorTip msg="Validator address is invalid" />
           </div>
-        )}
+        ) : null}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton
