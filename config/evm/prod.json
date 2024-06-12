@@ -16,7 +16,7 @@
       "chainName": "BSC",
       "rpc": "https://bsc-dataseed.binance.org",
       "explorerUrl": "https://bscscan.com",
-      "validatorExplorerUrl": "https://bscscan.com/validators",
+      "validatorExplorerUrl": "https://www.bnbchain.org/en/bnb-staking",
       "icon": "/images/tokens/bnb.svg",
       "factoryContract": "0xfa27cde707Ee341BC4fdc6FB89A67d6381eA6AB5"
     }

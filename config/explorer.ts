@@ -68,9 +68,11 @@ export function getEvmScanValidatorUrl(
       return `https://seitrace.com/validator/${address}?chain=atlantic-2`;
     }
     return `https://seitrace.com/validator/${address}?chain=pacific-1`;
+  } else {
+    const matchedToken =
+      evmLsdTokens.find((item) => item.symbol === symbol) || evmLsdTokens[0];
+    return `${matchedToken.validatorExplorerUrl}/validator/${address}`;
   }
-
-  return getEvmScanAccountUrl(symbol, address);
 }
 
 export function getNeutronExplorerUrl() {
