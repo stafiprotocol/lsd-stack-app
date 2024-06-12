@@ -688,7 +688,7 @@ const DashboardItem = (props: {
         placeholder={
           lsdTokenConfig.symbol === 'SEI'
             ? 'Example: seivaloper...'
-            : 'Example: 0x000000...'
+            : 'Example: 0x...'
         }
         open={addValidatorModalOpen}
         close={() => {

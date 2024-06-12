@@ -6,8 +6,8 @@ import { InputItem } from 'components/common/InputItem';
 import { TipBar } from 'components/common/TipBar';
 import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
 import { getDocHost } from 'config/common';
-import { evmLsdTokens, getEvmFactoryAbi } from 'config/evm';
-import { EVM_CREATION_STEPS } from 'constants/common';
+import { evmLsdTokens, getEvmFactoryAbi, getStakeHubAbi } from 'config/evm';
+import { EVM_CREATION_STEPS, StakeHubContractAddress } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import Image from 'next/image';
@@ -22,7 +22,7 @@ import {
   setEvmLsdTokenInWhiteListInfo,
 } from 'redux/reducers/EvmLsdSlice';
 import snackbarUtil from 'utils/snackbarUtils';
-import { validateAddress } from 'utils/web3Utils';
+import { getWeb3, validateAddress } from 'utils/web3Utils';
 import { useConnect, useContractWrite, useSwitchNetwork } from 'wagmi';
 import Web3 from 'web3';
 import { isAddress } from 'web3-utils';
@@ -84,6 +84,49 @@ const ParameterPage = () => {
     'Connect Wallet' | 'Switch Network' | 'Next' | 'Submit'
   >('Connect Wallet');
   const [submittable, setSubmittable] = useState(false);
+  const [bnbValidatorIsValidMap, setBnbValidatorIsValidMap] = useState<{
+    [key in string]?: boolean;
+  }>({});
+
+  useEffect(() => {
+    (async () => {
+      if (lsdTokenConfig.symbol !== 'BNB') {
+        return;
+      }
+      const web3 = getWeb3(lsdTokenConfig.rpc);
+      const stakeHubContract = new web3.eth.Contract(
+        getStakeHubAbi(),
+        StakeHubContractAddress
+      );
+
+      const requests = votersAddrs.map(async (addr) => {
+        return (async () => {
+          if (!addr || !isAddress(addr)) {
+            return false;
+          }
+          const result = await stakeHubContract.methods
+            .getValidatorBasicInfo(addr)
+            .call()
+            .catch((err: any) => {});
+          console.log({ result });
+          if (result?.createdTime > 0 && !result?.jailed) {
+            return true;
+          }
+          return false;
+        })();
+      });
+
+      const results = await Promise.all(requests);
+      const newMap: {
+        [key in string]?: boolean;
+      } = {};
+      votersAddrs.forEach((addr, index) => {
+        newMap[addr] = results[index];
+      });
+
+      setBnbValidatorIsValidMap(newMap);
+    })();
+  }, [votersAddrs.join('-'), lsdTokenConfig.rpc]);
 
   const tokenType = useMemo(() => {
     return router.query.tokenType;
@@ -138,9 +181,12 @@ const ParameterPage = () => {
       if (token === 'SEI') {
         return checkAddress(address, 'seivaloper');
       }
+      if (token === 'BNB') {
+        return bnbValidatorIsValidMap[address];
+      }
       return isAddress(address);
     },
-    [token]
+    [token, bnbValidatorIsValidMap]
   );
 
   const submit = async () => {
@@ -439,7 +485,7 @@ const ParameterPage = () => {
                         placeholder={
                           lsdTokenConfig.symbol === 'SEI'
                             ? 'Example: seivaloper...'
-                            : 'Example: 0x0000000000000000'
+                            : 'Example: 0x...'
                         }
                       />
                       {!!item && !checkValidatorAddress(item) && (

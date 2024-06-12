@@ -4,6 +4,7 @@ import { AppEco } from 'interfaces/common';
 import Image from 'next/image';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import EcoEthImg from 'public/images/eco/eth.png';
+import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
 import ArrowDownImg from 'public/images/eco_arrow_down.svg';
 import ArrowUpImg from 'public/images/eco_arrow_up.svg';
@@ -47,6 +48,8 @@ export const EcoSelectorBtn = ({ active }: Props) => {
                   ? EcoCosmosImg
                   : appEco === AppEco.Lrt
                   ? EcoLrtImg
+                  : appEco === AppEco.Evm
+                  ? EcoEvmImg
                   : EcoEthImg
               }
               fill

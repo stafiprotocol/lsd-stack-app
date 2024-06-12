@@ -5,6 +5,7 @@ import factoryAbi from './abi/factory.json';
 import bnbFactoryAbi from './abi/bnbFactory.json';
 import stakeManagerAbi from './abi/stakeManager.json';
 import bnbStakeManagerAbi from './abi/bnbStakeManager.json';
+import stakeHubAbi from './abi/stakeHub.json';
 import devConfig from './dev.json';
 import prodConfig from './prod.json';
 
@@ -24,4 +25,8 @@ export const getEvmStakeManagerAbi = (symbol?: string) => {
     return bnbStakeManagerAbi as AbiItem[];
   }
   return stakeManagerAbi as AbiItem[];
+};
+
+export const getStakeHubAbi = () => {
+  return stakeHubAbi as AbiItem[];
 };

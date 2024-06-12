@@ -238,7 +238,7 @@ export const UpdateVotersModal = ({
                     label={`Voter ${index + 1} Addr`}
                     value={item}
                     onChange={(v) => changeVotersAddrs(v, index)}
-                    placeholder="Example: 0x0000000000000000"
+                    placeholder="Example: 0x..."
                   />
                   {!!item && !validateAddress(item) && (
                     <div className="pl-[.2rem]">

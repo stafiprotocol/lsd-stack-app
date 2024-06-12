@@ -13,6 +13,7 @@ import { EVM_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { EvmLsdTokenConfig } from 'interfaces/common';
+import ArrowDownImg from 'public/images/arrow_down_gray.svg';
 import {
   bindPopover,
   bindTrigger,
@@ -78,10 +79,19 @@ const CosmosPage = () => {
                 />
 
                 <div
-                  className="mt-[.48rem] bg-[#DEE6F780] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center h-[.49rem] cursor-pointer"
+                  className="relative mt-[.48rem] border border-[#6C86AD4D] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center h-[.49rem] cursor-pointer"
                   {...bindTrigger(popupState)}
                 >
                   {selectedLsdToken?.symbol}
+
+                  <div
+                    className={classNames(
+                      'absolute w-[.12rem] h-[.12rem] right-[.22rem] top-[.18rem]',
+                      popupState.isOpen ? 'rotate-180' : ''
+                    )}
+                  >
+                    <Image src={ArrowDownImg} fill alt="arrow" />
+                  </div>
                 </div>
 
                 <div
@@ -107,7 +117,8 @@ const CosmosPage = () => {
                     popupState.isOpen ? 'invisible' : ''
                   )}
                 >
-                  We currently only support SEI. To deploy other LSD, please{' '}
+                  We currently only support SEI, BNB. To deploy other LSD,
+                  please{' '}
                   <a
                     href="https://discord.com/invite/jB77etn"
                     target="_blank"

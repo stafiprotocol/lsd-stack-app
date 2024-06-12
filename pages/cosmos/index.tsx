@@ -11,6 +11,7 @@ import { COSMOS_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch } from 'hooks/common';
 import { CosmosLsdTokenConfig } from 'interfaces/common';
 import empty from 'public/images/empty_bird.svg';
+import ArrowDownImg from 'public/images/arrow_down_gray.svg';
 import {
   bindPopover,
   bindTrigger,
@@ -81,10 +82,19 @@ const CosmosPage = () => {
                 />
 
                 <div
-                  className="bg-[#DEE6F780] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center mt-[.24rem] h-[.49rem] cursor-pointer"
+                  className="relative border border-[#6C86AD4D] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center mt-[.24rem] h-[.49rem] cursor-pointer"
                   {...bindTrigger(popupState)}
                 >
                   {selectedLsdToken?.displayName}
+
+                  <div
+                    className={classNames(
+                      'absolute w-[.12rem] h-[.12rem] right-[.22rem] top-[.18rem]',
+                      popupState.isOpen ? 'rotate-180' : ''
+                    )}
+                  >
+                    <Image src={ArrowDownImg} fill alt="arrow" />
+                  </div>
                 </div>
 
                 <div

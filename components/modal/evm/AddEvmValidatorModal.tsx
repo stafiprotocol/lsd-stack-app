@@ -3,7 +3,8 @@ import { checkAddress } from '@stafihub/apps-wallet';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
-import { getEvmStakeManagerAbi } from 'config/evm';
+import { getEvmStakeManagerAbi, getStakeHubAbi } from 'config/evm';
+import { StakeHubContractAddress } from 'constants/common';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { EvmLsdTokenConfig } from 'interfaces/common';
 import Image from 'next/image';
@@ -42,16 +43,48 @@ export const AddEvmValidatorModal = ({
 }: Props) => {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('');
+  const [bnbValidatorValid, setBnbValidatorValid] = useState(false);
   const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
 
   const addressInvalid =
     !!value &&
     ((lsdTokenConfig.symbol === 'SEI' && !checkAddress(value, 'seivaloper')) ||
+      (lsdTokenConfig.symbol === 'BNB' && !bnbValidatorValid) ||
       !isAddress(value));
 
   useEffect(() => {
     setValue('');
   }, [open]);
+
+  useEffect(() => {
+    (async () => {
+      const web3 = getWeb3(lsdTokenConfig.rpc);
+      const stakeHubContract = new web3.eth.Contract(
+        getStakeHubAbi(),
+        StakeHubContractAddress
+      );
+
+      if (!value || !isAddress(value)) {
+        setBnbValidatorValid(false);
+        // return;
+      }
+      try {
+        const result = await stakeHubContract.methods
+          .getValidatorBasicInfo(value)
+          .call()
+          .catch((err: any) => {});
+        console.log({ result });
+        if (Number(result?.createdTime) > 0 && !result?.jailed) {
+          console.log('111');
+          setBnbValidatorValid(true);
+        } else {
+          setBnbValidatorValid(false);
+        }
+      } catch (err) {
+        setBnbValidatorValid(false);
+      }
+    })();
+  }, [value, lsdTokenConfig.rpc]);
 
   const [buttonDisabled, buttonText] = useMemo(() => {
     if (!metaMaskAccount) {

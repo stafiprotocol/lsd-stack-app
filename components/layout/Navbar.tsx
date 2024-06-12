@@ -146,7 +146,7 @@ const Navbar = () => {
               </div>
             ) : appEco === AppEco.Evm ? (
               <div>
-                Current liquid staking supports chains like SEI. We&apos;ll
+                Current liquid staking supports chains like SEI, BNB. We&apos;ll
                 support more in the future. Please check the{' '}
                 <a
                   href={`${getDocHost()}/docs/architecture/evmlsd.html`}

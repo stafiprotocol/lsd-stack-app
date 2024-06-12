@@ -1,5 +1,7 @@
 export const HashZero =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
+export const StakeHubContractAddress =
+  '0x0000000000000000000000000000000000002002';
 
 export const COMMON_ERROR_MESSAGE =
   'Something went wrong, please try again later';
