@@ -7,6 +7,7 @@ import {
   CANCELLED_ERR_MESSAGE1,
   CANCELLED_ERR_MESSAGE2,
   CANCELLED_ERR_MESSAGE3,
+  CANCELLED_ERR_MESSAGE4,
 } from 'constants/common';
 
 declare const window: any;
@@ -129,6 +130,7 @@ export const isMetaMaskCancelError = (err: any) => {
     err.code === 4001 ||
     err.message.indexOf(CANCELLED_ERR_MESSAGE1) >= 0 ||
     err.message.indexOf(CANCELLED_ERR_MESSAGE2) >= 0 ||
-    err.message.indexOf(CANCELLED_ERR_MESSAGE3) >= 0
+    err.message.indexOf(CANCELLED_ERR_MESSAGE3) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE4) >= 0
   );
 };

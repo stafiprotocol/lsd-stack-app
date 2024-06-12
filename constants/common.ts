@@ -21,6 +21,7 @@ export const CANCELLED_ERR_MESSAGE1 = 'User rejected the transaction';
 export const CANCELLED_ERR_MESSAGE2 = 'User rejected the request';
 export const CANCELLED_ERR_MESSAGE3 =
   "Cannot read properties of undefined (reading 'symbol')";
+export const CANCELLED_ERR_MESSAGE4 = 'user rejected transaction';
 
 // creation steps
 export const ETH_STANDARD_CREATION_STEPS = [

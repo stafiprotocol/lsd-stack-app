@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getFactoryContract } from 'config/eth/contract';
 import { getEvmFactoryAbi } from 'config/evm';
 import {
+  CANCELLED_ERR_MESSAGE1,
   CANCELLED_MESSAGE,
   CONNECTION_ERROR_MESSAGE,
   TRANSACTION_FAILED_MESSAGE,
@@ -67,6 +68,7 @@ export const createEvmLsdNetworkCustomStandard =
         writeAsync,
         lsdTokenConfig,
         [lsdTokenName, lsdTokenSymbol, voters, ownerAddress],
+        'standard',
         cb
       )
     );
@@ -87,6 +89,7 @@ export const createEvmLsdNetworkCustomCustom =
         writeAsync,
         lsdTokenConfig,
         [lsdTokenAddress, voters, ownerAddress],
+        'custom',
         cb
       )
     );
@@ -97,6 +100,7 @@ const createLsdNetwork =
     writeAsync: any,
     lsdTokenConfig: EvmLsdTokenConfig,
     params: any[],
+    type: 'custom' | 'standard',
     cb?: (success: boolean) => void
   ): AppThunk =>
   async (dispatch, getState) => {
@@ -115,12 +119,12 @@ const createLsdNetwork =
     );
 
     try {
-      console.log(...params);
-      console.log({ lsdTokenConfig });
+      // console.log(...params);
+      // console.log({ lsdTokenConfig });
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      console.log({ signer });
+      // console.log({ signer });
 
       const contract = new ethers.Contract(
         lsdTokenConfig.factoryContract,
@@ -129,8 +133,19 @@ const createLsdNetwork =
       );
 
       const contractWithSigner = contract.connect(signer);
-      const result = await contractWithSigner.createLsdNetwork(...params);
-      console.log({ result });
+      const result = await (type === 'standard'
+        ? contractWithSigner.createLsdNetwork(...params).catch((err: any) => {
+            if (isMetaMaskCancelError(err)) {
+              throw new Error(CANCELLED_ERR_MESSAGE1);
+            }
+          })
+        : contractWithSigner.createLsdNetworkWithLsdToken(...params)
+      ).catch((err: any) => {
+        if (isMetaMaskCancelError(err)) {
+          throw new Error(CANCELLED_ERR_MESSAGE1);
+        }
+      });
+      // console.log({ result });
 
       // const result = await writeAsync({
       //   args: [...params],
@@ -214,7 +229,7 @@ export const queryEvmLsdTokenInWhiteList =
     try {
       const web3 = getWeb3(lsdTokenConfig.rpc);
       const contract = new web3.eth.Contract(
-        getEvmFactoryAbi(),
+        getEvmFactoryAbi(lsdTokenConfig.symbol),
         lsdTokenConfig.factoryContract
       );
       const result = await contract.methods
