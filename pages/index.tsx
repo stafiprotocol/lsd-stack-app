@@ -62,7 +62,7 @@ const HomePage = () => {
               <div
                 className={classNames(
                   robotoBold.className,
-                  'text-[.64rem] leading-[.75rem] uppercase w-[4.25rem] text-black'
+                  'text-[.64rem] leading-[.75rem] uppercase w-[4.4rem] text-black'
                 )}
               >
                 welcome to
