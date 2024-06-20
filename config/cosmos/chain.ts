@@ -11,6 +11,10 @@ export const lsdTokenConfigs: CosmosLsdTokenConfig[] = isDev()
   ? devConfig.lsdTokens
   : prodConfig.lsdTokens;
 
-export const cosmosExplorerUrl = isDev()
-  ? devConfig.cosmosExplorerUrl
-  : prodConfig.cosmosExplorerUrl;
+export const getCosmosExplorerUrl = (tokenName: string) => {
+  const matched =
+    lsdTokenConfigs.find((item) => item.displayName === tokenName) ||
+    lsdTokenConfigs[0];
+
+  return matched.explorerUrl;
+};

@@ -1,6 +1,5 @@
 {
   "stakeManagerContract": "neutron1w4lmf2jwfszxkdnceatcex2l38frk78un2t2zyvhggxc3v74w2dqzfvxh2",
-  "cosmosExplorerUrl": "https://testnet-explorer.stafihub.io/cosmos-testnet",
   "chains": {
     "neutron": {
       "chainName": "Neutron Testnet",
@@ -33,7 +32,8 @@
       "ibcDenom": "ibc/0C778FABBAF7F27F10869C180E1D33BE208EF6866E812347F18FB8FDC819824D",
       "remoteDenom": "uatom",
       "bech32PrefixValAddr": "cosmosvaloper",
-      "icon": "/images/tokens/atom.svg"
+      "icon": "/images/tokens/atom.svg",
+      "explorerUrl": "https://testnet-explorer.stafihub.io/cosmos-testnet"
     }
   ]
 }

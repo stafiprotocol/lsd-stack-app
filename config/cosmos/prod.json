@@ -1,6 +1,5 @@
 {
   "stakeManagerContract": "neutron1humx752uqvxn2jfenh5524md0ta23usm8m2lesaxw47fps28yx5syztnk5",
-  "cosmosExplorerUrl": "https://www.mintscan.io/cosmos",
   "chains": {
     "neutron": {
       "chainName": "Neutron",
@@ -33,7 +32,8 @@
       "ibcDenom": "ibc/E573640FA945A0E6134DE5093FEFB5B689196A408974FBA113F809F68F16EB27",
       "remoteDenom": "uatom",
       "bech32PrefixValAddr": "cosmosvaloper",
-      "icon": "/images/tokens/atom.svg"
+      "icon": "/images/tokens/atom.svg",
+      "explorerUrl": "https://www.mintscan.io/cosmos"
     }
   ]
 }

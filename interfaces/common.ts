@@ -59,6 +59,7 @@ export interface CosmosLsdTokenConfig {
   remoteDenom: string;
   bech32PrefixValAddr: string;
   icon: string;
+  explorerUrl: string;
 }
 
 export interface LstItem {

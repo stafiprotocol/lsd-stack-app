@@ -5,6 +5,7 @@ import {
   WALLET_NOT_CONNECTED_MESSAGE,
 } from 'constants/common';
 import { Coin } from 'gen/neutron/stakeManager';
+import { CosmosLsdTokenConfig } from 'interfaces/common';
 import { AppThunk } from 'redux/store';
 import { isKeplrCancelError, sleep } from 'utils/commonUtils';
 import {
@@ -12,14 +13,13 @@ import {
   getNeutronInitPoolFeeAmount,
   getSigningStakeManagerClient,
 } from 'utils/cosmosUtils';
-import snackbarUtil from 'utils/snackbarUtils';
-import { setSubmitLoadingParams } from './AppSlice';
 import {
   amountToChain,
   chainAmountToHuman,
   formatNumber,
 } from 'utils/numberUtils';
-import { CosmosLsdTokenConfig } from 'interfaces/common';
+import snackbarUtil from 'utils/snackbarUtils';
+import { setSubmitLoadingParams } from './AppSlice';
 
 export interface LsdState {
   cosmosEcoLoading: boolean;
@@ -195,6 +195,7 @@ export const cosmosRegisterPool =
 
       cb && cb(true);
     } catch (err: any) {
+      // console.log({ err });
       dispatch(setCosmosEcoLoading(false));
 
       if (err.message.startsWith('Insufficient NTRN balance')) {

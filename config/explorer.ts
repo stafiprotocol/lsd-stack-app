@@ -1,5 +1,5 @@
 import { isDev } from './common';
-import { cosmosExplorerUrl, neutronChainConfig } from './cosmos/chain';
+import { getCosmosExplorerUrl, neutronChainConfig } from './cosmos/chain';
 import { evmLsdTokens } from './evm';
 
 export function getEtherScanUrl() {
@@ -109,9 +109,12 @@ export function getNeutronExplorerContractUrl(
   return `${getNeutronExplorerUrl()}/contracts/${contractAddress}`;
 }
 
-export function getCosmosExplorerAccountUrl(account: string) {
+export function getCosmosExplorerAccountUrl(
+  account: string,
+  tokenName: string = 'ATOM'
+) {
   if (isDev()) {
-    return `${cosmosExplorerUrl}/account/${account}`;
+    return `${getCosmosExplorerUrl(tokenName)}/account/${account}`;
   }
-  return `${cosmosExplorerUrl}/account/${account}`;
+  return `${getCosmosExplorerUrl(tokenName)}/account/${account}`;
 }
