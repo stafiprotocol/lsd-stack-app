@@ -11,13 +11,3 @@ export function getNeutronStakeManagerContract() {
   }
   return appProdConfig.stakeManagerContract;
 }
-
-/**
- * get neutron poolAddress
- */
-export function getNeutronPoolAddress() {
-  if (isDev()) {
-    return appDevConfig.poolAddress;
-  }
-  return appProdConfig.poolAddress;
-}
