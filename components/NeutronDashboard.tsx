@@ -1,6 +1,6 @@
 import { Popover } from '@mui/material';
 import classNames from 'classnames';
-import { neutronChainConfig } from 'config/cosmos/chain';
+import { lsdTokenConfigs, neutronChainConfig } from 'config/cosmos/chain';
 import {
   getCosmosExplorerAccountUrl,
   getNeutronExplorerAccountUrl,
@@ -118,6 +118,7 @@ interface DashboardInfo {
   unbondingPeriod: number;
   formatTotalLsdTokenAmount: string;
   lsmSupport: boolean;
+  remoteDenom: string;
 }
 
 const DashboardItem = (props: { ica: string }) => {
@@ -140,6 +141,11 @@ const DashboardItem = (props: { ica: string }) => {
   const [minDepositModalOpen, setMinDepositModalOpen] = useState(false);
   const [eraSecondsModalOpen, setEraSecondsModalOpen] = useState(false);
   const [lsmSupportModalOpen, setLsmSupportModalOpen] = useState(false);
+
+  const lsdTokenConfig =
+    lsdTokenConfigs.find(
+      (item) => item.displayName === dashboardInfo?.remoteDenom
+    ) || lsdTokenConfigs[0];
 
   const updateData = useCallback(async () => {
     try {
@@ -192,6 +198,7 @@ const DashboardItem = (props: { ica: string }) => {
           { decimals: 6, fixedDecimals: false }
         ),
         lsmSupport: poolInfo.lsm_support,
+        remoteDenom: poolInfo.remote_denom,
       });
     } catch (err: any) {
       console.log({ err });
@@ -211,7 +218,7 @@ const DashboardItem = (props: { ica: string }) => {
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-[.34rem] h-[.34rem] relative mr-[.12rem]">
-            <Image src={eth} layout="fill" alt="icon" />
+            <Image src={lsdTokenConfig.icon} layout="fill" alt="icon" />
           </div>
 
           {dashboardInfo ? (
