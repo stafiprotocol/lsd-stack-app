@@ -11,6 +11,8 @@ import { AppEco } from 'interfaces/common';
 import { AiValidatorModuleConfig, ModuleSetting } from 'interfaces/module';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
+import { ModuleStateTag } from './ModuleStateTag';
+import { useUserAddress } from 'hooks/useUserAddress';
 
 interface Props {
   eco: AppEco;
@@ -20,7 +22,7 @@ interface Props {
 
 export const AiModuleCard = (props: Props) => {
   const { lsdTokenAddress, lsdTokenName, eco } = props;
-  const { metaMaskAccount } = useWalletAccount();
+  const userAddress = useUserAddress(eco);
   const [setttingModalOpen, setSettingModalOpen] = useState(false);
   const [readyModalOpen, setReadyModalOpen] = useState(false);
   const [existSetting, setExistSetting] = useState<ModuleSetting>();
@@ -75,9 +77,16 @@ export const AiModuleCard = (props: Props) => {
           <div className="mt-[.06rem] flex items-center">
             <div className="text-text2 text-[.14rem]">AI Agent</div>
 
-            <div className="ml-[.14rem] flex items-center justify-center bg-[#DEE6F7] rounded-[.06rem] h-[.26rem] px-[.06rem] text-text1 text-[.12rem]">
-              Not Set
-            </div>
+            <ModuleStateTag
+              state={
+                !existSetting
+                  ? 'not set'
+                  : existSetting.disabled
+                  ? 'paused'
+                  : 'running'
+              }
+              className="ml-{.14rem}"
+            />
           </div>
         </div>
       </div>
@@ -110,18 +119,19 @@ export const AiModuleCard = (props: Props) => {
 
       <SetAiValidatorModal
         open={setttingModalOpen}
+        userAddress={userAddress}
         close={() => {
           setSettingModalOpen(false);
         }}
         currentConfig={existSetting?.config?.config as AiValidatorModuleConfig}
         onSuccess={async (config: AiValidatorModuleConfig) => {
-          if (!metaMaskAccount || !lsdTokenName || !lsdTokenAddress) {
+          if (!userAddress || !lsdTokenName || !lsdTokenAddress) {
             return;
           }
           const saved = await saveModuleToDb({
             myKey: `ai-${lsdTokenAddress}`,
             eco: eco,
-            userAddress: metaMaskAccount,
+            userAddress: userAddress,
             disabled: false,
             tokenName: lsdTokenName,
             tokenAddress: lsdTokenAddress,

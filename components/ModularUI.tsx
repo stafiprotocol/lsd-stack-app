@@ -1,13 +1,7 @@
 import { Popover } from '@mui/material';
 import classNames from 'classnames';
-import { LsdCaseCardV2 } from 'components/common/LsdCaseCardV2';
 import { EcoSelectorBtn } from 'components/eco/EcoSelectorBtn';
-import {
-  getCosmosStackAppUrl,
-  getEthStackAppUrl,
-  getEvmCaseUrl,
-  getLrtCaseUrl,
-} from 'config/eth/env';
+import { getEthStackAppUrl } from 'config/eth/env';
 import { robotoBold, robotoSemiBold } from 'config/font';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { AppEco } from 'interfaces/common';
@@ -24,19 +18,19 @@ import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
-import homeVectorImg from 'public/images/home_vector.png';
-import atomLstImg from 'public/images/lst/atom.svg';
-import customLstImg from 'public/images/lst/custom.svg';
-import dotLstImg from 'public/images/lst/dot.svg';
-import ethLstImg from 'public/images/lst/eth.svg';
-import moreLstImg from 'public/images/lst/more.svg';
-import moveLstImg from 'public/images/lst/move.png';
-import solLstImg from 'public/images/lst/sol.svg';
 import { setAppEco } from 'redux/reducers/AppSlice';
 import { RootState } from 'redux/store';
 import { LsdCaseCard } from './common/LsdCaseCard';
+import { useEffect, useState } from 'react';
 
 export const ModularUI = () => {
+  const [showSelectEco, setShowSelectEco] = useState(false);
+
+  const popupState = usePopupState({
+    variant: 'popover',
+    popupId: 'eco',
+  });
+
   return (
     <div className="flex-1 bg-blue flex flex-col justify-center pb-[.6rem]">
       <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto ">
@@ -88,16 +82,26 @@ export const ModularUI = () => {
             </div>
 
             <div className="mt-[.32rem] flex items-center">
-              <div className="flex h-[.56rem] items-stretch rounded-[.56rem] border border-[#222C3C80] hover:border-[#222C3C] active:border-[#222C3C80]">
-                <div
-                  className={classNames(
-                    robotoSemiBold.className,
-                    ' px-[.3rem] flex items-center cursor-pointer text-text1'
-                  )}
-                >
-                  Try out now
+              {showSelectEco ? (
+                <EcoSelector />
+              ) : (
+                <div className="flex h-[.56rem] items-stretch rounded-[.56rem] border border-[#222C3C80] hover:border-[#222C3C] active:border-[#222C3C80]">
+                  <div
+                    className={classNames(
+                      robotoSemiBold.className,
+                      ' px-[.3rem] flex items-center cursor-pointer text-text1'
+                    )}
+                    onClick={() => {
+                      setShowSelectEco(true);
+                      // setTimeout(() => {
+                      //   popupState.open();
+                      // }, 1000);
+                    }}
+                  >
+                    Try out now
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div
                 className={classNames(
@@ -136,6 +140,10 @@ const EcoSelector = () => {
     variant: 'popover',
     popupId: 'eco',
   });
+
+  // useEffect(() => {
+  //   popupState.open();
+  // }, [popupState]);
 
   return (
     <div>

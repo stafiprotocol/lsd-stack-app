@@ -177,9 +177,27 @@ const DeployPage = () => {
               type="stroke"
               height=".56rem"
               onClick={() => openLink('https://discord.com/invite/jB77etn')}
-              width="5.07rem"
+              width="2.62rem"
             >
               Contact Us
+            </CustomButton>
+
+            <CustomButton
+              type="stroke"
+              height=".56rem"
+              onClick={() => {
+                router.push({
+                  pathname: '/cosmos/[connectionId]/module',
+                  query: {
+                    ...router.query,
+                    connectionId: router.query.connectionId,
+                    poolAddr: router.query.poolAddr,
+                  },
+                });
+              }}
+              width="2.62rem"
+            >
+              Next
             </CustomButton>
           </div>
         </FormCard>

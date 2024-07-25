@@ -1,52 +1,28 @@
 import classNames from 'classnames';
-import { EthDashboard } from 'components/EthDashboard';
-import { EvmDashboard } from 'components/EvmDashboard';
+import { NeutronDashboard } from 'components/NeutronDashboard';
+import { ProfileModulePage } from 'components/ProfileModulePage';
 import { CustomButton } from 'components/common/CustomButton';
 import { getDocHost } from 'config/common';
-import { getEthereumChainId } from 'config/eth/env';
+import { neutronChainConfig } from 'config/cosmos/chain';
 import { useAppDispatch } from 'hooks/common';
-import { useWalletAccount } from 'hooks/useWalletAccount';
-import { AppEco, EvmLsdTokenConfig } from 'interfaces/common';
-import others from 'public/images/tokens/others.svg';
-import { bindTrigger } from 'material-ui-popup-state';
-import { bindPopover, usePopupState } from 'material-ui-popup-state/hooks';
+import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
+import { AppEco } from 'interfaces/common';
+import { usePopupState } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
 import Link from 'next/link';
 import empty from 'public/images/empty_bird.svg';
-import { useEffect, useState } from 'react';
-import { useConnect } from 'wagmi';
-import ArrowDownImg from 'public/images/arrow_down_gray.svg';
-import { evmLsdTokens } from 'config/evm';
-import { Popover } from '@mui/material';
-import { Icomoon } from 'components/icon/Icomoon';
-import { getInjectedConnector, openLink } from 'utils/commonUtils';
-import { ProfileModulePage } from 'components/ProfileModulePage';
+import { useState } from 'react';
+import { connectKeplrAccount } from 'redux/reducers/WalletSlice';
 
 const EvmProfilePage = () => {
   const dispatch = useAppDispatch();
 
-  const { metaMaskAccount } = useWalletAccount();
-
-  const { connectors, connectAsync } = useConnect();
+  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
 
   const [tab, setTab] = useState<'stack' | 'module'>('stack');
 
   const clickWallet = async () => {
-    const metamaskConnector = getInjectedConnector(connectors);
-    if (!metamaskConnector) {
-      return;
-    }
-    try {
-      await connectAsync({
-        connector: metamaskConnector,
-        chainId: getEthereumChainId(),
-      });
-    } catch (err: any) {
-      if (err.code === 4001) {
-      } else {
-        console.error(err);
-      }
-    }
+    dispatch(connectKeplrAccount([neutronChainConfig]));
   };
 
   return (
@@ -79,7 +55,7 @@ const EvmProfilePage = () => {
             </div>
           </div>
 
-          {!metaMaskAccount ? (
+          {!neutronChainAccount?.bech32Address ? (
             <div className="flex flex-col items-center">
               <div
                 className="relative"
@@ -96,12 +72,7 @@ const EvmProfilePage = () => {
               </div>
 
               <div className="mt-[.32rem] flex items-center">
-                <div
-                  className="relative cursor-pointer"
-                  onClick={() => {
-                    clickWallet();
-                  }}
-                >
+                <div className="relative cursor-pointer" onClick={clickWallet}>
                   <CustomButton
                     type="primary"
                     width="1.62rem"
@@ -127,7 +98,7 @@ const EvmProfilePage = () => {
           ) : tab === 'stack' ? (
             <DashboardUI />
           ) : (
-            <ProfileModulePage eco={AppEco.Evm} />
+            <ProfileModulePage eco={AppEco.Cosmos} />
           )}
         </div>
       </div>
@@ -143,17 +114,10 @@ const DashboardUI = () => {
     popupId: 'token',
   });
 
-  const [selectedLsdToken, setSelectedLsdToken] = useState<EvmLsdTokenConfig>();
-
-  useEffect(() => {
-    if (evmLsdTokens.length > 0) {
-      setSelectedLsdToken(evmLsdTokens[0]);
-    }
-  }, []);
-
   return (
     <div>
-      <div
+      <NeutronDashboard />
+      {/* <div
         className="relative w-[3.2rem] mt-[.24rem] border border-[#6C86AD4D] rounded-[.2rem] text-[.14rem] text-text1 flex justify-center items-center text-center h-[.4rem] cursor-pointer"
         {...bindTrigger(popupState)}
       >
@@ -167,11 +131,11 @@ const DashboardUI = () => {
         >
           <Image src={ArrowDownImg} fill alt="arrow" />
         </div>
-      </div>
+      </div> */}
 
-      {selectedLsdToken && <EvmDashboard lsdTokenConfig={selectedLsdToken} />}
+      {/* {selectedLsdToken && <EvmDashboard lsdTokenConfig={selectedLsdToken} />} */}
 
-      <Popover
+      {/* <Popover
         {...bindPopover(popupState)}
         elevation={0}
         anchorOrigin={{
@@ -252,7 +216,7 @@ const DashboardUI = () => {
             Contact Us
           </div>
         </div>
-      </Popover>
+      </Popover> */}
     </div>
   );
 };

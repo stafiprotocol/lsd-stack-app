@@ -10,6 +10,7 @@ import { openLink } from 'utils/commonUtils';
 import { AppEco } from 'interfaces/common';
 import { saveModuleToDb } from 'utils/dbUtils';
 import { useWalletAccount } from 'hooks/useWalletAccount';
+import { useUserAddress } from 'hooks/useUserAddress';
 
 interface Props {
   eco: AppEco;
@@ -19,7 +20,7 @@ interface Props {
 
 export const FrontendModuleCard = (props: Props) => {
   const { lsdTokenAddress, lsdTokenName, eco } = props;
-  const { metaMaskAccount } = useWalletAccount();
+  const userAddress = useUserAddress(eco);
 
   return (
     <div className="w-[3.1rem] h-[3rem] flex flex-col items-stretch px-[.24rem] bg-color-bg2 rounded-[.3rem] border-[.01rem] border-color-border1">
@@ -58,13 +59,13 @@ export const FrontendModuleCard = (props: Props) => {
         type="primary"
         onClick={async () => {
           openLink('https://www.google.com');
-          if (!metaMaskAccount || !lsdTokenAddress || !lsdTokenName) {
+          if (!userAddress || !lsdTokenAddress || !lsdTokenName) {
             return;
           }
           const saved = await saveModuleToDb({
             myKey: `frontend-${lsdTokenAddress}`,
             eco: eco,
-            userAddress: metaMaskAccount,
+            userAddress: userAddress,
             disabled: false,
             tokenName: lsdTokenName,
             tokenAddress: lsdTokenAddress,

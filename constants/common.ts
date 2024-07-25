@@ -47,6 +47,7 @@ export const EVM_CREATION_STEPS = [
   'Token Standard',
   'Parameters',
   'Deploy',
+  'Module',
 ];
 
 export const COSMOS_CREATION_STEPS = [
@@ -55,6 +56,7 @@ export const COSMOS_CREATION_STEPS = [
   'Register Pool',
   'Init Pool',
   'Deploy',
+  'Module',
 ];
 
 export const LRT_CREATION_STEPS = [
@@ -62,4 +64,5 @@ export const LRT_CREATION_STEPS = [
   'Token Standard',
   'Parameters',
   'Deploy',
+  'Module',
 ];

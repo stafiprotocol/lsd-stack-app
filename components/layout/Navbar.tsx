@@ -51,12 +51,10 @@ const Navbar = () => {
   const { address } = useAccount();
 
   const walletNotConnected = useMemo(() => {
-    if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
-      return !address;
-    } else if (appEco === AppEco.Cosmos) {
+    if (appEco === AppEco.Cosmos) {
       return !neutronChainAccount?.bech32Address;
     }
-    return true;
+    return !address;
   }, [appEco, neutronChainAccount, address]);
 
   const isProfile = router.pathname.includes('/profile');
@@ -284,12 +282,10 @@ const UserInfo = () => {
   const { disconnectAsync } = useDisconnect();
 
   const displayAddress = useMemo(() => {
-    if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
-      return address;
-    } else if (appEco === AppEco.Cosmos) {
+    if (appEco === AppEco.Cosmos) {
       return neutronChainAccount?.bech32Address;
     }
-    return '';
+    return address;
   }, [appEco, neutronChainAccount, address]);
 
   const addressPopupState = usePopupState({
@@ -320,10 +316,10 @@ const UserInfo = () => {
   };
 
   const clickDisconnectWallet = async () => {
-    if (appEco === AppEco.Eth) {
-      await disconnectAsync();
-    } else if (appEco === AppEco.Cosmos) {
+    if (appEco === AppEco.Cosmos) {
       dispatch(disconnectWallet());
+    } else {
+      await disconnectAsync();
     }
   };
 
@@ -459,7 +455,11 @@ const ConnectButton = () => {
   const { connectors, connectAsync } = useConnect();
 
   const clickConnectWallet = async () => {
-    if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
+    if (
+      appEco === AppEco.Eth ||
+      appEco === AppEco.Evm ||
+      appEco === AppEco.Lrt
+    ) {
       console.log({ connectors });
       const metamaskConnector = connectors.find((c) => c.id === 'injected');
       if (!metamaskConnector) {
@@ -467,7 +467,7 @@ const ConnectButton = () => {
       }
       try {
         let chainId;
-        if (appEco === AppEco.Eth) {
+        if (appEco === AppEco.Eth || appEco === AppEco.Lrt) {
           chainId = getEthereumChainId();
         } else {
           const { token } = router.query;

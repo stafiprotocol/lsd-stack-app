@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { EthDashboard } from 'components/EthDashboard';
+import { LrtDashboard } from 'components/LrtDashboard';
 import { ProfileModulePage } from 'components/ProfileModulePage';
 import { CustomButton } from 'components/common/CustomButton';
 import { getDocHost } from 'config/common';
@@ -117,9 +118,9 @@ const EthProfilePage = () => {
               </div>
             </div>
           ) : tab === 'stack' ? (
-            <EthDashboard />
+            <LrtDashboard />
           ) : (
-            <ProfileModulePage eco={AppEco.Eth} />
+            <ProfileModulePage eco={AppEco.Lrt} />
           )}
         </div>
       </div>

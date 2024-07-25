@@ -1,4 +1,5 @@
 import { openDB } from 'idb';
+import { AppEco } from 'interfaces/common';
 import { ModuleSetting } from 'interfaces/module';
 
 export const indexDbName = 'lsaas-database';
@@ -60,16 +61,22 @@ export async function getModuleSettingFromDb(
     `${type}-${tokenAddress}`
   );
   return exists;
+}
 
-  //   const eTag = event.tags.find((tag) => tag[0] === 'e');
-  //   const taskEventId = eTag ? eTag[1] : '';
+export async function getModuleListFromDb(
+  userAddress: string,
+  eco: AppEco
+): Promise<ModuleSetting[]> {
+  const db = await openDB(indexDbName, indexDbVersion);
 
-  //   const exists = await db.get('resultEvents', taskEventId);
-  //   if (exists) {
-  //     return;
-  //   }
+  const all = await db.getAll(indexDbModuleStoreName);
 
-  //   await db.add('resultEvents', {
-  //     assignEventId: taskEventId,
-  //   });
+  if (!all) {
+    return [];
+  }
+
+  const list = all.filter(
+    (item) => item.userAddress === userAddress && item.eco === eco
+  );
+  return list;
 }

@@ -10,6 +10,8 @@ import { ModuleSetting, PointModuleConfig } from 'interfaces/module';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { AppEco } from 'interfaces/common';
+import { ModuleStateTag } from './ModuleStateTag';
+import { useUserAddress } from 'hooks/useUserAddress';
 
 interface Props {
   eco: AppEco;
@@ -19,7 +21,7 @@ interface Props {
 
 export const PointSystemModuleCard = (props: Props) => {
   const { lsdTokenAddress, lsdTokenName, eco } = props;
-  const { metaMaskAccount } = useWalletAccount();
+  const userAddress = useUserAddress(eco);
   const [setttingModalOpen, setSettingModalOpen] = useState(false);
   const [readyModalOpen, setReadyModalOpen] = useState(false);
   const [existSetting, setExistSetting] = useState<ModuleSetting>();
@@ -53,9 +55,16 @@ export const PointSystemModuleCard = (props: Props) => {
           <div className="mt-[.06rem] flex items-center">
             <div className="text-text2 text-[.14rem]">Marketing</div>
 
-            <div className="ml-[.14rem] flex items-center justify-center bg-[#80CAFF80] rounded-[.06rem] h-[.26rem] px-[.06rem] text-text1 text-[.12rem]">
-              Running
-            </div>
+            <ModuleStateTag
+              state={
+                !existSetting
+                  ? 'not set'
+                  : existSetting.disabled
+                  ? 'paused'
+                  : 'running'
+              }
+              className="ml-{.14rem}"
+            />
           </div>
         </div>
       </div>
@@ -86,19 +95,21 @@ export const PointSystemModuleCard = (props: Props) => {
       </CustomButton>
 
       <SetPointSystemModal
+        eco={eco}
+        userAddress={userAddress}
         open={setttingModalOpen}
         close={() => {
           setSettingModalOpen(false);
         }}
         currentConfig={existSetting?.config?.config as PointModuleConfig}
         onSuccess={async (config: PointModuleConfig) => {
-          if (!metaMaskAccount || !lsdTokenName || !lsdTokenAddress) {
+          if (!userAddress || !lsdTokenName || !lsdTokenAddress) {
             return;
           }
           const saved = await saveModuleToDb({
             myKey: `point-${lsdTokenAddress}`,
             eco: eco,
-            userAddress: metaMaskAccount,
+            userAddress: userAddress,
             disabled: false,
             tokenName: lsdTokenName,
             tokenAddress: lsdTokenAddress,

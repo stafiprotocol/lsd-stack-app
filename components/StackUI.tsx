@@ -32,10 +32,18 @@ import ethLstImg from 'public/images/lst/eth.svg';
 import moreLstImg from 'public/images/lst/more.svg';
 import moveLstImg from 'public/images/lst/move.png';
 import solLstImg from 'public/images/lst/sol.svg';
+import { useState } from 'react';
 import { setAppEco } from 'redux/reducers/AppSlice';
 import { RootState } from 'redux/store';
 
 export const StackUI = () => {
+  const [showSelectEco, setShowSelectEco] = useState(false);
+
+  const popupState = usePopupState({
+    variant: 'popover',
+    popupId: 'eco',
+  });
+
   return (
     <div className="flex-1 bg-blue flex flex-col justify-center pb-[.6rem]">
       <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto ">
@@ -58,25 +66,37 @@ export const StackUI = () => {
             </div>
 
             <div className="mt-[.32rem] flex items-center">
-              <div className="flex h-[.56rem] items-stretch rounded-[.56rem] border border-[#222C3C80] hover:border-[#222C3C] active:border-[#222C3C80]">
+              {showSelectEco ? (
+                <EcoSelector popupState={popupState} />
+              ) : (
+                <div className="flex h-[.56rem] items-stretch rounded-[.56rem] border border-[#222C3C80] hover:border-[#222C3C] active:border-[#222C3C80]">
+                  <div
+                    className={classNames(
+                      robotoSemiBold.className,
+                      ' px-[.3rem] flex items-center cursor-pointer text-text1'
+                    )}
+                    onClick={() => {
+                      setShowSelectEco(true);
+                      // setTimeout(() => {
+                      //   popupState.open();
+                      // }, 1000);
+                    }}
+                  >
+                    Try out now
+                  </div>
+                </div>
+              )}
+
+              {!showSelectEco && (
                 <div
                   className={classNames(
                     robotoSemiBold.className,
-                    ' px-[.3rem] flex items-center cursor-pointer text-text1'
+                    'mx-[.3rem] flex items-center cursor-pointer text-text1'
                   )}
                 >
-                  Try out now
+                  Learn More
                 </div>
-              </div>
-
-              <div
-                className={classNames(
-                  robotoSemiBold.className,
-                  'mx-[.3rem] flex items-center cursor-pointer text-text1'
-                )}
-              >
-                Learn More
-              </div>
+              )}
             </div>
 
             {/* <div className="mt-[.68rem]">
@@ -159,11 +179,8 @@ export const StackUI = () => {
   );
 };
 
-const EcoSelector = () => {
-  const popupState = usePopupState({
-    variant: 'popover',
-    popupId: 'eco',
-  });
+const EcoSelector = (props: { popupState: any }) => {
+  const { popupState } = props;
 
   return (
     <div>

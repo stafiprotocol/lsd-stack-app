@@ -64,10 +64,6 @@ export const NeutronDashboard = () => {
 
   return (
     <div>
-      <div className={classNames('text-[.24rem]', robotoSemiBold.className)}>
-        My Deployment History
-      </div>
-
       {icas.length > 0 ? (
         icas.map((ica) => <DashboardItem key={ica} ica={ica} />)
       ) : (

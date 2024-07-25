@@ -6,6 +6,7 @@ import { InputItem } from 'components/common/InputItem';
 import { getEthereumChainId } from 'config/eth/env';
 import { robotoBold } from 'config/font';
 import { useWalletAccount } from 'hooks/useWalletAccount';
+import { AppEco } from 'interfaces/common';
 import { PointModuleConfig } from 'interfaces/module';
 import Image from 'next/image';
 import CloseImg from 'public/images/close.svg';
@@ -14,6 +15,8 @@ import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import { useEffect, useMemo, useState } from 'react';
 
 interface Props {
+  eco: AppEco;
+  userAddress?: string;
   open: boolean;
   close: () => void;
   currentConfig?: PointModuleConfig;
@@ -22,6 +25,8 @@ interface Props {
 
 export const SetPointSystemModal = ({
   open,
+  eco,
+  userAddress,
   close,
   onSuccess,
   currentConfig,
@@ -29,7 +34,17 @@ export const SetPointSystemModal = ({
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('');
   const [minimalDeposit, setMinimalDeposit] = useState('');
-  const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
+
+  const baseTokenName =
+    eco === AppEco.Eth
+      ? 'ETH'
+      : eco === AppEco.Evm
+      ? 'SEI'
+      : eco === AppEco.Cosmos
+      ? 'ATOM'
+      : eco === AppEco.Lrt
+      ? 'ETH'
+      : '';
 
   useEffect(() => {
     if (currentConfig) {
@@ -60,10 +75,10 @@ export const SetPointSystemModal = ({
       return [true, 'Set As Your Module'];
     }
     return [false, 'Set As Your Module'];
-  }, [metaMaskAccount, metaMaskChainId, value, valueTooLarge, minimalDeposit]);
+  }, [userAddress, value, valueTooLarge, minimalDeposit]);
 
   const submit = async () => {
-    if (!metaMaskAccount || metaMaskChainId !== getEthereumChainId()) {
+    if (!userAddress) {
       // onConnectWallet();
       return;
     }
@@ -167,8 +182,8 @@ export const SetPointSystemModal = ({
             disabled={loading}
             label={
               frequency === '1 day'
-                ? 'Points / rETH / Day'
-                : 'Points / rETH / Hour'
+                ? `Points / r${baseTokenName} / Day`
+                : `Points / r${baseTokenName} / Hour`
             }
             placeholder={''}
             isNumber
@@ -183,8 +198,8 @@ export const SetPointSystemModal = ({
             <InputErrorTip
               msg={
                 frequency === '1 day'
-                  ? 'Points / rETH / Day must be < 10000'
-                  : 'Points / rETH / Hour must be < 10000'
+                  ? `Points / r${baseTokenName} / Day must be < 10000`
+                  : `Points / r${baseTokenName} / Hour must be < 10000`
               }
             />
           </div>
@@ -196,7 +211,7 @@ export const SetPointSystemModal = ({
             label={'Minimal Deposit'}
             placeholder={''}
             isNumber
-            suffix="ETH"
+            suffix={baseTokenName}
             value={minimalDeposit}
             onChange={setMinimalDeposit}
             className="mt-[.16rem]"

@@ -25,16 +25,17 @@ export const EcoSelectorBtn = ({ active }: Props) => {
     <div
       className={classNames(
         'cursor-pointer relative w-[3.68rem] h-[.56rem] rounded-[.28rem] flex items-center justify-center',
-        active
-          ? 'text-text1 bg-transparent border-[.01rem] border-text1'
-          : 'text-white bg-text1 border-none'
+        'border border-[#222C3C80] hover:border-[#222C3C]'
+        // active
+        //   ? 'text-text1 bg-transparent border-[.01rem] border-text1'
+        //   : 'text-white bg-text1 border-none'
       )}
     >
       {!appEco ? (
         <div
           className={classNames(
             'w-[3.68rem] h-[.56rem] text-[.16rem] font-[600] flex justify-center items-center',
-            active ? 'text-text1' : 'text-white '
+            'text-text1'
           )}
         >
           Choose ECO
@@ -67,8 +68,13 @@ export const EcoSelectorBtn = ({ active }: Props) => {
         </div>
       )}
 
-      <div className="absolute w-[.15rem] h-[.12rem] right-[.22rem] top-[.22rem]">
-        <Image src={active ? ArrowUpImg : ArrowDownImg} fill alt="arrow" />
+      <div
+        className={classNames(
+          'absolute w-[.15rem] h-[.12rem] right-[.22rem] top-[.22rem]',
+          active ? '' : 'rotate-180'
+        )}
+      >
+        <Image src={ArrowUpImg} fill alt="arrow" />
       </div>
     </div>
   );

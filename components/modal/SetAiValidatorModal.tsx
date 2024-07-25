@@ -3,29 +3,20 @@ import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
-import { getEthWithdrawContractAbi } from 'config/eth/contract';
-import { getEthereumChainId } from 'config/eth/env';
 import { robotoBold } from 'config/font';
+import { useUserAddress } from 'hooks/useUserAddress';
 import { useWalletAccount } from 'hooks/useWalletAccount';
+import { SetAiValidatorResponseData } from 'interfaces/common';
+import { AiValidatorModuleConfig } from 'interfaces/module';
 import Image from 'next/image';
 import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
-import EcoSelectedImg from 'public/images/eco/selected.svg';
-import EcoUnselectedImg from 'public/images/eco/unselected.svg';
-import snackbarUtil from 'utils/snackbarUtils';
-import {
-  createWeb3,
-  fetchTransactionReceiptWithWeb3,
-  getEthWeb3,
-} from 'utils/web3Utils';
-import { parseEther } from 'viem';
-import { useContractWrite } from 'wagmi';
-import { SetAiValidatorResponseData } from 'interfaces/common';
 import { openLink } from 'utils/commonUtils';
-import { AiValidatorModuleConfig } from 'interfaces/module';
+import snackbarUtil from 'utils/snackbarUtils';
 
 interface Props {
   open: boolean;
+  userAddress?: string;
   close: () => void;
   onSuccess: (config: AiValidatorModuleConfig) => void;
   currentConfig?: AiValidatorModuleConfig;
@@ -33,6 +24,7 @@ interface Props {
 
 export const SetAiValidatorModal = ({
   open,
+  userAddress,
   close,
   onSuccess,
   currentConfig,
@@ -43,7 +35,6 @@ export const SetAiValidatorModal = ({
     useState<SetAiValidatorResponseData>();
   const [value, setValue] = useState('');
   const [modelId, setModelId] = useState('');
-  const { metaMaskAccount, metaMaskChainId } = useWalletAccount();
 
   useEffect(() => {
     setStep(1);
@@ -72,9 +63,13 @@ export const SetAiValidatorModal = ({
       return [true, 'Generate Example'];
     }
     return [false, 'Generate Example'];
-  }, [metaMaskAccount, metaMaskChainId, value, valueTooLarge, modelId, step]);
+  }, [userAddress, value, valueTooLarge, modelId, step]);
 
   const submit = async () => {
+    if (!userAddress) {
+      return;
+    }
+
     if (step === 2) {
       onSuccess({
         modelId,
@@ -100,7 +95,13 @@ export const SetAiValidatorModal = ({
         },
         body: JSON.stringify(params),
       }
-    );
+    ).catch((err) => {
+      snackbarUtil.error(err.message);
+    });
+    if (!setResponse) {
+      setLoading(false);
+      return;
+    }
     const setResponseJson = await setResponse.json();
     setLoading(false);
 

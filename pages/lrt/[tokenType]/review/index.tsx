@@ -59,7 +59,7 @@ const ReviewPage = () => {
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
       <div className="my-[.36rem] mr-[.56rem]">
-        <div className="mt-[.36rem] flex ">
+        <div className="mt-[.36rem] flex">
           <div className={classNames('flex-1 min-w-[6.4rem] w-[6.4rem]')}>
             <div className="bg-color-bg2 rounded-[.3rem] pb-[.14rem] border-[.01rem] border-color-border1">
               <div className="text-[.28rem] leading-[.42rem] font-[700] text-text1 text-center mt-[.24rem]">
@@ -128,11 +128,21 @@ const ReviewPage = () => {
                 <CustomButton
                   width="2.62rem"
                   height=".56rem"
+                  onClick={() => {
+                    router.push(`/lrt/${router.query.tokenType}/module`);
+                  }}
+                  disabled={!deployInfo}
+                >
+                  Next
+                </CustomButton>
+                {/* <CustomButton
+                  width="2.62rem"
+                  height=".56rem"
                   onClick={() => setReadyModalOpened(true)}
                   disabled={!deployInfo}
                 >
                   Confirm
-                </CustomButton>
+                </CustomButton> */}
               </div>
             </div>
           </div>
@@ -152,19 +162,29 @@ const ReviewPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
-              Relay is an off-chain service responsible for interacting with LRT contracts. There are two ways to run the relay:
+              Relay is an off-chain service responsible for interacting with LRT
+              contracts. There are two ways to run the relay:
               <br />
-              1. <a
-                  className="underline"
-                  href='https://discord.com/invite/jB77etn'
-                  target='_blank'
-                >Contact with StaFi team</a> to whitelist your LRT, so that you do not have to maintain the Relay service by yourself
+              1.{' '}
+              <a
+                className="underline"
+                href="https://discord.com/invite/jB77etn"
+                target="_blank"
+              >
+                Contact with StaFi team
+              </a>{' '}
+              to whitelist your LRT, so that you do not have to maintain the
+              Relay service by yourself
               <br />
-              2. <a
-                  className="underline"
-                  href={`${getDocHost()}/docs/developlrt/deploy.html#step2-run-relay-service`}
-                  target='_blank'
-                >Follow our doc</a> to run your own Relay service
+              2.{' '}
+              <a
+                className="underline"
+                href={`${getDocHost()}/docs/developlrt/deploy.html#step2-run-relay-service`}
+                target="_blank"
+              >
+                Follow our doc
+              </a>{' '}
+              to run your own Relay service
             </div>
 
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
@@ -183,7 +203,8 @@ const ReviewPage = () => {
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
               - Web3 frontend development technologies required
               <br />
-              - Follow the instructions of the documentation to build your own LRT App
+              - Follow the instructions of the documentation to build your own
+              LRT App
               <br />
               - Reach out StaFi Stack Team if you need help
               <br />

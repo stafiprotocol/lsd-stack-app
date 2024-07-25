@@ -10,6 +10,7 @@ export enum AppEco {
 export enum ModuleType {
   Ai = 'AI',
   PointSystem = 'PointSystem',
+  Frontend = 'Frontend',
 }
 
 export interface NavigationItem {

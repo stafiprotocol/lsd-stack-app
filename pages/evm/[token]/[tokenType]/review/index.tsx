@@ -133,14 +133,27 @@ const ReviewPage = () => {
                 >
                   Back
                 </CustomButton>
+
                 <CustomButton
+                  width="2.62rem"
+                  height=".56rem"
+                  onClick={() => {
+                    router.push(
+                      `/evm/${router.query.token}/${router.query.tokenType}/module`
+                    );
+                  }}
+                  disabled={!deployInfo}
+                >
+                  Next
+                </CustomButton>
+                {/* <CustomButton
                   width="2.62rem"
                   height=".56rem"
                   onClick={() => setReadyModalOpened(true)}
                   disabled={!deployInfo}
                 >
                   Confirm
-                </CustomButton>
+                </CustomButton> */}
               </div>
             </div>
           </div>
@@ -160,8 +173,9 @@ const ReviewPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
-              Relay is an off-chain service responsible for periodically calling newEra method,
-              which will delegate or undelegate, update rate and distribute rewards etc.
+              Relay is an off-chain service responsible for periodically calling
+              newEra method, which will delegate or undelegate, update rate and
+              distribute rewards etc.
               <br />
               Go through with these steps to run a relay service:
               <br />

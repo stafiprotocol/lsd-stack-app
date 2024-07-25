@@ -70,10 +70,6 @@ export const LrtDashboard = () => {
 
   return (
     <div>
-      <div className={classNames('text-[.24rem]', robotoSemiBold.className)}>
-        My Deployment History
-      </div>
-
       {lrdTokens.length > 0 ? (
         lrdTokens.map((address) => (
           <DashboardItem key={address} address={address} />
