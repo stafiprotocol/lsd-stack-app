@@ -20,6 +20,7 @@ import {
   queryLsdTokenInWhiteList,
   setLsdTokenInWhiteListInfo,
 } from 'redux/reducers/LsdSlice';
+import { getInjectedConnector } from 'utils/commonUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 import { validateAddress } from 'utils/web3Utils';
 import {
@@ -119,7 +120,7 @@ const ParameterPage = () => {
 
   const submit = async () => {
     if (!metaMaskAccount) {
-      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+      const metamaskConnector = getInjectedConnector(connectors);
       if (!metamaskConnector) {
         return;
       }

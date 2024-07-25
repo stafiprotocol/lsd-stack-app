@@ -137,11 +137,21 @@ const ReviewPage = () => {
                 <CustomButton
                   width="2.62rem"
                   height=".56rem"
+                  onClick={() => {
+                    router.push(`/eth/standard/module`);
+                  }}
+                  disabled={!deployInfo}
+                >
+                  Next
+                </CustomButton>
+                {/* <CustomButton
+                  width="2.62rem"
+                  height=".56rem"
                   onClick={() => setReadyModalOpened(true)}
                   disabled={!deployInfo}
                 >
                   Confirm
-                </CustomButton>
+                </CustomButton> */}
               </div>
             </div>
           </div>

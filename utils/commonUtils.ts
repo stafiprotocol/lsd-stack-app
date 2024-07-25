@@ -1,4 +1,5 @@
 import { KEPLR_ERROR_REJECT } from 'constants/common';
+import { Connector } from 'wagmi';
 
 /**
  * open link in new tab
@@ -25,4 +26,10 @@ export const isKeplrInstalled = () => {
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function getInjectedConnector(connectors: Connector[]) {
+  const injectedConnector = connectors.find((c) => c.id === 'injected');
+
+  return injectedConnector;
 }

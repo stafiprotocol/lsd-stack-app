@@ -20,6 +20,7 @@ import { useConnect } from 'wagmi';
 import { getEthereumChainId } from 'config/eth/env';
 import { EvmDashboard } from 'components/EvmDashboard';
 import { lsdTokenConfigs } from 'config/cosmos/chain';
+import { getInjectedConnector } from 'utils/commonUtils';
 
 export function getStaticProps() {
   return { props: {} };
@@ -59,7 +60,7 @@ const ParameterPage = () => {
     evmLsdTokens.find((item) => item.symbol === token) || evmLsdTokens[0];
 
   const clickWallet = async () => {
-    const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+    const metamaskConnector = getInjectedConnector(connectors);
     if (!metamaskConnector) {
       return;
     }

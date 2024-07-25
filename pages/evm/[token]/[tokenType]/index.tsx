@@ -21,6 +21,7 @@ import {
   queryEvmLsdTokenInWhiteList,
   setEvmLsdTokenInWhiteListInfo,
 } from 'redux/reducers/EvmLsdSlice';
+import { getInjectedConnector } from 'utils/commonUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 import { getWeb3, validateAddress } from 'utils/web3Utils';
 import { useConnect, useContractWrite, useSwitchNetwork } from 'wagmi';
@@ -191,7 +192,7 @@ const ParameterPage = () => {
 
   const submit = async () => {
     if (!metaMaskAccount) {
-      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+      const metamaskConnector = getInjectedConnector(connectors);
       if (!metamaskConnector) {
         return;
       }

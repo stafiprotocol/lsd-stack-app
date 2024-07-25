@@ -21,6 +21,7 @@ import { useConnect } from 'wagmi';
 import { CustomButton } from 'components/common/CustomButton';
 import Link from 'next/link';
 import { LrtDashboard } from 'components/LrtDashboard';
+import { getInjectedConnector } from 'utils/commonUtils';
 
 const EthPage = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ const EthPage = () => {
   const { connectors, connectAsync } = useConnect();
 
   const clickWallet = async () => {
-    const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+    const metamaskConnector = getInjectedConnector(connectors);
     if (!metamaskConnector) {
       return;
     }

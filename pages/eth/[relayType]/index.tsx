@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { setBackRoute } from 'redux/reducers/AppSlice';
 import { createLsdNetworkStandard } from 'redux/reducers/LsdSlice';
+import { getInjectedConnector } from 'utils/commonUtils';
 import { validateAddress } from 'utils/web3Utils';
 import { useConnect, useContractWrite, useSwitchNetwork } from 'wagmi';
 import Web3 from 'web3';
@@ -80,7 +81,7 @@ const ParameterPage = () => {
 
   const submit = async () => {
     if (!metaMaskAccount) {
-      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+      const metamaskConnector = getInjectedConnector(connectors);
       if (!metamaskConnector) {
         return;
       }

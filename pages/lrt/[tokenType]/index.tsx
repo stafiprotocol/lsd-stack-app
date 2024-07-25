@@ -24,6 +24,7 @@ import {
   setLrtTokenInWhiteListInfo,
 } from 'redux/reducers/LrtSlice';
 import { RootState } from 'redux/store';
+import { getInjectedConnector } from 'utils/commonUtils';
 import { validateAddress } from 'utils/web3Utils';
 import {
   useAccount,
@@ -125,7 +126,7 @@ const ParameterPage = () => {
 
   const submit = async () => {
     if (!metaMaskAccount) {
-      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+      const metamaskConnector = getInjectedConnector(connectors);
       if (!metamaskConnector) {
         return;
       }

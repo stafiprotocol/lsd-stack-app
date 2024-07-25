@@ -7,6 +7,11 @@ export enum AppEco {
   Others = 'Others',
 }
 
+export enum ModuleType {
+  Ai = 'AI',
+  PointSystem = 'PointSystem',
+}
+
 export interface NavigationItem {
   name: string;
   path?: string;
@@ -76,4 +81,15 @@ export interface EvmLsdTokenConfig {
   chainName: string;
   icon: string;
   factoryContract: string;
+}
+
+export interface SetAiValidatorResponseData {
+  modelId: string;
+  recommendedValidators: AiRecommendValidator[];
+}
+
+export interface AiRecommendValidator {
+  moniker: string;
+  operatorAddress: string;
+  reasons: string[];
 }

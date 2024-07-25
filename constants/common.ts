@@ -29,6 +29,7 @@ export const ETH_STANDARD_CREATION_STEPS = [
   'Relay Type',
   'Parameters',
   'Deploy',
+  'Module',
 ];
 
 export const ETH_CUSTOMIZE_CREATION_STEPS = [
@@ -37,6 +38,7 @@ export const ETH_CUSTOMIZE_CREATION_STEPS = [
   'Token Standard',
   'Parameters',
   'Deploy',
+  'Module',
 ];
 
 export const EVM_CREATION_STEPS = [

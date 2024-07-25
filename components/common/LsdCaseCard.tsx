@@ -10,150 +10,56 @@ import Link from 'next/link';
 import { getDocHost } from 'config/common';
 
 interface LsdCaseCardProps {
-  icon: any;
+  title: string;
   text: string;
   url?: string;
   className?: string;
-  isComing?: boolean;
-  isKarak?: boolean;
 }
 
 export const LsdCaseCard = (props: LsdCaseCardProps) => {
-  const { icon, text, url, className, isComing, isKarak } = props;
+  const { title, text, url, className } = props;
 
   return (
     <div
       className={classNames(
-        'group min-w-[2.55rem] w-[2.55rem] h-[1.78rem] rounded-[.12rem] border  flex flex-col items-center',
-        isComing
-          ? 'cursor-default border-[#00000070]'
-          : 'cursor-pointer border-[#000000] hover:border-[#00000000] hover:bg-[#E8EEFD] ',
+        'group min-w-[5rem] w-[5rem] px-[.3rem] pt-[.24rem] py-[.32rem] rounded-[.32rem] border  flex justify-between',
+        'cursor-pointer border-[#000000] hover:border-[#00000000] hover:bg-[#222C3C]',
         className || ''
       )}
       onClick={() => {
-        if (!isComing && url) {
+        if (url) {
           openLink(url);
         }
       }}
     >
-      <div className="mt-[.1rem] w-[1.6rem] h-[1.08rem] relative">
-        <Image src={icon} layout="fill" alt="icon" />
+      <div className={classNames('ml-[.12rem] mr-[.12rem] self-stretch')}>
+        <div
+          className={classNames(
+            ' text-[.24rem] text-text1 group-hover:text-[#FFFFFF]',
+            robotoBold.className
+          )}
+        >
+          {title}
+        </div>
+
+        <div
+          className={classNames(
+            'mt-[.32rem] text-[.14rem] text-[#222C3C99] group-hover:text-[#FFFFFF99]'
+          )}
+        >
+          {text}
+        </div>
       </div>
 
       <div
         className={classNames(
-          'ml-[.12rem] mr-[.12rem] self-stretch mt-[.1rem] flex items-center',
-          isComing ? 'justify-between' : 'justify-between'
+          'min-w-[.38rem] w-[.38rem] h-[.38rem] rounded-full p-[.1rem] border border-[#000000]',
+          'group-hover:bg-[#C9E3FD] group-hover:border-[#00000000]'
         )}
       >
-        {isKarak ? (
-          <Tooltip
-            title={
-              <div className="">
-                <div className="text-[#222C3B] text-[.16rem] text-center">
-                  Internal product testing is complete. We&apos;re now standing
-                  by for the Karak official testnet launch
-                </div>
-
-                <Link href={getDocHost()} target="_blank">
-                  <div className="mt-[.1rem] flex item-center cursor-pointer justify-center">
-                    <div
-                      className={classNames(
-                        'text-link mr-[.06rem] text-[.14rem]',
-                        robotoBold.className
-                      )}
-                    >
-                      Learn More
-                    </div>
-
-                    <div className="flex items-center">
-                      <Icomoon icon="share" size=".12rem" color="#5A5DE0" />
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            }
-            placement="top"
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  width: '2.4rem',
-                  color: '#6C86AD',
-                  background: '#ffffff80',
-                  border: '0.01rem solid #FFFFFF',
-                  backdropFilter: 'blur(.4rem)',
-                  borderRadius: '.3rem',
-                  lineHeight: 1.4,
-                  padding: '.12rem .16rem',
-                },
-              },
-            }}
-            sx={{
-              fontSize: '.12rem',
-              marginBottom: 0,
-              '& .MuiTooltip-popover': {
-                marginBottom: 0,
-              },
-            }}
-            PopperProps={{
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [60, -15],
-                  },
-                },
-              ],
-            }}
-          >
-            <div className="flex items-center">
-              <div
-                className={classNames(
-                  ' text-[.2rem]',
-                  robotoBold.className,
-                  isComing
-                    ? 'text-text1 h-[.38rem] flex items-center opacity-50'
-                    : 'text-text1'
-                )}
-              >
-                {text}
-              </div>
-
-              <div className="flex items-center ml-[.04rem] w-[.14rem] h-[.14rem] relative">
-                <Image src={TipImg} layout="fill" alt="icon" />
-              </div>
-            </div>
-          </Tooltip>
-        ) : (
-          <div
-            className={classNames(
-              ' text-[.2rem]',
-              robotoBold.className,
-              isComing
-                ? 'text-text1 h-[.38rem] flex items-center opacity-50'
-                : 'text-text1'
-            )}
-          >
-            {text}
-          </div>
-        )}
-
-        {/* {isComing ? (
-          <div className="opacity-50 ml-[.06rem] w-[.38rem] flex items-center justify-center py-[.02rem] rounded-[.04rem] bg-text1 text-blue text-[.12rem]">
-            soon
-          </div>
-        ) : ( */}
-        <div
-          className={classNames(
-            'w-[.38rem] h-[.38rem] rounded-full p-[.1rem] ',
-            isComing ? 'opacity-50' : 'group-hover:bg-[#ffffff]'
-          )}
-        >
-          <div className="w-full h-full relative">
-            <Image src={arrowTrImg} layout="fill" alt="icon" />
-          </div>
+        <div className="w-full h-full relative">
+          <Image src={arrowTrImg} layout="fill" alt="icon" />
         </div>
-        {/* )} */}
       </div>
     </div>
   );

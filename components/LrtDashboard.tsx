@@ -42,6 +42,7 @@ import { UpdateLstForStakeModal } from './modal/lrt/UpdateLstForStakeModal';
 import { UpdateSupportedLstsModal } from './modal/lrt/UpdateSupportedLstsModal';
 import { UpdateLrtPlatformFeeModal } from './modal/lrt/UpdateLrtPlatformFeeModal';
 import snackbarUtil from 'utils/snackbarUtils';
+import { getInjectedConnector } from 'utils/commonUtils';
 
 export const LrtDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -299,7 +300,7 @@ const DashboardItem = (props: { address: string }) => {
       await switchNetworkAsync(getEthereumChainId());
       return;
     }
-    const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+    const metamaskConnector = getInjectedConnector(connectors);
     if (!metamaskConnector) {
       return;
     }

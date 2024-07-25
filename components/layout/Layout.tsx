@@ -38,9 +38,7 @@ export const Layout = (props: React.PropsWithChildren) => {
   const [navigation, setNavigation] = useState<NavigationItem[]>([]);
 
   useEffect(() => {
-    if (address) {
-      dispatch(setMetaMaskAccount(address));
-    }
+    dispatch(setMetaMaskAccount(address));
     dispatch(setMetaMaskChainId(wagmiChain?.id));
   }, [address, dispatch, wagmiChain?.id]);
 

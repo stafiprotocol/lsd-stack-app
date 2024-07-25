@@ -9,6 +9,7 @@ import { ETH_CUSTOMIZE_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch } from 'hooks/common';
 import { useDeployInfo } from 'hooks/useDeployInfo';
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import ExternalLinkImg from 'public/images/external_link.svg';
 import { useEffect, useState } from 'react';
@@ -41,6 +42,7 @@ export function getStaticPaths() {
 const ReviewPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const params = useParams();
 
   const { fetchLoading, deployInfo } = useDeployInfo('customize');
 
@@ -144,11 +146,21 @@ const ReviewPage = () => {
                 <CustomButton
                   width="2.62rem"
                   height=".56rem"
+                  onClick={() => {
+                    router.push(`/eth/customize/${params.tokenType}/module`);
+                  }}
+                  disabled={!deployInfo}
+                >
+                  Next
+                </CustomButton>
+                {/* <CustomButton
+                  width="2.62rem"
+                  height=".56rem"
                   onClick={() => setReadyModalOpened(true)}
                   disabled={!deployInfo}
                 >
                   Confirm
-                </CustomButton>
+                </CustomButton> */}
               </div>
             </div>
           </div>

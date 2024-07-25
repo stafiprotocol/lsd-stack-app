@@ -34,6 +34,9 @@ import { useSelector } from 'react-redux';
 import { getDocHost } from 'config/common';
 import { LsaasSidebar } from 'components/modal/LsaasSidebar';
 import { evmLsdTokens } from 'config/evm';
+import { robotoBold, robotoSemiBold } from 'config/font';
+import { getEcoTokenIcon } from 'utils/iconUtils';
+import Link from 'next/link';
 
 const Navbar = () => {
   const router = useRouter();
@@ -56,12 +59,17 @@ const Navbar = () => {
     return true;
   }, [appEco, neutronChainAccount, address]);
 
+  const isProfile = router.pathname.includes('/profile');
+
   const showBackToHome = useMemo(() => {
     // if (appEco === AppEco.Cosmos) {
     //   return creationStepInfo.activedIndex === 4;
     // }
-    return router.pathname !== '/' || creationStepInfo.activedIndex > 0;
-  }, [appEco, router, creationStepInfo]);
+    return (
+      !isProfile &&
+      (router.pathname !== '/' || creationStepInfo.activedIndex > 0)
+    );
+  }, [router.pathname, , isProfile, creationStepInfo]);
 
   const backToHome = () => {
     router.replace('/');
@@ -74,23 +82,69 @@ const Navbar = () => {
     );
   };
 
+  const clickProfile = () => {
+    if (appEco) {
+      router.push(`/${appEco.toLowerCase()}/profile`);
+    }
+  };
+
+  const clickDeploy = () => {
+    if (appEco) {
+      router.push(`/${appEco.toLowerCase()}`);
+    }
+  };
+
   return (
     <div>
-      <div className="bg-color-bgPage py-[.36rem] flex items-center justify-center">
+      <div className="bg-color-bgPage py-[.24rem] flex items-center justify-center">
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto flex items-center justify-between relative">
-          <div className="flex items-center gap-[.1rem]">
-            <div className="relative w-[.82rem] h-[.2rem]">
-              <Image src={LogoTextImg} alt="StaFi" layout="fill" />
-            </div>
-            <div className="w-[.45rem] h-[.2rem] relative">
-              <div className="text-[.12rem] font-[700] leading-[.18rem] z-10 absolute top-0 left-0 w-full h-full text-white text-center flex items-center justify-center">
-                LSAAS
+          <div className="flex items-center">
+            <Link href={'/'}>
+              <div className="flex items-center gap-[.1rem]">
+                <div className="relative w-[.82rem] h-[.2rem]">
+                  <Image src={LogoTextImg} alt="StaFi" layout="fill" />
+                </div>
+
+                <div className="w-[.45rem] h-[.2rem] relative">
+                  <div className="text-[.12rem] font-[700] leading-[.18rem] z-10 absolute top-0 left-0 w-full h-full text-white text-center flex items-center justify-center">
+                    LSAAS
+                  </div>
+                  <div className="absolute w-[.45rem] h-[.2rem] top-0 left-0">
+                    <Image src={LogoLabelBgImg} alt="LSAAS" layout="fill" />
+                  </div>
+                </div>
               </div>
-              <div className="absolute w-[.45rem] h-[.2rem] top-0 left-0">
-                <Image src={LogoLabelBgImg} alt="LSAAS" layout="fill" />
+            </Link>
+
+            <div className="ml-[.32rem] flex h-[.42rem] px-[.04rem] py-[.04rem] text-[.16rem] items-stretch rounded-[.4rem] border border-[#E8EFFD] bg-[#FFFFFF80]">
+              <div
+                className={classNames(
+                  ' w-[1.22rem] rounded-[.4rem] flex items-center justify-center cursor-pointer',
+                  !isProfile
+                    ? 'text-text1 bg-white border border-[#E8EFFD]'
+                    : 'text-text1',
+                  !isProfile ? robotoBold.className : ''
+                )}
+                onClick={clickDeploy}
+              >
+                Deploy
+              </div>
+
+              <div
+                className={classNames(
+                  'w-[1.22rem] rounded-[.4rem] flex items-center justify-center cursor-pointer',
+                  isProfile
+                    ? 'text-text1 bg-white border border-[#E8EFFD]'
+                    : 'text-text1',
+                  isProfile ? robotoBold.className : ''
+                )}
+                onClick={clickProfile}
+              >
+                Profile
               </div>
             </div>
           </div>
+
           <div className={classNames('flex items-center')}>
             <div className={classNames('ml-[.16rem]')}>
               {walletNotConnected ? <ConnectButton /> : <UserInfo />}
@@ -116,7 +170,10 @@ const Navbar = () => {
       )}
 
       <div
-        className={classNames('flex justify-center h-[1.86rem] relative')}
+        className={classNames(
+          'flex justify-center h-[1.86rem] relative',
+          isProfile ? 'hidden' : ''
+        )}
         style={{
           background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) -20.69%, rgba(255, 255, 255, 0.5) 103.45%)',
@@ -183,6 +240,32 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {isProfile && (
+        <div
+          className="flex justify-center"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(255, 255, 255, 0) -20.69%, rgba(255, 255, 255, 0.5) 103.45%)',
+            boxShadow: '0px 1px 0px #FFFFFF',
+          }}
+        >
+          <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW h-[1.2rem] flex items-center">
+            <div className="w-[.68rem] h-[.68rem] relative">
+              <Image src={getEcoTokenIcon(appEco)} alt="icon" layout="fill" />
+            </div>
+
+            <div
+              className={classNames(
+                robotoBold.className,
+                'text-[.34rem] text-text1 ml-[.12rem]'
+              )}
+            >
+              {appEco} Stack Profile
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -377,8 +460,8 @@ const ConnectButton = () => {
 
   const clickConnectWallet = async () => {
     if (appEco === AppEco.Eth || appEco === AppEco.Evm) {
-      // console.log({ connectors });
-      const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+      console.log({ connectors });
+      const metamaskConnector = connectors.find((c) => c.id === 'injected');
       if (!metamaskConnector) {
         return;
       }

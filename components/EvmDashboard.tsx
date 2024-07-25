@@ -34,6 +34,7 @@ import { RemoveEvmValidatorModal } from './modal/evm/RemoveEvmValidatorModal';
 import { UpdateEvmFactoryFeeModal } from './modal/evm/UpdateEvmFactoryFeeModal';
 import { UpdateEvmMinDepositModal } from './modal/evm/UpdateEvmMinDepositModal';
 import { UpdateEvmPlatformFeeModal } from './modal/evm/UpdateEvmPlatformFeeModal';
+import { getInjectedConnector } from 'utils/commonUtils';
 
 interface Props {
   lsdTokenConfig: EvmLsdTokenConfig;
@@ -67,10 +68,6 @@ export const EvmDashboard = (props: Props) => {
 
   return (
     <div>
-      <div className={classNames('text-[.24rem]', robotoSemiBold.className)}>
-        My Deployment History
-      </div>
-
       {lsdTokens.length > 0 ? (
         lsdTokens.map((address) => (
           <DashboardItem
@@ -154,7 +151,7 @@ const DashboardItem = (props: {
       const networkContractsOfLsdToken = await factoryContract.methods
         .networkContractsOfLsdToken(address)
         .call();
-      console.log({ networkContractsOfLsdToken });
+      // console.log({ networkContractsOfLsdToken });
 
       const entrustedLsdTokens: string[] = await factoryContract.methods
         .getEntrustedLsdTokens()
@@ -253,7 +250,7 @@ const DashboardItem = (props: {
       await switchNetworkAsync(lsdTokenConfig.chainId);
       return;
     }
-    const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+    const metamaskConnector = getInjectedConnector(connectors);
     if (!metamaskConnector) {
       return;
     }

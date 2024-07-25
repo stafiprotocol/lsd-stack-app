@@ -3,9 +3,10 @@ import NumArrowDownImg from 'public/images/num_arrow_down.svg';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { robotoBold } from 'config/font';
+import { ReactNode } from 'react';
 
 interface Props {
-  label: string;
+  label: string | ReactNode;
   value: string | undefined;
   onChange: (v: string) => void;
   placeholder: string;

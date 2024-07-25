@@ -41,6 +41,7 @@ import { UpdateVotersModal } from './modal/eth/UpdateVotersModal';
 import { UpdateRewardPeriodModal } from './modal/eth/updateRewardPeriodModal';
 import { EmptyContent } from './common/EmptyContent';
 import snackbarUtil from 'utils/snackbarUtils';
+import { getInjectedConnector } from 'utils/commonUtils';
 
 export const EthDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -68,9 +69,9 @@ export const EthDashboard = () => {
 
   return (
     <div>
-      <div className={classNames('text-[.24rem]', robotoSemiBold.className)}>
+      {/* <div className={classNames('text-[.24rem]', robotoSemiBold.className)}>
         My Deployment History
-      </div>
+      </div> */}
 
       {lsdTokens.length > 0 ? (
         lsdTokens.map((address) => (
@@ -292,7 +293,7 @@ const DashboardItem = (props: { address: string }) => {
       await switchNetworkAsync(getEthereumChainId());
       return;
     }
-    const metamaskConnector = connectors.find((c) => c.name === 'MetaMask');
+    const metamaskConnector = getInjectedConnector(connectors);
     if (!metamaskConnector) {
       return;
     }

@@ -16,6 +16,7 @@ import {
   ETH_CUSTOMIZE_CREATION_STEPS,
   ETH_STANDARD_CREATION_STEPS,
 } from 'constants/common';
+import { initIndexDb } from 'utils/dbUtils';
 
 declare const window: { ethereum: any };
 declare const ethereum: any;
@@ -25,6 +26,10 @@ export function useInit() {
 
   const dispatch = useAppDispatch();
   const { backRoute } = useAppSelector((state) => state.app);
+
+  useEffect(() => {
+    initIndexDb();
+  }, []);
 
   // useEffect(() => {
   //   if (!path) return;
