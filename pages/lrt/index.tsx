@@ -74,59 +74,6 @@ const EthPage = () => {
           </div>
         </div>
       </div>
-
-      <div className="bg-bgPage pt-[.56rem] pb-[1.05rem]">
-        <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
-          {metaMaskAccount ? (
-            <LrtDashboard />
-          ) : (
-            <div className="flex flex-col items-center">
-              <div
-                className="relative"
-                style={{
-                  width: '.4rem',
-                  height: '.4rem',
-                }}
-              >
-                <Image src={empty} alt="empty" layout="fill" />
-              </div>
-
-              <div className="mt-[.16rem] text-[.14rem] text-color-text2">
-                Please connect your wallet to view your LSD deploy history
-              </div>
-
-              <div className="mt-[.32rem] flex items-center">
-                <div
-                  className="relative cursor-pointer"
-                  onClick={() => {
-                    clickWallet();
-                  }}
-                >
-                  <CustomButton
-                    type="primary"
-                    width="1.62rem"
-                    className="opacity-50"
-                  ></CustomButton>
-
-                  <div className="text-[.16rem] text-text1 absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center">
-                    Connect Wallet
-                  </div>
-                </div>
-
-                <Link href={getDocHost()} target="_blank">
-                  <CustomButton
-                    type="stroke"
-                    width="1.62rem"
-                    className="ml-[.32rem]"
-                  >
-                    View Doc
-                  </CustomButton>
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   );
 };

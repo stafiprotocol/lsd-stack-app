@@ -9,24 +9,38 @@ import {
 } from 'interfaces/module';
 import { AppEco } from 'interfaces/common';
 import { ModuleStateTag } from './ModuleStateTag';
-import { saveModuleToDb } from 'utils/dbUtils';
+import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { openLink } from 'utils/commonUtils';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SetPointSystemModal } from './modal/SetPointSystemModal';
 import { SetAiValidatorModal } from './modal/SetAiValidatorModal';
 import { useUserAddress } from 'hooks/useUserAddress';
+import { LsdHistoryItem } from 'hooks/useModuleList';
 
 interface ModuleTableItemProps {
   index: number;
   eco: AppEco;
-  moduleSetting: ModuleSetting;
-  onUpdate: () => void;
+  type: 'ai' | 'point' | 'frontend';
+  lsdHistoryItem: LsdHistoryItem;
 }
 
 export const ModuleTableItem = (props: ModuleTableItemProps) => {
-  const { index, eco, moduleSetting, onUpdate } = props;
+  const { index, type, eco, lsdHistoryItem } = props;
   const [editModalOpen, setEditModalOpen] = useState(false);
   const userAddress = useUserAddress(eco);
+  const [moduleSetting, setModuleSetting] = useState<ModuleSetting>();
+
+  const updateModule = useCallback(async () => {
+    const moduleSetting = await getModuleSettingFromDb(
+      type,
+      lsdHistoryItem.tokenAddress
+    );
+    setModuleSetting(moduleSetting);
+  }, [lsdHistoryItem.tokenAddress, type]);
+
+  useEffect(() => {
+    updateModule();
+  }, [updateModule]);
 
   return (
     <div
@@ -49,7 +63,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
             </div>
 
             <div className="ml-[.16rem] text-[.16rem] text-color-text1">
-              {moduleSetting.tokenName}
+              {lsdHistoryItem.tokenName}
             </div>
           </div>
         </div>
@@ -57,25 +71,29 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
 
       <div className="flex items-center justify-start text-[.16rem] text-color-text1">
         <div className="w-[.34rem] h-[.34rem] min-w-[.34rem] relative mr-[.16rem]">
-          <Image
-            src={getModuleIcon(moduleSetting.config.type)}
-            alt="logo"
-            layout="fill"
-          />
+          <Image src={getModuleIcon(type)} alt="logo" layout="fill" />
         </div>
 
-        {getModuleName(moduleSetting.config.type)}
+        {getModuleName(type)}
       </div>
 
       <div className="flex items-center justify-start text-[.16rem] text-color-text1">
-        <ModuleStateTag
-          state={moduleSetting.disabled ? 'paused' : 'running'}
-          className="ml-{.14rem}"
-        />
+        {type !== 'frontend' && (
+          <ModuleStateTag
+            state={
+              !moduleSetting
+                ? 'not set'
+                : moduleSetting.disabled
+                ? 'paused'
+                : 'running'
+            }
+            className="ml-{.14rem}"
+          />
+        )}
       </div>
 
       <div className="flex items-center justify-start text-[.16rem] text-color-text1">
-        {moduleSetting.config.type === 'frontend' ? (
+        {type === 'frontend' ? (
           <CustomButton
             type="primary"
             width="1.3rem"
@@ -108,20 +126,24 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           Toturial
         </CustomButton>
 
-        {moduleSetting.config.type !== 'frontend' && (
+        {type !== 'frontend' && (
           <CustomButton
             type="stroke"
             width="1.3rem"
             className="ml-[.24rem]"
             onClick={async () => {
-              await saveModuleToDb({
-                ...moduleSetting,
-                disabled: !moduleSetting.disabled,
-              });
-              onUpdate();
+              if (!moduleSetting || moduleSetting.disabled) {
+                setEditModalOpen(true);
+              } else {
+                await saveModuleToDb({
+                  ...moduleSetting,
+                  disabled: true,
+                });
+                updateModule();
+              }
             }}
           >
-            {moduleSetting.disabled ? 'Turn on' : 'Turn off'}
+            {!moduleSetting || moduleSetting.disabled ? 'Turn on' : 'Turn off'}
           </CustomButton>
         )}
       </div>
@@ -129,41 +151,51 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
       <SetPointSystemModal
         eco={eco}
         userAddress={userAddress}
-        open={editModalOpen && moduleSetting.config.type === 'point'}
+        open={editModalOpen && type === 'point'}
         close={() => {
           setEditModalOpen(false);
         }}
         currentConfig={moduleSetting?.config?.config as PointModuleConfig}
         onSuccess={async (config: PointModuleConfig) => {
           const saved = await saveModuleToDb({
-            ...moduleSetting,
+            myKey: `point-${lsdHistoryItem.tokenAddress}`,
+            eco: eco,
+            userAddress: userAddress || '',
+            disabled: false,
+            tokenName: lsdHistoryItem.tokenName,
+            tokenAddress: lsdHistoryItem.tokenAddress,
             config: {
               type: 'point',
               config: config,
             },
           });
           setEditModalOpen(false);
-          onUpdate();
+          updateModule();
         }}
       />
 
       <SetAiValidatorModal
         userAddress={userAddress}
-        open={editModalOpen && moduleSetting.config.type === 'ai'}
+        open={editModalOpen && type === 'ai'}
         close={() => {
           setEditModalOpen(false);
         }}
         currentConfig={moduleSetting?.config?.config as AiValidatorModuleConfig}
         onSuccess={async (config: AiValidatorModuleConfig) => {
           const saved = await saveModuleToDb({
-            ...moduleSetting,
+            myKey: `ai-${lsdHistoryItem.tokenAddress}`,
+            eco: eco,
+            userAddress: userAddress || '',
+            disabled: false,
+            tokenName: lsdHistoryItem.tokenName,
+            tokenAddress: lsdHistoryItem.tokenAddress,
             config: {
               type: 'ai',
               config: config,
             },
           });
           setEditModalOpen(false);
-          onUpdate();
+          updateModule();
         }}
       />
     </div>

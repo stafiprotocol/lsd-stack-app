@@ -132,6 +132,10 @@ const DashboardItem = (props: {
     variant: 'popover',
     popupId: 'setting',
   });
+  const linksPopupState = usePopupState({
+    variant: 'popover',
+    popupId: 'links',
+  });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [platformFeeModalOpen, setPlatformFeeModalOpen] = useState(false);
   const [stackFeeModalOpen, setStackFeeModalOpen] = useState(false);
@@ -268,7 +272,7 @@ const DashboardItem = (props: {
   };
 
   return (
-    <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] p-[.24rem]">
+    <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] px-[.24rem] pt-[.32rem] pb-[.4rem]">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-[.34rem] h-[.34rem] relative mr-[.12rem]">
@@ -298,27 +302,43 @@ const DashboardItem = (props: {
           )}
         </div>
 
-        <div
-          className={classNames(
-            'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
-            settingsPopupState.isOpen ? 'bg-color-selected' : ''
-          )}
-          {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
-        >
-          <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+        <div className="flex items-center">
+          <div
+            className={classNames(
+              'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
+              settingsPopupState.isOpen
+                ? 'bg-color-selected'
+                : 'bg-color-bgPage'
+            )}
+            {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
+          >
+            <div className="w-[.24rem] h-[.24rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className={classNames(
+              'cursor-pointer ml-[.16rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
+              linksPopupState.isOpen ? 'bg-color-selected' : 'bg-color-bgPage'
+            )}
+            {...(dashboardInfo ? bindTrigger(linksPopupState) : {})}
+          >
+            <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+          </div>
         </div>
       </div>
 
       <div
         className="mt-[.17rem] grid text-[.14rem] items-start"
         style={{
-          gridTemplateColumns: '45% 1px 55%',
+          gridTemplateColumns: '100%',
         }}
       >
         <div
           className="grid gap-y-[.24rem]"
           style={{
-            gridTemplateColumns: '50% 50%',
+            gridTemplateColumns: '23% 23% 24% 30%',
           }}
         >
           <div className="flex items-center">
@@ -371,117 +391,6 @@ const DashboardItem = (props: {
             </div>
           </div>
         </div>
-
-        <div className="mt-[-.4rem] self-stretch w-[1px] bg-[#6C86AD33]" />
-
-        <div
-          className="grid gap-y-[.24rem] pl-[.38rem]"
-          style={{
-            gridTemplateColumns: '40% 40% 20%',
-          }}
-        >
-          <div>
-            <div className="flex items-center">
-              <Link
-                href={getEvmScanAccountUrl(lsdTokenConfig.symbol, address)}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">LSD Token Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEvmScanAccountUrl(
-                  lsdTokenConfig.symbol,
-                  getFactoryContract().address
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    LSD Factory Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEvmScanAccountUrl(
-                  lsdTokenConfig.symbol,
-                  dashboardInfo?._admin || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Owner Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <Link
-                href={getEvmScanAccountUrl(
-                  lsdTokenConfig.symbol,
-                  dashboardInfo?._stakePool || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Stake Pool Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEvmScanAccountUrl(
-                  lsdTokenConfig.symbol,
-                  dashboardInfo?._stakeManager || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Stake Manager Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          <div className="max-h-[1.62rem] overflow-auto">
-            <div className="text-text2">Validators:</div>
-
-            {dashboardInfo?._voters?.map((voter, index) => (
-              <div key={index} className="flex items-center mt-[.24rem]">
-                <Link
-                  href={getEvmScanValidatorUrl(lsdTokenConfig.symbol, voter)}
-                  target="_blank"
-                >
-                  <div className="flex item-center cursor-pointer">
-                    <div className="text-link mr-[.06rem]">
-                      Validator-{index + 1}
-                    </div>
-                    <Icomoon icon="share" size=".12rem" />
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       <Popover
@@ -513,11 +422,11 @@ const DashboardItem = (props: {
       >
         <div
           className={classNames(
-            'p-[.16rem] w-[2.6rem] pl-[.16rem] pr-[.24rem] py-[.04rem] leading-tight'
+            'w-[2.6rem] pl-[.16rem] text-[.14rem] pr-[.24rem] py-[.32rem]'
           )}
         >
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -529,9 +438,7 @@ const DashboardItem = (props: {
               settingsPopupState.close();
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Platform Fee
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Platform Fee</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -539,7 +446,7 @@ const DashboardItem = (props: {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -551,9 +458,7 @@ const DashboardItem = (props: {
               settingsPopupState.close();
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Stack Fee
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Stack Fee</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -561,7 +466,7 @@ const DashboardItem = (props: {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -573,7 +478,7 @@ const DashboardItem = (props: {
               setMinDepositModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Min Deposit Amount
             </div>
 
@@ -583,7 +488,7 @@ const DashboardItem = (props: {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -595,9 +500,7 @@ const DashboardItem = (props: {
               setAddValidatorModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Add Validator
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Add Validator</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -605,7 +508,7 @@ const DashboardItem = (props: {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -621,7 +524,7 @@ const DashboardItem = (props: {
               setRemoveValidatorModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Remove Validator
             </div>
 
@@ -629,6 +532,111 @@ const DashboardItem = (props: {
               <Image src={edit} layout="fill" alt="icon" />
             </div>
           </div>
+        </div>
+      </Popover>
+
+      <Popover
+        {...bindPopover(linksPopupState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#ffffff80',
+            border: '0.01rem solid #FFFFFF',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div className="w-[2.9rem] max-h-[4.4rem] overflow-auto hide-scrollbar pl-[.16rem] text-[.14rem] pr-[.24rem] py-[.32rem]">
+          <Link
+            href={getEvmScanAccountUrl(lsdTokenConfig.symbol, address)}
+            target="_blank"
+          >
+            <div className="justify-between flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">LSD Token Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+          <Link
+            href={getEvmScanAccountUrl(
+              lsdTokenConfig.symbol,
+              getFactoryContract().address
+            )}
+            target="_blank"
+          >
+            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">LSD Factory Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+          <Link
+            href={getEvmScanAccountUrl(
+              lsdTokenConfig.symbol,
+              dashboardInfo?._admin || ''
+            )}
+            target="_blank"
+          >
+            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Owner Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+          <Link
+            href={getEvmScanAccountUrl(
+              lsdTokenConfig.symbol,
+              dashboardInfo?._stakePool || ''
+            )}
+            target="_blank"
+          >
+            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Stake Pool Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+          <Link
+            href={getEvmScanAccountUrl(
+              lsdTokenConfig.symbol,
+              dashboardInfo?._stakeManager || ''
+            )}
+            target="_blank"
+          >
+            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Stake Manager Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          {dashboardInfo?._voters?.map((voter, index) => (
+            <div key={index}>
+              <Link
+                href={getEvmScanValidatorUrl(lsdTokenConfig.symbol, voter)}
+                target="_blank"
+              >
+                <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+                  <div className="text-link mr-[.06rem]">
+                    Validator-{index + 1}
+                  </div>
+                  <Icomoon icon="share" size=".12rem" />
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </Popover>
 

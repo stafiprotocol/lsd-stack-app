@@ -137,6 +137,10 @@ const DashboardItem = (props: { address: string }) => {
     variant: 'popover',
     popupId: 'setting',
   });
+  const linksPopupState = usePopupState({
+    variant: 'popover',
+    popupId: 'links',
+  });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [updateNodeFeeModalOpen, setUpdateNodeFeeModalOpen] = useState(false);
   const [stackFeeModalOpen, setStackFeeModalOpen] = useState(false);
@@ -311,7 +315,7 @@ const DashboardItem = (props: { address: string }) => {
   };
 
   return (
-    <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] p-[.24rem]">
+    <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] px-[.24rem] pt-[.32rem] pb-[.4rem]">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-[.34rem] h-[.34rem] relative mr-[.12rem]">
@@ -338,27 +342,43 @@ const DashboardItem = (props: { address: string }) => {
           )}
         </div>
 
-        <div
-          className={classNames(
-            'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
-            settingsPopupState.isOpen ? 'bg-color-selected' : ''
-          )}
-          {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
-        >
-          <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+        <div className="flex items-center">
+          <div
+            className={classNames(
+              'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
+              settingsPopupState.isOpen
+                ? 'bg-color-selected'
+                : 'bg-color-bgPage'
+            )}
+            {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
+          >
+            <div className="w-[.24rem] h-[.24rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className={classNames(
+              'cursor-pointer ml-[.16rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
+              linksPopupState.isOpen ? 'bg-color-selected' : 'bg-color-bgPage'
+            )}
+            {...(dashboardInfo ? bindTrigger(linksPopupState) : {})}
+          >
+            <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+          </div>
         </div>
       </div>
 
       <div
-        className="mt-[.17rem] grid text-[.14rem] items-start"
+        className="mt-[.24rem] grid text-[.14rem] items-start"
         style={{
-          gridTemplateColumns: '45% 1px 55%',
+          gridTemplateColumns: '100%',
         }}
       >
         <div
           className="grid gap-y-[.24rem]"
           style={{
-            gridTemplateColumns: '50% 50%',
+            gridTemplateColumns: '23% 23% 24% 30%',
           }}
         >
           <div className="flex items-center">
@@ -445,160 +465,6 @@ const DashboardItem = (props: { address: string }) => {
             </div>
           </div>
         </div>
-
-        <div className="mt-[-.4rem] self-stretch w-[1px] bg-[#6C86AD33]" />
-
-        <div
-          className="grid gap-y-[.24rem] pl-[.38rem]"
-          style={{
-            gridTemplateColumns: '40% 40% 20%',
-          }}
-        >
-          <div>
-            <div className="flex items-center">
-              <Link href={getEtherScanAccountUrl(address)} target="_blank">
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">LSD Token Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(getFactoryContract().address)}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    LSD Factory Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(dashboardInfo?._admin || '')}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Owner Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(dashboardInfo?._feePool || '')}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Fee Pool Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(dashboardInfo?._userDeposit || '')}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    User Deposit Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(
-                  dashboardInfo?._networkProposal || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Network Proposal Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(
-                  dashboardInfo?._networkWithdraw || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Network Withdraw Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(dashboardInfo?._nodeDeposit || '')}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Node Deposit Address
-                  </div>
-
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getEtherScanAccountUrl(
-                  dashboardInfo?._networkBalances || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Network Balances Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          <div className="max-h-[1.62rem] overflow-auto">
-            <div className="text-text2">Voters:</div>
-
-            {dashboardInfo?._voters?.map((voter, index) => (
-              <div key={index} className="flex items-center mt-[.24rem]">
-                <Link href={getEtherScanAccountUrl(voter)} target="_blank">
-                  <div className="flex item-center cursor-pointer">
-                    <div className="text-link mr-[.06rem]">
-                      Voter-{index + 1}
-                    </div>
-                    <Icomoon icon="share" size=".12rem" />
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
       <Popover
@@ -630,11 +496,11 @@ const DashboardItem = (props: { address: string }) => {
       >
         <div
           className={classNames(
-            'p-[.16rem] w-[2.6rem] pl-[.16rem] pr-[.24rem] py-[.04rem] leading-tight'
+            'w-[2.6rem] pl-[.16rem] text-[.14rem] pr-[.24rem] py-[.32rem]'
           )}
         >
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -646,7 +512,7 @@ const DashboardItem = (props: { address: string }) => {
               settingsPopupState.close();
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Node & Platform Fees
             </div>
 
@@ -656,7 +522,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -668,9 +534,7 @@ const DashboardItem = (props: { address: string }) => {
               setStackFeeModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Stack Fee
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Stack Fee</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -678,7 +542,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -690,7 +554,7 @@ const DashboardItem = (props: { address: string }) => {
               setMinDepositModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Min Deposit Amount
             </div>
 
@@ -700,7 +564,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer hidden items-center justify-between"
+            className="mt-[.24rem] cursor-pointer hidden items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -712,7 +576,7 @@ const DashboardItem = (props: { address: string }) => {
               setRewardPeriodModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Reward Update Period
             </div>
 
@@ -722,7 +586,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -734,9 +598,7 @@ const DashboardItem = (props: { address: string }) => {
               setVotersModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Voters
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Voters</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -744,7 +606,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -756,7 +618,7 @@ const DashboardItem = (props: { address: string }) => {
               setTrustEnabledModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Enable/Disable Trust Node
             </div>
 
@@ -766,7 +628,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -778,7 +640,7 @@ const DashboardItem = (props: { address: string }) => {
               setSoloEnabledModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Enable/Disable Solo Node
             </div>
 
@@ -788,7 +650,7 @@ const DashboardItem = (props: { address: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== metaMaskAccount) {
                 snackbarUtil.error(
@@ -800,7 +662,7 @@ const DashboardItem = (props: { address: string }) => {
               setSoloDepositModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Solo Node Deposit Amount
             </div>
 
@@ -808,6 +670,147 @@ const DashboardItem = (props: { address: string }) => {
               <Image src={edit} layout="fill" alt="icon" />
             </div>
           </div>
+        </div>
+      </Popover>
+
+      <Popover
+        {...bindPopover(linksPopupState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#ffffff80',
+            border: '0.01rem solid #FFFFFF',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div className="w-[2.9rem] max-h-[4.4rem] overflow-auto hide-scrollbar pl-[.16rem] pr-[.24rem] py-[.32rem] text-[.14rem]">
+          <Link href={getEtherScanAccountUrl(address)} target="_blank">
+            <div className="flex items-center justify-between">
+              <div className="text-link mr-[.06rem]">LSD Token Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(getFactoryContract().address)}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">LSD Factory Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._admin || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Owner Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._feePool || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Fee Pool Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._userDeposit || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex item-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">User Deposit Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._networkProposal || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">
+                Network Proposal Address
+              </div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._networkWithdraw || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">
+                Network Withdraw Address
+              </div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._nodeDeposit || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex item-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Node Deposit Address</div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getEtherScanAccountUrl(dashboardInfo?._networkBalances || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between flex item-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">
+                Network Balances Address
+              </div>
+
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          {dashboardInfo?._voters?.map((voter, index) => (
+            <div key={index} className="">
+              <Link href={getEtherScanAccountUrl(voter)} target="_blank">
+                <div className="mt-[.24rem] justify-between flex items-center cursor-pointer">
+                  <div className="text-link mr-[.06rem]">Voter-{index + 1}</div>
+                  <Icomoon icon="share" size=".12rem" />
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </Popover>
 

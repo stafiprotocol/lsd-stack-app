@@ -1,6 +1,5 @@
 import { Popover } from '@mui/material';
 import classNames from 'classnames';
-import { NeutronDashboard } from 'components/NeutronDashboard';
 import { CustomButton } from 'components/common/CustomButton';
 import { FaqCard } from 'components/common/FaqCard';
 import { FormCard } from 'components/common/FormCard';
@@ -13,20 +12,17 @@ import { EVM_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch } from 'hooks/common';
 import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
 import { EvmLsdTokenConfig } from 'interfaces/common';
-import ArrowDownImg from 'public/images/arrow_down_gray.svg';
 import {
   bindPopover,
   bindTrigger,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import empty from 'public/images/empty_bird.svg';
+import ArrowDownImg from 'public/images/arrow_down_gray.svg';
 import others from 'public/images/tokens/others.svg';
 import { useEffect, useState } from 'react';
 import { setCreationStepInfo } from 'redux/reducers/AppSlice';
-import { connectKeplrAccount } from 'redux/reducers/WalletSlice';
 import { openLink } from 'utils/commonUtils';
 
 const CosmosPage = () => {
@@ -234,59 +230,6 @@ const CosmosPage = () => {
               </>
             </FaqCard>
           </div>
-        </div>
-      </div>
-
-      <div className="bg-bgPage pt-[.56rem] pb-[1.05rem] hidden">
-        <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
-          {neutronChainAccount?.bech32Address ? (
-            <NeutronDashboard />
-          ) : (
-            <div className="flex flex-col items-center">
-              <div
-                className="relative"
-                style={{
-                  width: '.4rem',
-                  height: '.4rem',
-                }}
-              >
-                <Image src={empty} alt="empty" layout="fill" />
-              </div>
-
-              <div className="mt-[.16rem] text-[.14rem] text-color-text2">
-                Please connect your wallet to view your LSD deploy history
-              </div>
-
-              <div className="mt-[.32rem] flex items-center">
-                <div
-                  className="relative cursor-pointer"
-                  onClick={() => {
-                    dispatch(connectKeplrAccount([neutronChainConfig]));
-                  }}
-                >
-                  <CustomButton
-                    type="primary"
-                    width="1.62rem"
-                    className="opacity-50"
-                  ></CustomButton>
-
-                  <div className="text-[.16rem] text-text1 absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center">
-                    Connect Wallet
-                  </div>
-                </div>
-
-                <Link href={getDocHost()} target="_blank">
-                  <CustomButton
-                    type="stroke"
-                    width="1.62rem"
-                    className="ml-[.32rem]"
-                  >
-                    View Doc
-                  </CustomButton>
-                </Link>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

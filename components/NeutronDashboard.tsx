@@ -125,6 +125,10 @@ const DashboardItem = (props: { ica: string }) => {
     variant: 'popover',
     popupId: 'setting',
   });
+  const linksPopupState = usePopupState({
+    variant: 'popover',
+    popupId: 'links',
+  });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [updatePlatformFeeModalOpen, setUpdatePlatformFeeModalOpen] =
     useState(false);
@@ -210,7 +214,7 @@ const DashboardItem = (props: { ica: string }) => {
   };
 
   return (
-    <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] p-[.24rem]">
+    <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] px-[.24rem] pt-[.32rem] pb-[.4rem]">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-[.34rem] h-[.34rem] relative mr-[.12rem]">
@@ -242,27 +246,43 @@ const DashboardItem = (props: { ica: string }) => {
           )}
         </div>
 
-        <div
-          className={classNames(
-            'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
-            settingsPopupState.isOpen ? 'bg-color-selected' : ''
-          )}
-          {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
-        >
-          <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+        <div className="flex items-center">
+          <div
+            className={classNames(
+              'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
+              settingsPopupState.isOpen
+                ? 'bg-color-selected'
+                : 'bg-color-bgPage'
+            )}
+            {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
+          >
+            <div className="w-[.24rem] h-[.24rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className={classNames(
+              'cursor-pointer ml-[.16rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
+              linksPopupState.isOpen ? 'bg-color-selected' : 'bg-color-bgPage'
+            )}
+            {...(dashboardInfo ? bindTrigger(linksPopupState) : {})}
+          >
+            <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+          </div>
         </div>
       </div>
 
       <div
         className="mt-[.17rem] grid text-[.14rem] items-start"
         style={{
-          gridTemplateColumns: '55% 1px 45%',
+          gridTemplateColumns: '100%',
         }}
       >
         <div
           className="grid gap-y-[.24rem]"
           style={{
-            gridTemplateColumns: '50% 50%',
+            gridTemplateColumns: '23% 23% 24% 30%',
           }}
         >
           <div className=" items-center hidden">
@@ -329,91 +349,6 @@ const DashboardItem = (props: { ica: string }) => {
             </div>
           </div>
         </div>
-
-        <div className="mt-[-.4rem] self-stretch w-[1px] bg-[#6C86AD33]" />
-
-        <div
-          className="grid gap-y-[.24rem] pl-[.38rem]"
-          style={{
-            gridTemplateColumns: '40% 40% 20%',
-          }}
-        >
-          <div>
-            <div className="flex items-center">
-              <Link
-                href={getNeutronExplorerContractUrl(
-                  dashboardInfo?._lsdToken || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">LSD Token Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getNeutronExplorerAccountUrl(dashboardInfo?._admin || '')}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Owner Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getNeutronExplorerAccountUrl(
-                  dashboardInfo?._platformFeeReceiver || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Fee Receiver Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center">
-              <Link
-                href={getCosmosExplorerAccountUrl(
-                  dashboardInfo?._poolAddress || ''
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">Pool Address</div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-
-            <div className="mt-[.24rem] flex items-center">
-              <Link
-                href={getNeutronExplorerContractUrl(
-                  getNeutronStakeManagerContract()
-                )}
-                target="_blank"
-              >
-                <div className="flex item-center cursor-pointer">
-                  <div className="text-link mr-[.06rem]">
-                    Stake Manager Address
-                  </div>
-                  <Icomoon icon="share" size=".12rem" />
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
       </div>
 
       <Popover
@@ -445,11 +380,11 @@ const DashboardItem = (props: { ica: string }) => {
       >
         <div
           className={classNames(
-            'p-[.16rem] w-[2.6rem] pl-[.16rem] pr-[.24rem] py-[.04rem] leading-tight'
+            'w-[2.6rem] pl-[.16rem] text-[.14rem] pr-[.24rem] py-[.32rem]'
           )}
         >
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -473,9 +408,7 @@ const DashboardItem = (props: { ica: string }) => {
               settingsPopupState.close();
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Platform Fee
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Platform Fee</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -483,7 +416,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -507,7 +440,7 @@ const DashboardItem = (props: { ica: string }) => {
               settingsPopupState.close();
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Platform Fee Receiver
             </div>
 
@@ -517,7 +450,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer items-center justify-between hidden"
+            className="mt-[.24rem] cursor-pointer items-center justify-between hidden"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -541,7 +474,7 @@ const DashboardItem = (props: { ica: string }) => {
               settingsPopupState.close();
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Unbond Commission Fee
             </div>
 
@@ -551,7 +484,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer hidden items-center justify-between"
+            className="mt-[.24rem] cursor-pointer hidden items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -575,9 +508,7 @@ const DashboardItem = (props: { ica: string }) => {
               setEraSecondsModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              Era Seconds
-            </div>
+            <div className="text-color-text2 text-[.14rem]">Era Seconds</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -585,7 +516,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -609,7 +540,7 @@ const DashboardItem = (props: { ica: string }) => {
               setMinDepositModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
+            <div className="text-color-text2 text-[.14rem]">
               Min Deposit Amount
             </div>
 
@@ -619,7 +550,7 @@ const DashboardItem = (props: { ica: string }) => {
           </div>
 
           <div
-            className="py-[.1rem] cursor-pointer flex items-center justify-between"
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
               if (dashboardInfo?._admin !== neutronAccount?.bech32Address) {
                 snackbarUtil.error(
@@ -643,14 +574,98 @@ const DashboardItem = (props: { ica: string }) => {
               setLsmSupportModalOpen(true);
             }}
           >
-            <div className="ml-[.12rem] text-color-text2 text-[.14rem]">
-              LSM Support
-            </div>
+            <div className="text-color-text2 text-[.14rem]">LSM Support</div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
             </div>
           </div>
+        </div>
+      </Popover>
+
+      <Popover
+        {...bindPopover(linksPopupState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#ffffff80',
+            border: '0.01rem solid #FFFFFF',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div className="w-[2.9rem] max-h-[4.4rem] overflow-auto hide-scrollbar pl-[.16rem] pr-[.24rem] py-[.32rem] text-[.14rem]">
+          <Link
+            href={getNeutronExplorerContractUrl(dashboardInfo?._lsdToken || '')}
+            target="_blank"
+          >
+            <div className="flex justify-between items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">LSD Token Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getNeutronExplorerAccountUrl(dashboardInfo?._admin || '')}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between items-center flex cursor-pointer">
+              <div className="text-link mr-[.06rem]">Owner Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getNeutronExplorerAccountUrl(
+              dashboardInfo?._platformFeeReceiver || ''
+            )}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between items-center flex cursor-pointer">
+              <div className="text-link mr-[.06rem]">Fee Receiver Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getCosmosExplorerAccountUrl(
+              dashboardInfo?._poolAddress || ''
+            )}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between items-center flex cursor-pointer">
+              <div className="text-link mr-[.06rem]">Pool Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link
+            href={getNeutronExplorerContractUrl(
+              getNeutronStakeManagerContract()
+            )}
+            target="_blank"
+          >
+            <div className="mt-[.24rem] justify-between items-center flex cursor-pointer">
+              <div className="text-link mr-[.06rem]">Stake Manager Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
         </div>
       </Popover>
 
