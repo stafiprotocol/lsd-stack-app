@@ -98,16 +98,18 @@ export const ProfileModulePage = (props: Props) => {
                 />
               )}
 
-              <ModuleTableItem
-                type="point"
-                index={eco !== AppEco.Cosmos ? 3 * index : 3 * index + 1}
-                lsdHistoryItem={item}
-                eco={eco}
-              />
+              {eco !== AppEco.Cosmos && (
+                <ModuleTableItem
+                  type="point"
+                  index={3 * index}
+                  lsdHistoryItem={item}
+                  eco={eco}
+                />
+              )}
 
               <ModuleTableItem
                 type="frontend"
-                index={eco !== AppEco.Cosmos ? 3 * index : 3 * index + 2}
+                index={3 * index + 1}
                 lsdHistoryItem={item}
                 eco={eco}
               />
