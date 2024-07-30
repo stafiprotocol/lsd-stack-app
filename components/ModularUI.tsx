@@ -40,21 +40,21 @@ export const ModularUI = () => {
             <LsdCaseCard
               title="Validator Selection AI Agent"
               text="Functions including simulate result and set parameters"
-              url={getEthStackAppUrl()}
+              url="https://www.stafi.io/modules/validator"
             />
 
             <LsdCaseCard
               title="Point System"
               text="Point function, customized point emission rules"
-              url={getEthStackAppUrl()}
               className="mt-[.16rem]"
+              url="https://www.stafi.io/modules/point/"
             />
 
             <LsdCaseCard
               title="Frontend"
               text="Frontend preview and host tutorial"
-              url={getEthStackAppUrl()}
               className="mt-[.16rem]"
+              url="https://www.stafi.io/modules/frontend/"
             />
           </div>
 
