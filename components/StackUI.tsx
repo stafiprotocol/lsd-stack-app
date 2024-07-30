@@ -17,6 +17,7 @@ import {
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import EcoEthImg from 'public/images/eco/eth.png';
@@ -88,14 +89,16 @@ export const StackUI = () => {
               )}
 
               {!showSelectEco && (
-                <div
-                  className={classNames(
-                    robotoSemiBold.className,
-                    'mx-[.3rem] flex items-center cursor-pointer text-text1'
-                  )}
-                >
-                  Learn More
-                </div>
+                <Link href="https://lsaas-docs.stafi.io" target="_blank">
+                  <div
+                    className={classNames(
+                      robotoSemiBold.className,
+                      'mx-[.3rem] flex items-center cursor-pointer text-text1'
+                    )}
+                  >
+                    Learn More
+                  </div>
+                </Link>
               )}
             </div>
 

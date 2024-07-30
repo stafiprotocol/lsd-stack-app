@@ -22,6 +22,7 @@ import { setAppEco } from 'redux/reducers/AppSlice';
 import { RootState } from 'redux/store';
 import { LsdCaseCard } from './common/LsdCaseCard';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export const ModularUI = () => {
   const [showSelectEco, setShowSelectEco] = useState(false);
@@ -103,14 +104,19 @@ export const ModularUI = () => {
                 </div>
               )}
 
-              <div
-                className={classNames(
-                  robotoSemiBold.className,
-                  'mx-[.3rem] flex items-center cursor-pointer text-text1'
-                )}
+              <Link
+                href="https://lsaas-docs.stafi.io/docs/modules/introduction.html"
+                target="_blank"
               >
-                Learn More
-              </div>
+                <div
+                  className={classNames(
+                    robotoSemiBold.className,
+                    'mx-[.3rem] flex items-center cursor-pointer text-text1'
+                  )}
+                >
+                  Learn More
+                </div>
+              </Link>
             </div>
 
             {/* <div className="mt-[.68rem]">

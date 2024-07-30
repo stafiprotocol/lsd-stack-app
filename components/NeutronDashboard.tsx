@@ -213,6 +213,10 @@ const DashboardItem = (props: { ica: string }) => {
     dispatch(connectKeplrAccount([neutronChainConfig]));
   };
 
+  if (!dashboardInfo) {
+    return null;
+  }
+
   return (
     <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] px-[.24rem] pt-[.32rem] pb-[.4rem]">
       <div className="flex justify-between items-center">
