@@ -66,3 +66,5 @@ export const LRT_CREATION_STEPS = [
   'Deploy',
   'Module',
 ];
+
+export const SOL_CREATION_STEPS = ['SOL Eco', 'Parameters', 'Deploy', 'Module'];

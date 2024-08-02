@@ -1,42 +1,44 @@
 import { Popover } from '@mui/material';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import classNames from 'classnames';
+import { CreationStep } from 'components/common/CreationStep';
 import { CustomButton } from 'components/common/CustomButton';
+import { LsaasSidebar } from 'components/modal/LsaasSidebar';
+import { getDocHost } from 'config/common';
+import { neutronChainConfig } from 'config/cosmos/chain';
+import { getEthereumChainId } from 'config/eth/env';
+import { evmLsdTokens } from 'config/evm';
+import { robotoBold } from 'config/font';
+import { ETH_STANDARD_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
+import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
+import { useUserAddress } from 'hooks/useUserAddress';
+import { AppEco } from 'interfaces/common';
 import {
   bindPopover,
   bindTrigger,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import Image from 'next/image';
-import defaultAvatar from 'public/images/default_avatar.png';
-import ethereumLogo from 'public/images/ethereum.png';
-import neutronLogo from 'public/images/neutron.png';
-import { getShortAddress } from 'utils/stringUtils';
-import { getEthereumChainId } from 'config/eth/env';
-import LogoTextImg from 'public/images/logo_text.svg';
-import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
-import { CreationStep } from 'components/common/CreationStep';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import BackImg from 'public/images/back.svg';
-import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
-import { ETH_STANDARD_CREATION_STEPS } from 'constants/common';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { RootState } from 'redux/store';
+import defaultAvatar from 'public/images/default_avatar.png';
+import ethereumLogo from 'public/images/ethereum.png';
+import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
+import LogoTextImg from 'public/images/logo_text.svg';
+import neutronLogo from 'public/images/neutron.png';
 import { useMemo } from 'react';
-import { useCosmosChainAccount } from 'hooks/useCosmosChainAccount';
-import { neutronChainConfig } from 'config/cosmos/chain';
-import { AppEco } from 'interfaces/common';
+import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
 import {
   connectKeplrAccount,
   disconnectWallet,
 } from 'redux/reducers/WalletSlice';
-import { useSelector } from 'react-redux';
-import { getDocHost } from 'config/common';
-import { LsaasSidebar } from 'components/modal/LsaasSidebar';
-import { evmLsdTokens } from 'config/evm';
-import { robotoBold, robotoSemiBold } from 'config/font';
+import { RootState } from 'redux/store';
 import { getEcoTokenIcon } from 'utils/iconUtils';
-import Link from 'next/link';
+import { getShortAddress } from 'utils/stringUtils';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
 
 const Navbar = () => {
   const router = useRouter();
@@ -47,15 +49,7 @@ const Navbar = () => {
   );
   // console.log({ creationStepInfo });
 
-  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
-  const { address } = useAccount();
-
-  const walletNotConnected = useMemo(() => {
-    if (appEco === AppEco.Cosmos) {
-      return !neutronChainAccount?.bech32Address;
-    }
-    return !address;
-  }, [appEco, neutronChainAccount, address]);
+  const userAddress = useUserAddress(appEco);
 
   const isProfile = router.pathname.includes('/profile');
 
@@ -145,7 +139,7 @@ const Navbar = () => {
 
           <div className={classNames('flex items-center')}>
             <div className={classNames('ml-[.16rem]')}>
-              {walletNotConnected ? <ConnectButton /> : <UserInfo />}
+              {!userAddress ? <ConnectButton /> : <UserInfo />}
             </div>
           </div>
         </div>
@@ -275,18 +269,9 @@ const UserInfo = () => {
       appEco: state.app.appEco,
     };
   });
-  const neutronChainAccount = useCosmosChainAccount(neutronChainConfig.chainId);
-  // const { metaMaskAccount } = useWalletAccount();
-
-  const { address } = useAccount();
+  const userAddress = useUserAddress(appEco);
   const { disconnectAsync } = useDisconnect();
-
-  const displayAddress = useMemo(() => {
-    if (appEco === AppEco.Cosmos) {
-      return neutronChainAccount?.bech32Address;
-    }
-    return address;
-  }, [appEco, neutronChainAccount, address]);
+  const { disconnect: solDisconnect } = useWallet();
 
   const addressPopupState = usePopupState({
     variant: 'popover',
@@ -318,6 +303,8 @@ const UserInfo = () => {
   const clickDisconnectWallet = async () => {
     if (appEco === AppEco.Cosmos) {
       dispatch(disconnectWallet());
+    } else if (appEco === AppEco.Sol) {
+      solDisconnect();
     } else {
       await disconnectAsync();
     }
@@ -375,7 +362,7 @@ const UserInfo = () => {
             addressPopupState.isOpen ? 'text-text1 ' : 'text-color-text1'
           )}
         >
-          {getShortAddress(displayAddress, 5)}
+          {getShortAddress(userAddress, 5)}
         </div>
       </div>
 
@@ -411,7 +398,7 @@ const UserInfo = () => {
           <div
             className="cursor-pointer flex items-center justify-between"
             onClick={() => {
-              navigator.clipboard.writeText(displayAddress || '').then(() => {
+              navigator.clipboard.writeText(userAddress || '').then(() => {
                 addressPopupState.close();
               });
             }}
@@ -453,6 +440,7 @@ const ConnectButton = () => {
     };
   });
   const { connectors, connectAsync } = useConnect();
+  const solWalletModal = useWalletModal();
 
   const clickConnectWallet = async () => {
     if (
@@ -460,7 +448,7 @@ const ConnectButton = () => {
       appEco === AppEco.Evm ||
       appEco === AppEco.Lrt
     ) {
-      console.log({ connectors });
+      // console.log({ connectors });
       const metamaskConnector = connectors.find((c) => c.id === 'injected');
       if (!metamaskConnector) {
         return;
@@ -489,6 +477,8 @@ const ConnectButton = () => {
       }
     } else if (appEco == AppEco.Cosmos) {
       dispatch(connectKeplrAccount([neutronChainConfig]));
+    } else if (appEco == AppEco.Sol) {
+      solWalletModal.setVisible(true);
     }
   };
 

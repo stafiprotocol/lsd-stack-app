@@ -44,6 +44,8 @@ export const SetPointSystemModal = ({
       ? 'ATOM'
       : eco === AppEco.Lrt
       ? 'ETH'
+      : eco === AppEco.Sol
+      ? 'SOL'
       : '';
 
   useEffect(() => {

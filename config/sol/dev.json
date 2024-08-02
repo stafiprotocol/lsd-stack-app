@@ -1,0 +1,9 @@
+{
+  "programs": {
+    "lsdProgramId": "8ufkkVBM6s52WRnhdF2yUCu1eNPnS123SoVKv8wyBFAp",
+    "stackProgramId": "2gC8NuySDmRF7bjqnnJb9gJYSU4rtwNXqDShYbcgrCBF"
+  },
+  "explorer": "https://explorer.solana.com",
+  "restEndpoint": "https://solana-dev-rpc.stafi.io",
+  "wsEndpoint": "wss://solana-dev-wss.stafi.io"
+}

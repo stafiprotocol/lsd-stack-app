@@ -1,19 +1,31 @@
 import { Fade, ThemeProvider, styled } from '@mui/material';
+import '@solana/wallet-adapter-react-ui/styles.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from 'components/layout/Layout';
+import { wagmiConfig } from 'config/walletConnect';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import { SnackbarProvider } from 'notistack';
+import { MaterialDesignContent, SnackbarProvider } from 'notistack';
 import { ReactElement, ReactNode, useEffect, useMemo } from 'react';
 import { Provider } from 'react-redux';
 import { store } from 'redux/store';
+import 'styles/globals.css';
 import { theme } from 'styles/material-ui-theme';
 import { SnackbarUtilsConfigurator } from 'utils/snackbarUtils';
-import 'styles/globals.css';
-
-import { MaterialDesignContent } from 'notistack';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { WagmiConfig } from 'wagmi';
-import { wagmiConfig } from 'config/walletConnect';
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from '@solana/wallet-adapter-react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
+import {
+  WalletModalProvider,
+  WalletDisconnectButton,
+  WalletMultiButton,
+  useWalletModal,
+} from '@solana/wallet-adapter-react-ui';
+import { solanaRestEndpoint, solanaWsEndpoint } from 'config/sol';
 
 const queryClient = new QueryClient();
 
@@ -98,8 +110,19 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
       >
         <WagmiConfig config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
-            <SnackbarUtilsConfigurator />
-            <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+            <ConnectionProvider
+              endpoint={solanaRestEndpoint}
+              config={{
+                wsEndpoint: solanaWsEndpoint,
+              }}
+            >
+              <WalletProvider wallets={[]} autoConnect>
+                <WalletModalProvider>
+                  <SnackbarUtilsConfigurator />
+                  <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+                </WalletModalProvider>
+              </WalletProvider>
+            </ConnectionProvider>
           </QueryClientProvider>
         </WagmiConfig>
       </SnackbarProvider>

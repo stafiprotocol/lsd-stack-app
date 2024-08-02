@@ -46,9 +46,12 @@ export const ConfirmModal = ({ open, close, paramList, create }: Props) => {
           {paramList.map((param, index) => (
             <div
               key={index}
-              className="text-[.16rem] leading-[.18rem] font-[400] text-text2 mb-[.16rem] text-center"
+              className="px-[.32rem] text-[.16rem] leading-[.18rem] font-[400] text-text2 mb-[.16rem] flex items-start"
             >
-              {param.name}: <span className="font-[700]">{param.value}</span>
+              <div className="w-[1.3rem] text-end">{param.name}:</div>
+              <span className="ml-[.12rem] font-[700] break-all">
+                {param.value}
+              </span>
             </div>
           ))}
         </div>
@@ -58,6 +61,7 @@ export const ConfirmModal = ({ open, close, paramList, create }: Props) => {
             Yes, Sumbit the settings
           </CustomButton>
         </div>
+
         <div className="mt-[.16rem] mb-[.36rem] flex justify-center">
           <CustomButton
             width="5.31rem"

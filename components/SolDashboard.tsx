@@ -1,14 +1,20 @@
+import { AnchorProvider, BN, Program, setProvider } from '@coral-xyz/anchor';
 import { Popover } from '@mui/material';
-import classNames from 'classnames';
 import {
-  getFactoryContract,
-  getLsdTokenContractAbi,
-} from 'config/eth/contract';
-import { getEvmFactoryAbi, getEvmStakeManagerAbi } from 'config/evm';
-import { getEvmScanAccountUrl, getEvmScanValidatorUrl } from 'config/explorer';
+  useAnchorWallet,
+  useConnection,
+  useWallet,
+} from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { PublicKey } from '@solana/web3.js';
+import classNames from 'classnames';
+import { getSolanaScanAccountUrl } from 'config/explorer';
 import { robotoBold, robotoSemiBold } from 'config/font';
-import { useWalletAccount } from 'hooks/useWalletAccount';
-import { EvmLsdTokenConfig } from 'interfaces/common';
+import { solanaPrograms } from 'config/sol';
+import { IDL, LsdProgram } from 'config/sol/idl/lsd_program';
+import { useDebouncedEffect } from 'hooks/useDebouncedEffect';
+import { useUserAddress } from 'hooks/useUserAddress';
+import { AppEco } from 'interfaces/common';
 import {
   bindPopover,
   bindTrigger,
@@ -18,63 +24,69 @@ import Image from 'next/image';
 import Link from 'next/link';
 import cup from 'public/images/cup.svg';
 import edit from 'public/images/edit.svg';
-import eth from 'public/images/tokens/eth.svg';
-import { useCallback, useEffect, useState } from 'react';
-import { formatNumber } from 'utils/numberUtils';
+import sol from 'public/images/tokens/SOL.svg';
+import { useCallback, useState } from 'react';
+import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
-import { formatDuration } from 'utils/timeUtils';
-import { getWeb3 } from 'utils/web3Utils';
-import { formatEther } from 'viem';
-import { useConnect, useSwitchNetwork } from 'wagmi';
 import { DataLoading } from './common/DataLoading';
 import { EmptyContent } from './common/EmptyContent';
 import { Icomoon } from './icon/Icomoon';
-import { AddEvmValidatorModal } from './modal/evm/AddEvmValidatorModal';
-import { RemoveEvmValidatorModal } from './modal/evm/RemoveEvmValidatorModal';
-import { UpdateEvmFactoryFeeModal } from './modal/evm/UpdateEvmFactoryFeeModal';
-import { UpdateEvmMinDepositModal } from './modal/evm/UpdateEvmMinDepositModal';
-import { UpdateEvmPlatformFeeModal } from './modal/evm/UpdateEvmPlatformFeeModal';
-import { getInjectedConnector } from 'utils/commonUtils';
+import { UpdateSolPlatformFeeModal } from './modal/sol/UpdateSolPlatformFeeModal';
+import { UpdateSolMinDepositModal } from './modal/sol/UpdateSolMinDepositModal';
+import { AddSolValidatorModal } from './modal/sol/AddSolValidatorModal';
+import { RemoveSolValidatorModal } from './modal/sol/RemoveSolValidatorModal';
 
-interface Props {
-  lsdTokenConfig: EvmLsdTokenConfig;
-}
-
-export const EvmDashboard = (props: Props) => {
-  const { lsdTokenConfig } = props;
-  const { metaMaskAccount } = useWalletAccount();
-  const [lsdTokens, setLsdTokens] = useState<string[]>([]);
+export const SolDashboard = () => {
+  const { publicKey } = useWallet();
+  const { connection } = useConnection();
+  const [addresses, setAddresses] = useState<string[]>([]);
 
   const updateList = useCallback(async () => {
     try {
-      const web3 = getWeb3(lsdTokenConfig.rpc);
-      const contract = new web3.eth.Contract(
-        getEvmFactoryAbi(),
-        lsdTokenConfig.factoryContract,
-        { from: metaMaskAccount }
-      );
-      const lsdTokensOfCreater = await contract.methods
-        .lsdTokensOfCreater(metaMaskAccount)
-        .call();
-      setLsdTokens(lsdTokensOfCreater);
+      if (!publicKey) {
+        return;
+      }
+      let stakeManagerSeed;
+      let i = 0;
+      let stakeManagerPubkey;
+      let stakeManagerAddresses = [];
+      while (true) {
+        stakeManagerSeed = `stake_manager_seed_${i}`;
+        stakeManagerPubkey = await PublicKey.createWithSeed(
+          publicKey,
+          stakeManagerSeed,
+          new PublicKey(solanaPrograms.lsdProgramId)
+        );
+
+        const existAccountInfo = await connection.getAccountInfo(
+          stakeManagerPubkey
+        );
+        if (!existAccountInfo) {
+          break;
+        }
+        stakeManagerAddresses.push(stakeManagerPubkey.toString());
+        i++;
+      }
+
+      setAddresses(stakeManagerAddresses);
     } catch (err: any) {
       console.log({ err });
     }
-  }, [metaMaskAccount, lsdTokenConfig]);
+  }, [publicKey, connection]);
 
-  useEffect(() => {
-    updateList();
-  }, [updateList]);
+  useDebouncedEffect(
+    () => {
+      updateList();
+    },
+    [updateList],
+    1000
+  );
 
   return (
     <div>
-      {lsdTokens.length > 0 ? (
-        lsdTokens.map((address) => (
-          <DashboardItem
-            lsdTokenConfig={lsdTokenConfig}
-            key={address}
-            address={address}
-          />
+      {addresses.length > 0 ? (
+        addresses.map((address) => (
+          <DashboardItem key={address} address={address} />
         ))
       ) : (
         <div className="mt-[.56rem]">
@@ -109,25 +121,25 @@ export const EvmDashboard = (props: Props) => {
 
 interface DashboardInfo {
   symbol: string;
-  _stakeManager: string;
-  _stakePool: string;
-  _voters: string[];
-  _admin: string;
-  isEntrusted: boolean;
+  admin: PublicKey;
+  balancer: PublicKey;
+  lsdTokenMint: PublicKey;
+  stack: PublicKey;
+  validators: PublicKey[];
   formatPlatformFeeCommission: string;
-  formatFactoryFeeCommission: string;
-  eraSeconds: string;
+  formatStackCommissionRate: string;
   unbondingDuration: string;
   formatMinStakeAmount: string;
   latestEra: string;
 }
 
-const DashboardItem = (props: {
-  lsdTokenConfig: EvmLsdTokenConfig;
-  address: string;
-}) => {
-  const { address, lsdTokenConfig } = props;
-  const { metaMaskAccount } = useWalletAccount();
+const DashboardItem = (props: { address: string }) => {
+  const { address } = props;
+  const userAddress = useUserAddress(AppEco.Sol);
+  const wallet = useAnchorWallet();
+  const walletModal = useWalletModal();
+  const { connection } = useConnection();
+
   const settingsPopupState = usePopupState({
     variant: 'popover',
     popupId: 'setting',
@@ -138,7 +150,6 @@ const DashboardItem = (props: {
   });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [platformFeeModalOpen, setPlatformFeeModalOpen] = useState(false);
-  const [stackFeeModalOpen, setStackFeeModalOpen] = useState(false);
   const [minDepositModalOpen, setMinDepositModalOpen] = useState(false);
   const [addValidatorModalOpen, setAddValidatorModalOpen] = useState(false);
   const [removeValidatorModalOpen, setRemoveValidatorModalOpen] =
@@ -146,69 +157,36 @@ const DashboardItem = (props: {
 
   const updateData = useCallback(async () => {
     try {
-      const web3 = getWeb3(lsdTokenConfig.rpc);
-      const factoryContract = new web3.eth.Contract(
-        getEvmFactoryAbi(lsdTokenConfig.symbol),
-        lsdTokenConfig.factoryContract
-      );
-
-      const networkContractsOfLsdToken = await factoryContract.methods
-        .networkContractsOfLsdToken(address)
-        .call();
-      // console.log({ networkContractsOfLsdToken });
-
-      const entrustedLsdTokens: string[] = await factoryContract.methods
-        .getEntrustedLsdTokens()
-        .call();
-
-      const isEntrusted = entrustedLsdTokens.includes(address);
-
-      if (!networkContractsOfLsdToken) {
+      if (!wallet) {
         return;
       }
+      const { PublicKey } = await import('@solana/web3.js');
+      const provider = new AnchorProvider(connection, wallet, {});
+      setProvider(provider);
 
-      const stakeManagerContract = new web3.eth.Contract(
-        getEvmStakeManagerAbi(lsdTokenConfig.symbol),
-        networkContractsOfLsdToken._stakeManager
+      const programId = new PublicKey(solanaPrograms.lsdProgramId);
+      const program = new Program<LsdProgram>(IDL, programId);
+
+      const stakeManagerAccount = await program.account.stakeManager.fetch(
+        new PublicKey(address)
       );
-
-      const _voters = await stakeManagerContract.methods
-        .getValidatorsOf(networkContractsOfLsdToken._stakePool)
-        .call();
-
-      const adminAddress = await stakeManagerContract.methods.owner().call();
-
-      const lsdTokenContract = new web3.eth.Contract(
-        getLsdTokenContractAbi(),
-        address
-      );
-      const tokenSymbol = await lsdTokenContract.methods.symbol().call();
-
-      const protocolFeeCommission = await stakeManagerContract.methods
-        .protocolFeeCommission()
-        .call();
-      const factoryFeeCommission = await stakeManagerContract.methods
-        .factoryFeeCommission()
-        .call();
-      const eraSeconds = await stakeManagerContract.methods.eraSeconds().call();
-      const unbondingDuration = await stakeManagerContract.methods
-        .unbondingDuration()
-        .call();
-      const minStakeAmount = await stakeManagerContract.methods
-        .minStakeAmount()
-        .call();
-      const latestEra = await stakeManagerContract.methods.latestEra().call();
+      console.log({ stakeManagerAccount });
 
       setDashboardInfo({
-        symbol: tokenSymbol,
-        _admin: adminAddress,
-        _voters: [..._voters],
-        _stakeManager: networkContractsOfLsdToken._stakeManager,
-        _stakePool: networkContractsOfLsdToken._stakePool,
-        isEntrusted,
+        symbol: 'SOL LST',
+        admin: stakeManagerAccount.admin,
+        balancer: stakeManagerAccount.balancer,
+        stack: stakeManagerAccount.stack,
+        lsdTokenMint: stakeManagerAccount.lsdTokenMint,
+        validators: stakeManagerAccount.validators,
         formatPlatformFeeCommission: formatNumber(
           Number(
-            formatEther(BigInt(protocolFeeCommission) * BigInt(100))
+            chainAmountToHuman(
+              stakeManagerAccount.platformFeeCommission
+                .mul(new BN(100))
+                .toString(),
+              9
+            )
           ).toString(),
           {
             decimals: 2,
@@ -216,9 +194,14 @@ const DashboardItem = (props: {
             roundMode: 'round',
           }
         ),
-        formatFactoryFeeCommission: formatNumber(
+        formatStackCommissionRate: formatNumber(
           Number(
-            formatEther(BigInt(factoryFeeCommission) * BigInt(100))
+            chainAmountToHuman(
+              stakeManagerAccount.stackFeeCommission
+                .mul(new BN(100))
+                .toString(),
+              9
+            )
           ).toString(),
           {
             decimals: 2,
@@ -226,49 +209,31 @@ const DashboardItem = (props: {
             roundMode: 'round',
           }
         ),
-        eraSeconds,
-        unbondingDuration,
         formatMinStakeAmount: formatNumber(
-          formatEther(BigInt(minStakeAmount)).toString(),
+          chainAmountToHuman(stakeManagerAccount.minStakeAmount.toString(), 9),
           {
             decimals: 6,
             fixedDecimals: false,
           }
         ),
-        latestEra,
+        unbondingDuration: stakeManagerAccount.unbondingDuration.toString(),
+        latestEra: stakeManagerAccount.latestEra.toString(),
       });
     } catch (err: any) {
       console.log({ err });
     }
-  }, [address, lsdTokenConfig]);
+  }, [address, connection, wallet]);
 
-  useEffect(() => {
-    updateData();
-  }, [updateData]);
-
-  const { connectors, connectAsync } = useConnect();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  useDebouncedEffect(
+    () => {
+      updateData();
+    },
+    [updateData],
+    1000
+  );
 
   const connectWallet = async () => {
-    if (metaMaskAccount && switchNetworkAsync) {
-      await switchNetworkAsync(lsdTokenConfig.chainId);
-      return;
-    }
-    const metamaskConnector = getInjectedConnector(connectors);
-    if (!metamaskConnector) {
-      return;
-    }
-    try {
-      await connectAsync({
-        chainId: lsdTokenConfig.chainId,
-        connector: metamaskConnector,
-      });
-    } catch (err: any) {
-      if (err.code === 4001) {
-      } else {
-        console.error(err);
-      }
-    }
+    walletModal.setVisible(true);
   };
 
   return (
@@ -276,14 +241,11 @@ const DashboardItem = (props: {
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-[.34rem] h-[.34rem] relative mr-[.12rem]">
-            <Image src={lsdTokenConfig.icon} layout="fill" alt="icon" />
+            <Image src={sol} layout="fill" alt="icon" />
           </div>
 
           {dashboardInfo ? (
-            <Link
-              href={getEvmScanAccountUrl(lsdTokenConfig.symbol, address)}
-              target="_blank"
-            >
+            <Link href={getSolanaScanAccountUrl(address)} target="_blank">
               <div className="flex items-center cursor-pointer">
                 <div
                   className={classNames(
@@ -352,35 +314,28 @@ const DashboardItem = (props: {
           <div className="flex items-center">
             <div className="text-text2">Stack Fee Commission:</div>
             <div className="text-text1 ml-[.06rem] ">
-              {dashboardInfo ? dashboardInfo.formatFactoryFeeCommission : '--'}%
+              {dashboardInfo ? dashboardInfo.formatStackCommissionRate : '--'}%
             </div>
           </div>
 
           <div className="flex items-center">
             <div className="text-text2">Min Deposit Amount:</div>
             <div className="text-text1 ml-[.06rem] ">
-              {dashboardInfo ? dashboardInfo.formatMinStakeAmount : '--'}{' '}
-              {lsdTokenConfig.symbol}
+              {dashboardInfo ? dashboardInfo.formatMinStakeAmount : '--'} SOL
             </div>
           </div>
 
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <div className="text-text2">Era Seconds:</div>
             <div className="text-text1 ml-[.06rem] ">
               {dashboardInfo ? dashboardInfo.eraSeconds : '--'}
             </div>
-          </div>
+          </div> */}
 
           <div className="flex items-center">
             <div className="text-text2">Unbonding Duration:</div>
             <div className="text-text1 ml-[.06rem] ">
-              {dashboardInfo
-                ? formatDuration(
-                    Number(dashboardInfo.unbondingDuration) *
-                      Number(dashboardInfo.eraSeconds) *
-                      1000
-                  )
-                : '--'}
+              {dashboardInfo ? Number(dashboardInfo.unbondingDuration) : '--'}
             </div>
           </div>
 
@@ -428,14 +383,14 @@ const DashboardItem = (props: {
           <div
             className="cursor-pointer flex items-center justify-between"
             onClick={() => {
-              if (dashboardInfo?._admin !== metaMaskAccount) {
+              if (dashboardInfo?.admin?.toString() !== userAddress) {
                 snackbarUtil.error(
                   'Please use the owner address to update parameters.'
                 );
                 return;
               }
-              setPlatformFeeModalOpen(true);
               settingsPopupState.close();
+              setPlatformFeeModalOpen(true);
             }}
           >
             <div className="text-color-text2 text-[.14rem]">Platform Fee</div>
@@ -448,27 +403,7 @@ const DashboardItem = (props: {
           <div
             className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
-              if (dashboardInfo?._admin !== metaMaskAccount) {
-                snackbarUtil.error(
-                  'Please use the owner address to update parameters.'
-                );
-                return;
-              }
-              setStackFeeModalOpen(true);
-              settingsPopupState.close();
-            }}
-          >
-            <div className="text-color-text2 text-[.14rem]">Stack Fee</div>
-
-            <div className="w-[.13rem] h-[.13rem] relative">
-              <Image src={edit} layout="fill" alt="icon" />
-            </div>
-          </div>
-
-          <div
-            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
-            onClick={() => {
-              if (dashboardInfo?._admin !== metaMaskAccount) {
+              if (dashboardInfo?.admin?.toString() !== userAddress) {
                 snackbarUtil.error(
                   'Please use the owner address to update parameters.'
                 );
@@ -490,7 +425,7 @@ const DashboardItem = (props: {
           <div
             className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
-              if (dashboardInfo?._admin !== metaMaskAccount) {
+              if (dashboardInfo?.admin?.toString() !== userAddress) {
                 snackbarUtil.error(
                   'Please use the owner address to update parameters.'
                 );
@@ -510,13 +445,13 @@ const DashboardItem = (props: {
           <div
             className="mt-[.24rem] cursor-pointer flex items-center justify-between"
             onClick={() => {
-              if (dashboardInfo?._admin !== metaMaskAccount) {
+              if (dashboardInfo?.admin?.toString() !== userAddress) {
                 snackbarUtil.error(
                   'Please use the owner address to update parameters.'
                 );
                 return;
               }
-              if ((dashboardInfo?._voters?.length || 0) <= 1) {
+              if ((dashboardInfo?.validators?.length || 0) <= 1) {
                 snackbarUtil.error('Validators must be more than 1.');
                 return;
               }
@@ -562,75 +497,65 @@ const DashboardItem = (props: {
           },
         }}
       >
-        <div className="w-[2.9rem] max-h-[4.4rem] overflow-auto hide-scrollbar pl-[.16rem] text-[.14rem] pr-[.24rem] py-[.32rem]">
+        <div className="w-[2.9rem] max-h-[4.4rem] overflow-auto hide-scrollbar pl-[.16rem] pr-[.24rem] py-[.32rem] text-[.14rem]">
           <Link
-            href={getEvmScanAccountUrl(lsdTokenConfig.symbol, address)}
+            href={getSolanaScanAccountUrl(
+              dashboardInfo?.lsdTokenMint?.toString()
+            )}
             target="_blank"
           >
-            <div className="justify-between flex items-center cursor-pointer">
-              <div className="text-link mr-[.06rem]">LSD Token Address</div>
+            <div className="flex justify-between items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">LST Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
 
-              <Icomoon icon="share" size=".12rem" />
-            </div>
-          </Link>
           <Link
-            href={getEvmScanAccountUrl(
-              lsdTokenConfig.symbol,
-              getFactoryContract().address
-            )}
+            href={getSolanaScanAccountUrl(dashboardInfo?.admin?.toString())}
             target="_blank"
           >
-            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
-              <div className="text-link mr-[.06rem]">LSD Factory Address</div>
-              <Icomoon icon="share" size=".12rem" />
-            </div>
-          </Link>
-          <Link
-            href={getEvmScanAccountUrl(
-              lsdTokenConfig.symbol,
-              dashboardInfo?._admin || ''
-            )}
-            target="_blank"
-          >
-            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+            <div className="mt-[.24rem] flex justify-between items-center cursor-pointer">
               <div className="text-link mr-[.06rem]">Owner Address</div>
               <Icomoon icon="share" size=".12rem" />
             </div>
           </Link>
+
           <Link
-            href={getEvmScanAccountUrl(
-              lsdTokenConfig.symbol,
-              dashboardInfo?._stakePool || ''
-            )}
+            href={getSolanaScanAccountUrl(dashboardInfo?.balancer?.toString())}
             target="_blank"
           >
-            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
-              <div className="text-link mr-[.06rem]">Stake Pool Address</div>
+            <div className="mt-[.24rem] flex justify-between items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Balancer Address</div>
               <Icomoon icon="share" size=".12rem" />
             </div>
           </Link>
+
           <Link
-            href={getEvmScanAccountUrl(
-              lsdTokenConfig.symbol,
-              dashboardInfo?._stakeManager || ''
-            )}
+            href={getSolanaScanAccountUrl(dashboardInfo?.stack?.toString())}
             target="_blank"
           >
-            <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+            <div className="mt-[.24rem] flex justify-between items-center cursor-pointer">
+              <div className="text-link mr-[.06rem]">Stack Address</div>
+              <Icomoon icon="share" size=".12rem" />
+            </div>
+          </Link>
+
+          <Link href={getSolanaScanAccountUrl(address)} target="_blank">
+            <div className="mt-[.24rem] flex justify-between items-center cursor-pointer">
               <div className="text-link mr-[.06rem]">Stake Manager Address</div>
               <Icomoon icon="share" size=".12rem" />
             </div>
           </Link>
 
-          {dashboardInfo?._voters?.map((voter, index) => (
+          {dashboardInfo?.validators?.map((validator, index) => (
             <div key={index}>
               <Link
-                href={getEvmScanValidatorUrl(lsdTokenConfig.symbol, voter)}
+                href={getSolanaScanAccountUrl(validator.toString())}
                 target="_blank"
               >
-                <div className="justify-between mt-[.24rem] flex items-center cursor-pointer">
+                <div className="mt-[.24rem] flex justify-between items-center cursor-pointer">
                   <div className="text-link mr-[.06rem]">
-                    Validator-{index + 1}
+                    Validator {index + 1}
                   </div>
                   <Icomoon icon="share" size=".12rem" />
                 </div>
@@ -640,12 +565,7 @@ const DashboardItem = (props: {
         </div>
       </Popover>
 
-      <UpdateEvmPlatformFeeModal
-        lsdTokenConfig={lsdTokenConfig}
-        contractAddress={dashboardInfo?._stakeManager || ''}
-        placeholder={
-          dashboardInfo ? dashboardInfo.formatPlatformFeeCommission : ''
-        }
+      <UpdateSolPlatformFeeModal
         open={platformFeeModalOpen}
         close={() => {
           setPlatformFeeModalOpen(false);
@@ -654,28 +574,11 @@ const DashboardItem = (props: {
         onRefresh={() => {
           updateData();
         }}
+        stakeManagerAddress={address}
+        placeholder={dashboardInfo?.formatStackCommissionRate || ''}
       />
 
-      <UpdateEvmFactoryFeeModal
-        lsdTokenConfig={lsdTokenConfig}
-        contractAddress={dashboardInfo?._stakeManager || ''}
-        placeholder={
-          dashboardInfo ? dashboardInfo.formatFactoryFeeCommission : ''
-        }
-        open={stackFeeModalOpen}
-        close={() => {
-          setStackFeeModalOpen(false);
-        }}
-        onConnectWallet={connectWallet}
-        onRefresh={() => {
-          updateData();
-        }}
-      />
-
-      <UpdateEvmMinDepositModal
-        contractAddress={dashboardInfo?._stakeManager || ''}
-        lsdTokenConfig={lsdTokenConfig}
-        placeholder={dashboardInfo ? dashboardInfo.formatMinStakeAmount : ''}
+      <UpdateSolMinDepositModal
         open={minDepositModalOpen}
         close={() => {
           setMinDepositModalOpen(false);
@@ -684,18 +587,11 @@ const DashboardItem = (props: {
         onRefresh={() => {
           updateData();
         }}
+        stakeManagerAddress={address}
+        placeholder={dashboardInfo?.formatMinStakeAmount || ''}
       />
 
-      <AddEvmValidatorModal
-        poolAddress={dashboardInfo?._stakePool || ''}
-        contractAddress={dashboardInfo?._stakeManager || ''}
-        lsdTokenConfig={lsdTokenConfig}
-        currentValidators={dashboardInfo?._voters || []}
-        placeholder={
-          lsdTokenConfig.symbol === 'SEI'
-            ? 'Example: seivaloper...'
-            : 'Example: 0x...'
-        }
+      <AddSolValidatorModal
         open={addValidatorModalOpen}
         close={() => {
           setAddValidatorModalOpen(false);
@@ -704,13 +600,12 @@ const DashboardItem = (props: {
         onRefresh={() => {
           updateData();
         }}
+        stakeManagerAddress={address}
+        currentValidators={dashboardInfo?.validators || []}
+        placeholder="Example: HEL..."
       />
 
-      <RemoveEvmValidatorModal
-        poolAddress={dashboardInfo?._stakePool || ''}
-        contractAddress={dashboardInfo?._stakeManager || ''}
-        lsdTokenConfig={lsdTokenConfig}
-        validators={dashboardInfo?._voters || []}
+      <RemoveSolValidatorModal
         open={removeValidatorModalOpen}
         close={() => {
           setRemoveValidatorModalOpen(false);
@@ -719,6 +614,8 @@ const DashboardItem = (props: {
         onRefresh={() => {
           updateData();
         }}
+        stakeManagerAddress={address}
+        currentValidators={dashboardInfo?.validators || []}
       />
     </div>
   );

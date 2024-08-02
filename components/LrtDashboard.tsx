@@ -355,7 +355,7 @@ const DashboardItem = (props: { address: string }) => {
             )}
             {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
           >
-            <div className="w-[.24rem] h-[.24rem] relative">
+            <div className="w-[.15rem] h-[.15rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
             </div>
           </div>
@@ -367,7 +367,7 @@ const DashboardItem = (props: { address: string }) => {
             )}
             {...(dashboardInfo ? bindTrigger(linksPopupState) : {})}
           >
-            <Icomoon icon="more" size=".24rem" color="#6C86AD" />
+            <Icomoon icon="more" size=".15rem" color="#6C86AD" />
           </div>
         </div>
       </div>

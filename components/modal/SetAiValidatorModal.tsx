@@ -227,7 +227,7 @@ export const SetAiValidatorModal = ({
             }}
             type="stroke"
           >
-            Toturial
+            Tutorial
           </CustomButton>
 
           <CustomButton

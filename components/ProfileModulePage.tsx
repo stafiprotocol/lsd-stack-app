@@ -25,6 +25,7 @@ export const ProfileModulePage = (props: Props) => {
   const [evmLsdTokenConfig, setEvmLsdTokenConfig] =
     useState<EvmLsdTokenConfig>();
   const { lsdHistoryList } = useModuleList(eco, evmLsdTokenConfig);
+  console.log({ lsdHistoryList });
 
   useEffect(() => {
     if (evmLsdTokens.length > 0) {

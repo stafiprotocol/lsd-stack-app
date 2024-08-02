@@ -134,3 +134,12 @@ export const isMetaMaskCancelError = (err: any) => {
     err.message.indexOf(CANCELLED_ERR_MESSAGE4) >= 0
   );
 };
+
+export const isSolanaCancelError = (err: any) => {
+  return (
+    err.message.indexOf(CANCELLED_ERR_MESSAGE1) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE2) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE3) >= 0 ||
+    err.message.indexOf(CANCELLED_ERR_MESSAGE4) >= 0
+  );
+};

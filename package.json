@@ -8,6 +8,7 @@
     "start": "next start -p 5002"
   },
   "dependencies": {
+    "@coral-xyz/anchor": "0.29.0",
     "@cosmjs/cosmwasm-stargate": "0.32.3",
     "@cosmjs/proto-signing": "0.32.3",
     "@cosmjs/stargate": "0.32.3",
@@ -16,6 +17,12 @@
     "@mui/material": "^5.14.5",
     "@mui/styles": "^5.14.5",
     "@reduxjs/toolkit": "^1.9.5",
+    "@solana/spl-token": "^0.4.8",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/wallet-adapter-wallets": "^0.19.32",
+    "@solana/web3.js": "^1.95.2",
     "@stafihub/apps-wallet": "2.8.1",
     "@tanstack/query-core": "^5.17.19",
     "@tanstack/react-query": "^5.28.14",
@@ -25,6 +32,7 @@
     "@web3modal/ethereum": "2.7.1",
     "@web3modal/react": "2.7.1",
     "autoprefixer": "^10.4.15",
+    "bs58": "^6.0.0",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.9",
     "ethers": "5",

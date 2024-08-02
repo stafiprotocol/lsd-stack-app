@@ -86,7 +86,7 @@ export const FrontendModuleCard = (props: Props) => {
           openLink('https://www.google.com');
         }}
       >
-        Toturial
+        Tutorial
       </CustomButton>
     </div>
   );

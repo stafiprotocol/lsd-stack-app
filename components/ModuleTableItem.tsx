@@ -123,7 +123,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
             openLink('https://www.google.com');
           }}
         >
-          Toturial
+          Tutorial
         </CustomButton>
 
         {type !== 'frontend' && (

@@ -16,6 +16,10 @@ import {
 } from 'config/lrt/contract';
 import { getNeutronWasmClient, getStakeManagerClient } from 'utils/cosmosUtils';
 import { LsdToken } from 'gen/neutron';
+import { PublicKey } from '@solana/web3.js';
+import { solanaPrograms } from 'config/sol';
+import { useConnection } from '@solana/wallet-adapter-react';
+import { useDebouncedEffect } from './useDebouncedEffect';
 
 export interface LsdHistoryItem {
   tokenAddress: string;
@@ -27,6 +31,7 @@ export function useModuleList(
   evmLsdTokenConfig?: EvmLsdTokenConfig
 ) {
   const [moduleList, setModuleList] = useState<ModuleSetting[]>([]);
+  const { connection } = useConnection();
   const userAddress = useUserAddress(eco);
 
   const [lsdHistoryList, setLsdHistoryList] = useState<LsdHistoryItem[]>([]);
@@ -220,17 +225,64 @@ export function useModuleList(
     }
   }, [userAddress]);
 
-  useEffect(() => {
-    if (eco === AppEco.Eth) {
-      updateEthList();
-    } else if (eco === AppEco.Evm) {
-      updateEvmList();
-    } else if (eco === AppEco.Lrt) {
-      updateLrtList();
-    } else if (eco === AppEco.Cosmos) {
-      updateNeurtonList();
+  const updateSolList = useCallback(async () => {
+    if (!userAddress) {
+      return;
     }
-  }, [eco, updateEthList, updateEvmList, updateLrtList, updateNeurtonList]);
+    const publicKey = new PublicKey(userAddress);
+    let stakeManagerSeed;
+    let i = 0;
+    let stakeManagerPubkey;
+    let stakeManagerAddresses = [];
+    while (true) {
+      stakeManagerSeed = `stake_manager_seed_${i}`;
+      stakeManagerPubkey = await PublicKey.createWithSeed(
+        publicKey,
+        stakeManagerSeed,
+        new PublicKey(solanaPrograms.lsdProgramId)
+      );
+
+      const existAccountInfo = await connection.getAccountInfo(
+        stakeManagerPubkey
+      );
+      if (!existAccountInfo) {
+        break;
+      }
+      stakeManagerAddresses.push(stakeManagerPubkey.toString());
+      i++;
+    }
+
+    const resList: LsdHistoryItem[] = [];
+    stakeManagerAddresses.forEach((address) => {
+      resList.push({ tokenAddress: address, tokenName: 'SOL LST' });
+    });
+    setLsdHistoryList(resList);
+  }, [userAddress, connection]);
+
+  useDebouncedEffect(
+    () => {
+      if (eco === AppEco.Eth) {
+        updateEthList();
+      } else if (eco === AppEco.Evm) {
+        updateEvmList();
+      } else if (eco === AppEco.Lrt) {
+        updateLrtList();
+      } else if (eco === AppEco.Cosmos) {
+        updateNeurtonList();
+      } else if (eco === AppEco.Sol) {
+        updateSolList();
+      }
+    },
+    [
+      eco,
+      updateEthList,
+      updateEvmList,
+      updateLrtList,
+      updateNeurtonList,
+      updateSolList,
+    ],
+    1000
+  );
 
   return { lsdHistoryList };
 }

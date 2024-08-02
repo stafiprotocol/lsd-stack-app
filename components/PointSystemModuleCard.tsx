@@ -126,7 +126,7 @@ export const PointSystemModuleCard = (props: Props) => {
       />
 
       <SetPointSystemReadyModal
-        toturialUrl={`${getDocHost()}/docs/develop_evm_lsd/deploy.html`}
+        tutorialUrl={`${getDocHost()}/docs/develop_evm_lsd/deploy.html`}
         open={readyModalOpen}
         close={() => {
           setReadyModalOpen(false);

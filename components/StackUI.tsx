@@ -144,7 +144,7 @@ export const StackUI = () => {
           <LsdCaseCardV2
             text="SOL LST"
             icon={solLstImg}
-            url={getEvmCaseUrl()}
+            url={'/sol'}
             className="ml-[.32rem]"
           />
 

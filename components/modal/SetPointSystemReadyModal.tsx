@@ -10,13 +10,13 @@ import { openLink } from 'utils/commonUtils';
 interface Props {
   open: boolean;
   close: () => void;
-  toturialUrl: string;
+  tutorialUrl: string;
 }
 
 export const SetPointSystemReadyModal = ({
   open,
   close,
-  toturialUrl,
+  tutorialUrl,
 }: Props) => {
   return (
     <Modal open={open} onClose={close}>
@@ -76,7 +76,7 @@ export const SetPointSystemReadyModal = ({
             width="1.75rem"
             height=".46rem"
             onClick={() => {
-              openLink(toturialUrl);
+              openLink(tutorialUrl);
             }}
             border="none"
             trRaidus="0"

@@ -52,6 +52,8 @@ export const Layout = (props: React.PropsWithChildren) => {
       dispatch(setAppEco(AppEco.Evm));
     } else if (router.pathname.includes('lrt')) {
       dispatch(setAppEco(AppEco.Lrt));
+    } else if (router.pathname.includes('sol')) {
+      dispatch(setAppEco(AppEco.Sol));
     } else {
       dispatch(setAppEco(AppEco.Eth));
     }
@@ -79,7 +81,7 @@ export const Layout = (props: React.PropsWithChildren) => {
             position="relative"
             color="transparent"
             elevation={0}
-            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            // sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           >
             <Navbar />
           </AppBar>
