@@ -29,6 +29,7 @@ import ethereumLogo from 'public/images/ethereum.png';
 import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import LogoTextImg from 'public/images/logo_text.svg';
 import neutronLogo from 'public/images/neutron.png';
+import solanaLogo from 'public/images/solana.svg';
 import { useMemo } from 'react';
 import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
 import {
@@ -286,6 +287,8 @@ const UserInfo = () => {
       //   return seiLogo;
       case AppEco.Cosmos:
         return neutronLogo;
+      case AppEco.Sol:
+        return solanaLogo;
     }
     return ethereumLogo;
   };
