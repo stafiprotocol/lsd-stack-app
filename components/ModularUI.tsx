@@ -181,20 +181,22 @@ const EcoSelector = () => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos].map((eco) => (
-          <div key={eco}>
-            <EcoItem
-              eco={eco}
-              onClosePopup={() => {
-                popupState.close();
-              }}
-            />
+        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos, AppEco.Sol].map(
+          (eco) => (
+            <div key={eco}>
+              <EcoItem
+                eco={eco}
+                onClosePopup={() => {
+                  popupState.close();
+                }}
+              />
 
-            {eco !== AppEco.Others && (
-              <div className="bg-[#E8EFFD0D] h-[.01rem]" />
-            )}
-          </div>
-        ))}
+              {eco !== AppEco.Others && (
+                <div className="bg-[#E8EFFD0D] h-[.01rem]" />
+              )}
+            </div>
+          )
+        )}
       </Popover>
     </div>
   );

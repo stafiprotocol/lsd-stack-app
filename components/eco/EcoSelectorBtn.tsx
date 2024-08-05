@@ -6,7 +6,7 @@ import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import EcoEthImg from 'public/images/eco/eth.png';
 import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
-import ArrowDownImg from 'public/images/eco_arrow_down.svg';
+import EcoSolanaImg from 'public/images/eco/solana.png';
 import ArrowUpImg from 'public/images/eco_arrow_up.svg';
 import { RootState } from 'redux/store';
 
@@ -51,6 +51,8 @@ export const EcoSelectorBtn = ({ active }: Props) => {
                   ? EcoLrtImg
                   : appEco === AppEco.Evm
                   ? EcoEvmImg
+                  : appEco === AppEco.Sol
+                  ? EcoSolanaImg
                   : EcoEthImg
               }
               fill
@@ -59,8 +61,8 @@ export const EcoSelectorBtn = ({ active }: Props) => {
           </div>
           <div
             className={classNames(
-              'ml-[.12rem] text-[.16rem] text-white',
-              active ? 'text-text1' : 'text-white'
+              'ml-[.12rem] text-[.16rem] ',
+              active ? 'text-text1' : 'text-text1'
             )}
           >
             {appEco === AppEco.Lrt ? 'Eigenlayer LRT' : appEco}

@@ -2,12 +2,6 @@ import { Popover } from '@mui/material';
 import classNames from 'classnames';
 import { LsdCaseCardV2 } from 'components/common/LsdCaseCardV2';
 import { EcoSelectorBtn } from 'components/eco/EcoSelectorBtn';
-import {
-  getCosmosStackAppUrl,
-  getEthStackAppUrl,
-  getEvmCaseUrl,
-  getLrtCaseUrl,
-} from 'config/eth/env';
 import { robotoBold, robotoSemiBold } from 'config/font';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { AppEco } from 'interfaces/common';
@@ -24,6 +18,7 @@ import EcoEthImg from 'public/images/eco/eth.png';
 import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
+import EcoSolanaImg from 'public/images/eco/solana.png';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import homeVectorImg from 'public/images/home_vector.png';
 import atomLstImg from 'public/images/lst/atom.svg';
@@ -217,20 +212,22 @@ const EcoSelector = (props: { popupState: any }) => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos].map((eco) => (
-          <div key={eco}>
-            <EcoItem
-              eco={eco}
-              onClosePopup={() => {
-                popupState.close();
-              }}
-            />
+        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos, AppEco.Sol].map(
+          (eco) => (
+            <div key={eco}>
+              <EcoItem
+                eco={eco}
+                onClosePopup={() => {
+                  popupState.close();
+                }}
+              />
 
-            {eco !== AppEco.Others && (
-              <div className="bg-[#E8EFFD0D] h-[.01rem]" />
-            )}
-          </div>
-        ))}
+              {eco !== AppEco.Others && (
+                <div className="bg-[#E8EFFD0D] h-[.01rem]" />
+              )}
+            </div>
+          )
+        )}
       </Popover>
     </div>
   );
@@ -270,6 +267,8 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
               ? EcoLrtImg
               : eco === AppEco.Evm
               ? EcoEvmImg
+              : eco === AppEco.Sol
+              ? EcoSolanaImg
               : EcoEthImg
           }
           fill
