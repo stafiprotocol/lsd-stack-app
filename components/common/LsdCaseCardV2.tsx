@@ -16,13 +16,14 @@ interface LsdCaseCardProps {
   className?: string;
   isComing?: boolean;
   isKarak?: boolean;
+  isBlank?: boolean;
 }
 
 export const LsdCaseCardV2 = (props: LsdCaseCardProps) => {
-  const { icon, text, url, className, isComing, isKarak } = props;
+  const { icon, text, url, className, isComing, isKarak, isBlank } = props;
 
   return (
-    <Link href={url || ''}>
+    <Link href={url || ''} target={isBlank ? '_blank' : '_self'}>
       <div
         className={classNames(
           'group  flex flex-col items-center',

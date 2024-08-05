@@ -165,15 +165,17 @@ export const StackUI = () => {
 
           <LsdCaseCardV2
             text="CUSTOM"
+            isBlank
             icon={customLstImg}
-            isComing
+            url="https://lsaas-docs.stafi.io/docs/introduction/getstarted.html"
             className="ml-[.32rem]"
           />
 
           <LsdCaseCardV2
             text="MORE"
+            isBlank
             icon={moreLstImg}
-            isComing
+            url="https://lsaas-docs.stafi.io/docs/introduction/getstarted.html"
             className="ml-[.32rem]"
           />
         </div>

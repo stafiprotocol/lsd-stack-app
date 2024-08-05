@@ -124,7 +124,7 @@ const ParameterPage = () => {
     // dispatch(setBackRoute('tokenStandard'));
     // router.replace('/');
     dispatch(setBackRoute(''));
-    router.replace('/lrt');
+    router.replace('/');
   };
 
   const create = async () => {
