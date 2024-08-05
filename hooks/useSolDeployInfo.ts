@@ -1,17 +1,10 @@
-import {
-  getLrtFactoryContract,
-  getLrtStakeManagerAbi,
-  getLrtStakePoolAbi,
-  getLrtTokenContractAbi,
-} from 'config/lrt/contract';
-import { useCallback, useEffect, useState } from 'react';
-import { getEthWeb3 } from 'utils/web3Utils';
-import { useAppSelector } from './common';
-import { PublicKey } from '@solana/web3.js';
-import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { AnchorProvider, Program, setProvider } from '@coral-xyz/anchor';
+import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
 import { solanaPrograms } from 'config/sol';
 import { IDL, LsdProgram } from 'config/sol/idl/lsd_program';
+import { useCallback, useState } from 'react';
+import { useAppSelector } from './common';
 import { useDebouncedEffect } from './useDebouncedEffect';
 
 export interface SolDeployInfo {

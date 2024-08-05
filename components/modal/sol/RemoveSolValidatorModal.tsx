@@ -17,6 +17,7 @@ import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import { sleep } from 'utils/commonUtils';
 import snackbarUtil from 'utils/snackbarUtils';
+import { sendSolanaTransaction } from 'utils/solanaUtils';
 
 interface Props {
   open: boolean;
@@ -82,10 +83,11 @@ export const RemoveSolValidatorModal = ({
       const transaction = new Transaction();
       transaction.add(anchorInstruction);
 
-      const txid = await sendTransaction(transaction, connection);
+      // const txid = await sendTransaction(transaction, connection);
+      const txid = await sendSolanaTransaction(transaction, connection);
 
       let retryCount = 0;
-      while (retryCount < 20) {
+      while (retryCount < 20 && txid) {
         retryCount++;
         const transactionDetail = await connection.getTransaction(txid, {
           commitment: 'finalized',

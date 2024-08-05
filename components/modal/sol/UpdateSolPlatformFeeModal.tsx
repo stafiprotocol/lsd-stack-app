@@ -23,6 +23,7 @@ import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import { sleep } from 'utils/commonUtils';
 import snackbarUtil from 'utils/snackbarUtils';
+import { sendSolanaTransaction } from 'utils/solanaUtils';
 
 interface Props {
   open: boolean;
@@ -82,7 +83,7 @@ export const UpdateSolPlatformFeeModal = ({
       const programId = new PublicKey(solanaPrograms.lsdProgramId);
       const program = new Program<LsdProgram>(IDL, programId);
       const anchorInstruction = await program.methods
-        .setPlatformFeeCommission(new BN(Number(value) * 10000000))
+        .setPlatformFeeCommission(new BN((Number(value) * 10000000).toFixed(0)))
         .accounts({
           stakeManager: new PublicKey(stakeManagerAddress),
           admin: new PublicKey(userAddress),
@@ -122,10 +123,11 @@ export const UpdateSolPlatformFeeModal = ({
       const transaction = new Transaction();
       transaction.add(anchorInstruction);
 
-      const txid = await sendTransaction(transaction, connection);
+      // const txid = await sendTransaction(transaction, connection);
+      const txid = await sendSolanaTransaction(transaction, connection);
 
       let retryCount = 0;
-      while (retryCount < 20) {
+      while (retryCount < 20 && txid) {
         retryCount++;
         const transactionDetail = await connection.getTransaction(txid, {
           commitment: 'finalized',

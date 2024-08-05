@@ -32,6 +32,7 @@ import snackbarUtil from 'utils/snackbarUtils';
 import { isSolanaCancelError } from 'utils/web3Utils';
 import { setSubmitLoadingParams } from './AppSlice';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { sendSolanaTransaction } from 'utils/solanaUtils';
 
 export interface SolState {
   solEcoLoading: boolean;
@@ -160,12 +161,16 @@ export const solanaInitializeStakeManager =
         })
       );
 
-      const transferTransactionSignature = await sendTransaction(
+      // const transferTxid = await sendTransaction(
+      //   transferTransaction,
+      //   connection
+      // );
+      const transferTxid = await sendSolanaTransaction(
         transferTransaction,
         connection
       );
       console.log(
-        `View on explorer: https://explorer.solana.com/tx/${transferTransactionSignature}?cluster=custom`
+        `View on explorer: https://explorer.solana.com/tx/${transferTxid}?cluster=custom`
       );
 
       while (true) {
@@ -313,7 +318,14 @@ export const solanaInitializeStakeManager =
       });
       transaction.add(instruction);
 
-      const txid = await sendTransaction(transaction, connection);
+      // const txid = await sendTransaction(transaction, connection, {
+      //   skipPreflight: true,
+      // });
+      const txid = await sendSolanaTransaction(transaction, connection);
+      if (!txid) {
+        throw new Error(TRANSACTION_FAILED_MESSAGE);
+      }
+
       console.log(
         `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
       );

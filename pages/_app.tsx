@@ -1,7 +1,13 @@
 import { Fade, ThemeProvider, styled } from '@mui/material';
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from 'components/layout/Layout';
+import { solanaRestEndpoint, solanaWsEndpoint } from 'config/sol';
 import { wagmiConfig } from 'config/walletConnect';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
@@ -13,19 +19,6 @@ import 'styles/globals.css';
 import { theme } from 'styles/material-ui-theme';
 import { SnackbarUtilsConfigurator } from 'utils/snackbarUtils';
 import { WagmiConfig } from 'wagmi';
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from '@solana/wallet-adapter-react';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
-import {
-  WalletModalProvider,
-  WalletDisconnectButton,
-  WalletMultiButton,
-  useWalletModal,
-} from '@solana/wallet-adapter-react-ui';
-import { solanaRestEndpoint, solanaWsEndpoint } from 'config/sol';
 
 const queryClient = new QueryClient();
 
