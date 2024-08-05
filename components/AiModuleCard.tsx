@@ -13,6 +13,7 @@ import { useWalletAccount } from 'hooks/useWalletAccount';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { ModuleStateTag } from './ModuleStateTag';
 import { useUserAddress } from 'hooks/useUserAddress';
+import { openLink } from 'utils/commonUtils';
 
 interface Props {
   eco: AppEco;
@@ -85,7 +86,7 @@ export const AiModuleCard = (props: Props) => {
                   ? 'paused'
                   : 'running'
               }
-              className="ml-{.14rem}"
+              className="ml-[.14rem]"
             />
           </div>
         </div>
@@ -98,7 +99,7 @@ export const AiModuleCard = (props: Props) => {
       </div>
 
       <CustomButton
-        className="mb-[.24rem]"
+        className="mb-[.12rem]"
         type="primary"
         onClick={async () => {
           if (!existSetting || existSetting.disabled) {
@@ -115,6 +116,18 @@ export const AiModuleCard = (props: Props) => {
         {existSetting && !existSetting.disabled
           ? 'Disable Module'
           : 'Open Module'}
+      </CustomButton>
+
+      <CustomButton
+        className="mb-[.24rem]"
+        type="stroke"
+        onClick={() => {
+          openLink(
+            'https://lsaas-docs.stafi.io/docs/modules/validator_selection_ai_agent.html'
+          );
+        }}
+      >
+        Tutorial
       </CustomButton>
 
       <SetAiValidatorModal

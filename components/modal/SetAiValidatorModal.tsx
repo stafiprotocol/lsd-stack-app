@@ -223,7 +223,9 @@ export const SetAiValidatorModal = ({
             width="2.5rem"
             height=".56rem"
             onClick={() => {
-              openLink('https://www.google.com');
+              openLink(
+                'https://lsaas-docs.stafi.io/docs/modules/validator_selection_ai_agent.html'
+              );
             }}
             type="stroke"
           >

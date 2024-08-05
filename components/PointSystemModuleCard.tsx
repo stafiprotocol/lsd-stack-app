@@ -12,6 +12,7 @@ import { useWalletAccount } from 'hooks/useWalletAccount';
 import { AppEco } from 'interfaces/common';
 import { ModuleStateTag } from './ModuleStateTag';
 import { useUserAddress } from 'hooks/useUserAddress';
+import { openLink } from 'utils/commonUtils';
 
 interface Props {
   eco: AppEco;
@@ -63,7 +64,7 @@ export const PointSystemModuleCard = (props: Props) => {
                   ? 'paused'
                   : 'running'
               }
-              className="ml-{.14rem}"
+              className="ml-[.14rem]"
             />
           </div>
         </div>
@@ -75,7 +76,7 @@ export const PointSystemModuleCard = (props: Props) => {
       </div>
 
       <CustomButton
-        className="mb-[.24rem]"
+        className="mb-[.12rem]"
         type="primary"
         onClick={async () => {
           if (!existSetting || existSetting.disabled) {
@@ -92,6 +93,18 @@ export const PointSystemModuleCard = (props: Props) => {
         {existSetting && !existSetting.disabled
           ? 'Disable Module'
           : 'Open Module'}
+      </CustomButton>
+
+      <CustomButton
+        className="mb-[.24rem]"
+        type="stroke"
+        onClick={() => {
+          openLink(
+            'https://lsaas-docs.stafi.io/docs/modules/point_system.html'
+          );
+        }}
+      >
+        Tutorial
       </CustomButton>
 
       <SetPointSystemModal

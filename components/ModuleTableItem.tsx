@@ -16,6 +16,12 @@ import { SetPointSystemModal } from './modal/SetPointSystemModal';
 import { SetAiValidatorModal } from './modal/SetAiValidatorModal';
 import { useUserAddress } from 'hooks/useUserAddress';
 import { LsdHistoryItem } from 'hooks/useModuleList';
+import {
+  getCosmosStackAppUrl,
+  getEthStackAppUrl,
+  getEvmCaseUrl,
+  getLrtCaseUrl,
+} from 'config/eth/env';
 
 interface ModuleTableItemProps {
   index: number;
@@ -87,7 +93,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
                 ? 'paused'
                 : 'running'
             }
-            className="ml-{.14rem}"
+            className="ml-[.14rem]"
           />
         )}
       </div>
@@ -98,7 +104,19 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
             type="primary"
             width="1.3rem"
             onClick={() => {
-              openLink('https://www.google.com');
+              if (eco === AppEco.Cosmos) {
+                openLink(getCosmosStackAppUrl());
+              } else if (eco === AppEco.Lrt) {
+                openLink(getLrtCaseUrl());
+              } else if (eco === AppEco.Evm) {
+                openLink(getEvmCaseUrl());
+              } else if (eco === AppEco.Eth) {
+                openLink(getEthStackAppUrl());
+              } else {
+                openLink(
+                  'https://lsaas-docs.stafi.io/docs/modules/frontend.html'
+                );
+              }
             }}
           >
             Preview
@@ -120,7 +138,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           width="1.3rem"
           className="ml-[.24rem]"
           onClick={() => {
-            openLink('https://www.google.com');
+            openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
           }}
         >
           Tutorial

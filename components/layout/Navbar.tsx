@@ -172,9 +172,9 @@ const Navbar = () => {
           boxShadow: '0px 1px 0px #FFFFFF',
         }}
       >
-        <div className="absolute right-0 top-0 mt-[.72rem]">
+        {/* <div className="absolute right-0 top-0 mt-[.72rem]">
           <LsaasSidebar />
-        </div>
+        </div> */}
 
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW flex flex-col">
           <div className="h-full w-smallContentW xl:w-contentW 2xl:w-largeContentW text-text2 text-[.14rem] leading-[.21rem]">

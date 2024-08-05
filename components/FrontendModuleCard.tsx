@@ -11,6 +11,12 @@ import { AppEco } from 'interfaces/common';
 import { saveModuleToDb } from 'utils/dbUtils';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { useUserAddress } from 'hooks/useUserAddress';
+import {
+  getCosmosStackAppUrl,
+  getEthStackAppUrl,
+  getEvmCaseUrl,
+  getLrtCaseUrl,
+} from 'config/eth/env';
 
 interface Props {
   eco: AppEco;
@@ -58,7 +64,18 @@ export const FrontendModuleCard = (props: Props) => {
         className="mb-[.12rem]"
         type="primary"
         onClick={async () => {
-          openLink('https://www.google.com');
+          if (eco === AppEco.Cosmos) {
+            openLink(getCosmosStackAppUrl());
+          } else if (eco === AppEco.Lrt) {
+            openLink(getLrtCaseUrl());
+          } else if (eco === AppEco.Evm) {
+            openLink(getEvmCaseUrl());
+          } else if (eco === AppEco.Eth) {
+            openLink(getEthStackAppUrl());
+          } else {
+            openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+          }
+
           if (!userAddress || !lsdTokenAddress || !lsdTokenName) {
             return;
           }
@@ -83,7 +100,7 @@ export const FrontendModuleCard = (props: Props) => {
         className="mb-[.24rem]"
         type="stroke"
         onClick={() => {
-          openLink('https://www.google.com');
+          openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
         }}
       >
         Tutorial
