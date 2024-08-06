@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   createInitializeMint2Instruction,
   createMint,
+  getMinimumBalanceForRentExemptMint,
   getMintLen,
   MINT_SIZE,
   TOKEN_PROGRAM_ID,
@@ -80,7 +81,6 @@ export const solanaInitializeStakeManager =
       );
 
       const lsdProgramPubkey = new PublicKey(solanaPrograms.lsdProgramId);
-      const transferTransaction = new Transaction();
       const transaction = new Transaction();
 
       let stakeManagerSeed;
@@ -109,7 +109,8 @@ export const solanaInitializeStakeManager =
       const stakeManagerRent =
         await connection.getMinimumBalanceForRentExemption(stakeManagerSpace);
 
-      const lamports = await connection.getMinimumBalanceForRentExemption(0);
+      const stakePoolLamports =
+        await connection.getMinimumBalanceForRentExemption(0);
       // console.log({ lamports });
       const [stakePoolPubkey, number] = PublicKey.findProgramAddressSync(
         [stakeManagerPubkey.toBuffer(), Buffer.from('pool_seed')],
@@ -117,109 +118,34 @@ export const solanaInitializeStakeManager =
       );
       // console.log('stakePool:', stakePoolPubkey.toString());
 
-      const mintLamports = await connection.getMinimumBalanceForRentExemption(
-        getMintLen([])
+      const mintLamports = await getMinimumBalanceForRentExemptMint(connection);
+
+      // createMint
+      const keypair = Keypair.generate();
+      const mintPubkey = keypair.publicKey;
+
+      transaction.add(
+        SystemProgram.createAccount({
+          fromPubkey: new PublicKey(userPublicKey),
+          newAccountPubkey: keypair.publicKey,
+          space: MINT_SIZE,
+          lamports: mintLamports,
+          programId: TOKEN_PROGRAM_ID,
+        }),
+        createInitializeMint2Instruction(
+          keypair.publicKey,
+          9,
+          stakePoolPubkey,
+          null,
+          TOKEN_PROGRAM_ID
+        )
       );
-      // console.log({ mintLamports });
-
-      // test manual createMint
-      // const keypair = Keypair.generate();
-      // const testTransaction = new Transaction().add(
-      //   SystemProgram.createAccount({
-      //     fromPubkey: new PublicKey(userPublicKey),
-      //     newAccountPubkey: keypair.publicKey,
-      //     space: MINT_SIZE,
-      //     lamports,
-      //     programId: TOKEN_PROGRAM_ID,
-      //   }),
-      //   createInitializeMint2Instruction(
-      //     keypair.publicKey,
-      //     9,
-      //     stakePoolPubkey,
-      //     null,
-      //     TOKEN_PROGRAM_ID
-      //   )
-      // );
-      // const signature = await sendTransaction(testTransaction, connection, {
-      // signers: [keypair],
-      // });
-      // const signature = await sendAndConfirmTransaction(
-      //   connection,
-      //   testTransaction,
-      //   [keypair]
-      // );
-      // console.log({ signature });
-
-      // create mint
-      const newMintKeypair = Keypair.generate();
-      // console.log('newMintKeypair:', newMintKeypair.publicKey.toString());
-
-      transferTransaction.add(
-        SystemProgram.transfer({
-          fromPubkey: userPublicKey,
-          toPubkey: newMintKeypair.publicKey,
-          lamports: 10000000,
-        })
-      );
-
-      // const transferTxid = await sendTransaction(
-      //   transferTransaction,
-      //   connection
-      // );
-      const transferTxid = await sendSolanaTransaction(
-        transferTransaction,
-        connection
-      );
-      // console.log(
-      //   `View on explorer: https://explorer.solana.com/tx/${transferTxid}?cluster=custom`
-      // );
-
-      while (true) {
-        const newMintKeypairAccountInfo = await connection.getAccountInfo(
-          newMintKeypair.publicKey
-        );
-        if (newMintKeypairAccountInfo) {
-          // console.log('new Keypair account exist');
-          break;
-        }
-        // console.log('new Keypair account not exist');
-        await sleep(3000);
-      }
-
-      const mintPubkey = await createMint(
-        connection,
-        newMintKeypair,
-        stakePoolPubkey,
-        null,
-        9
-      );
-
-      // console.log('lsdTokenMintPubkey:', mintPubkey.toString());
-
-      // const mint = Keypair.generate();
-      // const mintPubkey = mint.publicKey;
-      // transaction.add(
-      //   SystemProgram.createAccount({
-      //     fromPubkey: userPublicKey,
-      //     newAccountPubkey: mint.publicKey,
-      //     space: MINT_SIZE,
-      //     lamports: mintLamports,
-      //     programId: TOKEN_PROGRAM_ID,
-      //   }),
-      //   createInitializeMint2Instruction(
-      //     mint.publicKey,
-      //     9,
-      //     stakePoolPubkey,
-      //     null,
-      //     TOKEN_PROGRAM_ID
-      //   )
-      // );
 
       transaction.add(
         SystemProgram.transfer({
           fromPubkey: userPublicKey,
           toPubkey: stakePoolPubkey,
-          lamports,
+          lamports: stakePoolLamports,
         })
       );
 
@@ -322,7 +248,9 @@ export const solanaInitializeStakeManager =
       // const txid = await sendTransaction(transaction, connection, {
       //   skipPreflight: true,
       // });
-      const txid = await sendSolanaTransaction(transaction, connection);
+      const txid = await sendSolanaTransaction(transaction, connection, [
+        keypair,
+      ]);
       if (!txid) {
         throw new Error(TRANSACTION_FAILED_MESSAGE);
       }
@@ -338,7 +266,7 @@ export const solanaInitializeStakeManager =
         transactionDetail = await connection.getTransaction(txid, {
           commitment: 'finalized',
         });
-        // console.log({ transactionDetail });
+        console.log({ transactionDetail });
         if (transactionDetail) {
           break;
         }
@@ -346,6 +274,10 @@ export const solanaInitializeStakeManager =
       }
 
       if (!transactionDetail) {
+        throw new Error(TRANSACTION_FAILED_MESSAGE);
+      }
+
+      if (transactionDetail.meta?.err) {
         throw new Error(TRANSACTION_FAILED_MESSAGE);
       }
 

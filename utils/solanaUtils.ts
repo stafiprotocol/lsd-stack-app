@@ -2,7 +2,7 @@ import {
   createAssociatedTokenAccountInstruction,
   getAssociatedTokenAddress,
 } from '@solana/spl-token';
-import { Connection, PublicKey, Transaction } from '@solana/web3.js';
+import { Connection, PublicKey, Signer, Transaction } from '@solana/web3.js';
 
 declare const window: any;
 
@@ -20,17 +20,22 @@ export function getSolanaExtension() {
 
 export async function sendSolanaTransaction(
   transaction: Transaction,
-  connection: Connection
+  connection: Connection,
+  signers?: Signer[]
 ) {
   try {
     const solana = getSolanaExtension();
     if (!solana || !solana.isConnected) {
+      console.log('111');
       return null;
     }
 
     let { blockhash } = await connection.getLatestBlockhash();
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = solana.publicKey;
+    if (signers) {
+      transaction.partialSign(...signers);
+    }
     let transferSigned = await solana.signTransaction(transaction);
     const txid = await connection.sendRawTransaction(
       transferSigned.serialize(),
@@ -40,6 +45,7 @@ export async function sendSolanaTransaction(
     );
     return txid;
   } catch (err) {
+    console.log({ err });
     return undefined;
   }
 }
