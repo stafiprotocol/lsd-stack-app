@@ -98,10 +98,10 @@ export const solanaInitializeStakeManager =
           stakeManagerPubkey
         );
         if (!existAccountInfo) {
-          console.log('stakeManagerPubkey', stakeManagerPubkey.toString());
+          // console.log('stakeManagerPubkey', stakeManagerPubkey.toString());
           break;
         }
-        console.log('exist AccountInfo,  skip i = ', i);
+        // console.log('exist AccountInfo,  skip i = ', i);
         i++;
       }
 
@@ -110,17 +110,17 @@ export const solanaInitializeStakeManager =
         await connection.getMinimumBalanceForRentExemption(stakeManagerSpace);
 
       const lamports = await connection.getMinimumBalanceForRentExemption(0);
-      console.log({ lamports });
+      // console.log({ lamports });
       const [stakePoolPubkey, number] = PublicKey.findProgramAddressSync(
         [stakeManagerPubkey.toBuffer(), Buffer.from('pool_seed')],
         lsdProgramPubkey
       );
-      console.log('stakePool:', stakePoolPubkey.toString());
+      // console.log('stakePool:', stakePoolPubkey.toString());
 
       const mintLamports = await connection.getMinimumBalanceForRentExemption(
         getMintLen([])
       );
-      console.log({ mintLamports });
+      // console.log({ mintLamports });
 
       // test manual createMint
       // const keypair = Keypair.generate();
@@ -152,7 +152,7 @@ export const solanaInitializeStakeManager =
 
       // create mint
       const newMintKeypair = Keypair.generate();
-      console.log('newMintKeypair:', newMintKeypair.publicKey.toString());
+      // console.log('newMintKeypair:', newMintKeypair.publicKey.toString());
 
       transferTransaction.add(
         SystemProgram.transfer({
@@ -170,19 +170,19 @@ export const solanaInitializeStakeManager =
         transferTransaction,
         connection
       );
-      console.log(
-        `View on explorer: https://explorer.solana.com/tx/${transferTxid}?cluster=custom`
-      );
+      // console.log(
+      //   `View on explorer: https://explorer.solana.com/tx/${transferTxid}?cluster=custom`
+      // );
 
       while (true) {
         const newMintKeypairAccountInfo = await connection.getAccountInfo(
           newMintKeypair.publicKey
         );
         if (newMintKeypairAccountInfo) {
-          console.log('new Keypair account exist');
+          // console.log('new Keypair account exist');
           break;
         }
-        console.log('new Keypair account not exist');
+        // console.log('new Keypair account not exist');
         await sleep(3000);
       }
 
@@ -194,7 +194,7 @@ export const solanaInitializeStakeManager =
         9
       );
 
-      console.log('lsdTokenMintPubkey:', mintPubkey.toString());
+      // console.log('lsdTokenMintPubkey:', mintPubkey.toString());
 
       // const mint = Keypair.generate();
       // const mintPubkey = mint.publicKey;
@@ -242,8 +242,8 @@ export const solanaInitializeStakeManager =
       );
 
       const stackPubkey = new PublicKey(solanaPrograms.stackProgramId);
-      console.log('stackPubkey:', stackPubkey.toString());
-      console.log('validatorPubkey:', validatorPublicKey.toString());
+      // console.log('stackPubkey:', stackPubkey.toString());
+      // console.log('validatorPubkey:', validatorPublicKey.toString());
       const adminPubkey = new PublicKey(userPublicKey);
 
       const [stackFeeAccountPubkey] = PublicKey.findProgramAddressSync(
@@ -327,9 +327,9 @@ export const solanaInitializeStakeManager =
         throw new Error(TRANSACTION_FAILED_MESSAGE);
       }
 
-      console.log(
-        `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
-      );
+      // console.log(
+      //   `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
+      // );
 
       let transactionDetail: TransactionResponse | null | undefined = undefined;
       let retryCount = 0;

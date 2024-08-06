@@ -63,7 +63,7 @@ const ParameterPage = () => {
 
         const balance = await connection.getBalance(userPublicKey);
         let solBalance = chainAmountToHuman(balance, 9);
-        console.log({ solBalance });
+        // console.log({ solBalance });
         setSolBalance(balance ? solBalance : '0');
       } catch (err) {
         // dispatch(setSolanaBalance('--'));

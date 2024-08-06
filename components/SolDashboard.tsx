@@ -170,7 +170,7 @@ const DashboardItem = (props: { address: string }) => {
       const stakeManagerAccount = await program.account.stakeManager.fetch(
         new PublicKey(address)
       );
-      console.log({ stakeManagerAccount });
+      // console.log({ stakeManagerAccount });
 
       setDashboardInfo({
         symbol: 'SOL LST',

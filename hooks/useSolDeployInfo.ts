@@ -41,7 +41,7 @@ export const useSolDeployInfo = (stakeManagerAddress: string) => {
       const stakeManagerAccount = await program.account.stakeManager.fetch(
         new PublicKey(stakeManagerAddress)
       );
-      console.log({ stakeManagerAccount });
+      // console.log({ stakeManagerAccount });
 
       if (stakeManagerAccount) {
         setDeployInfo({
