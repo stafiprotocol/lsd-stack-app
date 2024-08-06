@@ -537,7 +537,9 @@ const DashboardItem = (props: { address: string }) => {
             target="_blank"
           >
             <div className="mt-[.24rem] flex justify-between items-center cursor-pointer">
-              <div className="text-link mr-[.06rem]">Stack Address</div>
+              <div className="text-link mr-[.06rem]">
+                Stack Contract Address
+              </div>
               <Icomoon icon="share" size=".12rem" />
             </div>
           </Link>
