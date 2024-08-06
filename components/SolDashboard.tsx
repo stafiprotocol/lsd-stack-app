@@ -35,14 +35,17 @@ import { UpdateSolPlatformFeeModal } from './modal/sol/UpdateSolPlatformFeeModal
 import { UpdateSolMinDepositModal } from './modal/sol/UpdateSolMinDepositModal';
 import { AddSolValidatorModal } from './modal/sol/AddSolValidatorModal';
 import { RemoveSolValidatorModal } from './modal/sol/RemoveSolValidatorModal';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { PrimaryLoading } from './common/PrimaryLoading';
 
 export const SolDashboard = () => {
   const { publicKey } = useWallet();
   const { connection } = useConnection();
-  const [addresses, setAddresses] = useState<string[]>([]);
 
-  const updateList = useCallback(async () => {
-    try {
+  const listQuery: UseQueryResult<string[] | undefined> = useQuery({
+    queryKey: ['GetSolDashboardList', publicKey?.toString()],
+    enabled: !!publicKey?.toString(),
+    queryFn: async () => {
       if (!publicKey) {
         return;
       }
@@ -68,29 +71,26 @@ export const SolDashboard = () => {
         i++;
       }
 
-      setAddresses(stakeManagerAddresses);
-    } catch (err: any) {
-      console.log({ err });
-    }
-  }, [publicKey, connection]);
-
-  useDebouncedEffect(
-    () => {
-      updateList();
+      return stakeManagerAddresses;
     },
-    [updateList],
-    1000
-  );
+  });
 
   return (
-    <div>
-      {addresses.length > 0 ? (
-        addresses.map((address) => (
-          <DashboardItem key={address} address={address} />
-        ))
-      ) : (
-        <div className="mt-[.56rem]">
-          <EmptyContent />
+    <div className="relative">
+      {!listQuery.isLoading &&
+        (!!listQuery.data?.length ? (
+          listQuery.data.map((address) => (
+            <DashboardItem key={address} address={address} />
+          ))
+        ) : (
+          <div className="mt-[.56rem]">
+            <EmptyContent />
+          </div>
+        ))}
+
+      {listQuery.isLoading && (
+        <div className="pt-[.56rem] flex justify-center">
+          <PrimaryLoading size=".56rem" />
         </div>
       )}
 
@@ -335,7 +335,9 @@ const DashboardItem = (props: { address: string }) => {
           <div className="flex items-center">
             <div className="text-text2">Unbonding Duration:</div>
             <div className="text-text1 ml-[.06rem] ">
-              {dashboardInfo ? Number(dashboardInfo.unbondingDuration) : '--'}
+              {dashboardInfo
+                ? `${Number(dashboardInfo.unbondingDuration)} Epochs`
+                : '--'}
             </div>
           </div>
 

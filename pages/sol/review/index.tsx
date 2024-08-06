@@ -77,16 +77,16 @@ const ReviewPage = () => {
                     name="Owner address"
                     value={deployInfo.admin.toString()}
                   />
-                  <DeployInfoItem
+                  {/* <DeployInfoItem
                     name="Balancer address"
                     value={deployInfo.balancer.toString()}
-                  />
+                  /> */}
                   <DeployInfoItem
                     name="LST address"
                     value={deployInfo.lsdTokenMint.toString()}
                   />
                   <DeployInfoItem
-                    name="Stack address"
+                    name="Stack Contract address"
                     value={deployInfo.stack.toString()}
                   />
                   <DeployInfoItem

@@ -30,11 +30,10 @@ export function useModuleList(
   eco: AppEco,
   evmLsdTokenConfig?: EvmLsdTokenConfig
 ) {
-  const [moduleList, setModuleList] = useState<ModuleSetting[]>([]);
   const { connection } = useConnection();
   const userAddress = useUserAddress(eco);
 
-  const [lsdHistoryList, setLsdHistoryList] = useState<LsdHistoryItem[]>([]);
+  const [lsdHistoryList, setLsdHistoryList] = useState<LsdHistoryItem[]>();
 
   const updateEthList = useCallback(async () => {
     try {

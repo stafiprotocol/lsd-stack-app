@@ -43,40 +43,48 @@ import { UpdateSupportedLstsModal } from './modal/lrt/UpdateSupportedLstsModal';
 import { UpdateLrtPlatformFeeModal } from './modal/lrt/UpdateLrtPlatformFeeModal';
 import snackbarUtil from 'utils/snackbarUtils';
 import { getInjectedConnector } from 'utils/commonUtils';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { PrimaryLoading } from './common/PrimaryLoading';
 
 export const LrtDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
-  const [lrdTokens, setLrdTokens] = useState<string[]>([]);
 
-  const updateList = useCallback(async () => {
-    try {
-      const web3 = getEthWeb3();
-      const contract = new web3.eth.Contract(
-        getLrtFactoryContract().abi,
-        getLrtFactoryContract().address
-      );
-      const lrdTokensOfCreator = await contract.methods
-        .lrdTokensOfCreator(metaMaskAccount)
-        .call();
-      setLrdTokens(lrdTokensOfCreator);
-    } catch (err: any) {
-      console.log({ err });
-    }
-  }, [metaMaskAccount]);
-
-  useEffect(() => {
-    updateList();
-  }, [updateList]);
+  const listQuery: UseQueryResult<string[] | undefined> = useQuery({
+    queryKey: ['GetLrtDashboardList', metaMaskAccount],
+    enabled: !!metaMaskAccount,
+    queryFn: async () => {
+      try {
+        const web3 = getEthWeb3();
+        const contract = new web3.eth.Contract(
+          getLrtFactoryContract().abi,
+          getLrtFactoryContract().address
+        );
+        const lrdTokensOfCreator = await contract.methods
+          .lrdTokensOfCreator(metaMaskAccount)
+          .call();
+        return lrdTokensOfCreator;
+      } catch (err: any) {
+        console.log({ err });
+      }
+    },
+  });
 
   return (
     <div>
-      {lrdTokens.length > 0 ? (
-        lrdTokens.map((address) => (
-          <DashboardItem key={address} address={address} />
-        ))
-      ) : (
-        <div className="mt-[.56rem]">
-          <EmptyContent />
+      {!listQuery.isLoading &&
+        (!!listQuery.data?.length ? (
+          listQuery.data.map((address) => (
+            <DashboardItem key={address} address={address} />
+          ))
+        ) : (
+          <div className="mt-[.56rem]">
+            <EmptyContent />
+          </div>
+        ))}
+
+      {listQuery.isLoading && (
+        <div className="pt-[.56rem] flex justify-center">
+          <PrimaryLoading size=".56rem" />
         </div>
       )}
 

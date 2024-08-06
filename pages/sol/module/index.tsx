@@ -20,7 +20,7 @@ const LrtModulePage = () => {
     dispatch(
       setCreationStepInfo({
         steps: SOL_CREATION_STEPS,
-        activedIndex: 4,
+        activedIndex: 3,
       })
     );
   }, [dispatch]);

@@ -184,7 +184,7 @@ export const UpdateSolPlatformFeeModal = ({
         <div className="mx-[.24rem] mt-[.16rem]">
           <InputItem
             disabled={loading}
-            label="Stack Fee"
+            label="Platform Fee"
             placeholder={placeholder}
             suffix="%"
             isNumber

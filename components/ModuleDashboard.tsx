@@ -26,11 +26,13 @@ export const ModuleDashboard = (props: Props) => {
         />
       )}
 
-      <PointSystemModuleCard
-        eco={eco}
-        lsdTokenAddress={lsdTokenAddress}
-        lsdTokenName={lsdTokenName}
-      />
+      {eco !== AppEco.Sol && eco !== AppEco.Cosmos && (
+        <PointSystemModuleCard
+          eco={eco}
+          lsdTokenAddress={lsdTokenAddress}
+          lsdTokenName={lsdTokenName}
+        />
+      )}
 
       <FrontendModuleCard
         eco={eco}

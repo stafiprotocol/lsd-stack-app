@@ -35,6 +35,8 @@ import { UpdateEvmFactoryFeeModal } from './modal/evm/UpdateEvmFactoryFeeModal';
 import { UpdateEvmMinDepositModal } from './modal/evm/UpdateEvmMinDepositModal';
 import { UpdateEvmPlatformFeeModal } from './modal/evm/UpdateEvmPlatformFeeModal';
 import { getInjectedConnector } from 'utils/commonUtils';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { PrimaryLoading } from './common/PrimaryLoading';
 
 interface Props {
   lsdTokenConfig: EvmLsdTokenConfig;
@@ -43,42 +45,52 @@ interface Props {
 export const EvmDashboard = (props: Props) => {
   const { lsdTokenConfig } = props;
   const { metaMaskAccount } = useWalletAccount();
-  const [lsdTokens, setLsdTokens] = useState<string[]>([]);
 
-  const updateList = useCallback(async () => {
-    try {
-      const web3 = getWeb3(lsdTokenConfig.rpc);
-      const contract = new web3.eth.Contract(
-        getEvmFactoryAbi(),
-        lsdTokenConfig.factoryContract,
-        { from: metaMaskAccount }
-      );
-      const lsdTokensOfCreater = await contract.methods
-        .lsdTokensOfCreater(metaMaskAccount)
-        .call();
-      setLsdTokens(lsdTokensOfCreater);
-    } catch (err: any) {
-      console.log({ err });
-    }
-  }, [metaMaskAccount, lsdTokenConfig]);
-
-  useEffect(() => {
-    updateList();
-  }, [updateList]);
+  const listQuery: UseQueryResult<string[] | undefined> = useQuery({
+    queryKey: [
+      'GetEvmDashboardList',
+      metaMaskAccount,
+      lsdTokenConfig.factoryContract,
+    ],
+    enabled: !!metaMaskAccount,
+    queryFn: async () => {
+      try {
+        const web3 = getWeb3(lsdTokenConfig.rpc);
+        const contract = new web3.eth.Contract(
+          getEvmFactoryAbi(),
+          lsdTokenConfig.factoryContract,
+          { from: metaMaskAccount }
+        );
+        const lsdTokensOfCreater = await contract.methods
+          .lsdTokensOfCreater(metaMaskAccount)
+          .call();
+        return lsdTokensOfCreater;
+      } catch (err: any) {
+        console.log({ err });
+      }
+    },
+  });
 
   return (
     <div>
-      {lsdTokens.length > 0 ? (
-        lsdTokens.map((address) => (
-          <DashboardItem
-            lsdTokenConfig={lsdTokenConfig}
-            key={address}
-            address={address}
-          />
-        ))
-      ) : (
-        <div className="mt-[.56rem]">
-          <EmptyContent />
+      {!listQuery.isLoading &&
+        (!!listQuery.data?.length ? (
+          listQuery.data.map((address) => (
+            <DashboardItem
+              key={address}
+              address={address}
+              lsdTokenConfig={lsdTokenConfig}
+            />
+          ))
+        ) : (
+          <div className="mt-[.56rem]">
+            <EmptyContent />
+          </div>
+        ))}
+
+      {listQuery.isLoading && (
+        <div className="pt-[.56rem] flex justify-center">
+          <PrimaryLoading size=".56rem" />
         </div>
       )}
 

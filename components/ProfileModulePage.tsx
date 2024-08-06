@@ -14,6 +14,7 @@ import { evmLsdTokens } from 'config/evm';
 import { Icomoon } from './icon/Icomoon';
 import { Popover } from '@mui/material';
 import { openLink } from 'utils/commonUtils';
+import { PrimaryLoading } from './common/PrimaryLoading';
 
 interface Props {
   eco: AppEco;
@@ -62,7 +63,7 @@ export const ProfileModulePage = (props: Props) => {
         <div
           className={classNames(
             'h-[.7rem] grid items-center font-[500]',
-            lsdHistoryList.length > 0 ? '' : 'invisible'
+            !!lsdHistoryList?.length ? '' : 'invisible'
           )}
           style={{
             gridTemplateColumns: '22% 22% 10% 46%',
@@ -83,39 +84,46 @@ export const ProfileModulePage = (props: Props) => {
           <div className="flex items-center justify-start text-[.16rem] text-color-text2"></div>
         </div>
 
-        {lsdHistoryList.length === 0 ? (
-          <div className="mt-[.32rem] mb-[1rem]">
-            <EmptyContent />
-          </div>
-        ) : (
-          lsdHistoryList.map((item, index) => (
-            <div key={index}>
-              {eco === AppEco.Cosmos && (
-                <ModuleTableItem
-                  type="ai"
-                  index={3 * index}
-                  lsdHistoryItem={item}
-                  eco={eco}
-                />
-              )}
-
-              {eco !== AppEco.Cosmos && (
-                <ModuleTableItem
-                  type="point"
-                  index={3 * index}
-                  lsdHistoryItem={item}
-                  eco={eco}
-                />
-              )}
-
-              <ModuleTableItem
-                type="frontend"
-                index={3 * index + 1}
-                lsdHistoryItem={item}
-                eco={eco}
-              />
+        {!!lsdHistoryList &&
+          (!lsdHistoryList.length ? (
+            <div className="mt-[.32rem] mb-[1rem]">
+              <EmptyContent />
             </div>
-          ))
+          ) : (
+            lsdHistoryList.map((item, index) => (
+              <div key={index}>
+                {eco === AppEco.Cosmos && (
+                  <ModuleTableItem
+                    type="ai"
+                    index={3 * index}
+                    lsdHistoryItem={item}
+                    eco={eco}
+                  />
+                )}
+
+                {eco !== AppEco.Cosmos && eco !== AppEco.Sol && (
+                  <ModuleTableItem
+                    type="point"
+                    index={3 * index}
+                    lsdHistoryItem={item}
+                    eco={eco}
+                  />
+                )}
+
+                <ModuleTableItem
+                  type="frontend"
+                  index={3 * index + 1}
+                  lsdHistoryItem={item}
+                  eco={eco}
+                />
+              </div>
+            ))
+          ))}
+
+        {!lsdHistoryList && (
+          <div className="pt-[.24rem] pb-[1rem] flex justify-center">
+            <PrimaryLoading size=".56rem" />
+          </div>
         )}
       </div>
 

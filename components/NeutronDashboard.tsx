@@ -37,38 +37,44 @@ import { UpdateCosmosMinDepositModal } from './modal/cosmos/UpdateCosmosMinDepos
 import { UpdateCosmosPlatformFeeModal } from './modal/cosmos/UpdateCosmosPlatformFeeModal';
 import { UpdateCosmosUnbondFeeModal } from './modal/cosmos/UpdateCosmosUnbondFeeModal';
 import { getNeutronStakeManagerContract } from 'config/cosmos/contract';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { PrimaryLoading } from './common/PrimaryLoading';
 
 export const NeutronDashboard = () => {
-  const { metaMaskAccount } = useWalletAccount();
   const neutronAccount = useCosmosChainAccount(neutronChainConfig.chainId);
-  const [icas, setIcas] = useState<string[]>([]);
 
-  const updateList = useCallback(async () => {
-    try {
-      const stakeManagerClient = await getStakeManagerClient();
-      const interchainAccountIds =
-        await stakeManagerClient.queryInterchainAccountIdFromCreator({
-          addr: neutronAccount?.bech32Address || '',
-        });
+  const listQuery: UseQueryResult<string[] | undefined> = useQuery({
+    queryKey: ['GetNeutronDashboardList', neutronAccount?.bech32Address],
+    enabled: !!neutronAccount?.bech32Address,
+    queryFn: async () => {
+      try {
+        const stakeManagerClient = await getStakeManagerClient();
+        const interchainAccountIds =
+          await stakeManagerClient.queryInterchainAccountIdFromCreator({
+            addr: neutronAccount?.bech32Address || '',
+          });
 
-      // console.log({ interchainAccountIds });
-      setIcas(interchainAccountIds);
-    } catch (err: any) {
-      console.log({ err });
-    }
-  }, [neutronAccount?.bech32Address]);
-
-  useEffect(() => {
-    updateList();
-  }, [updateList]);
+        return interchainAccountIds;
+      } catch (err: any) {
+        console.log({ err });
+      }
+    },
+  });
 
   return (
     <div>
-      {icas.length > 0 ? (
-        icas.map((ica) => <DashboardItem key={ica} ica={ica} />)
-      ) : (
-        <div className="mt-[.56rem]">
-          <EmptyContent />
+      {!listQuery.isLoading &&
+        (!!listQuery.data?.length ? (
+          listQuery.data.map((ica) => <DashboardItem key={ica} ica={ica} />)
+        ) : (
+          <div className="mt-[.56rem]">
+            <EmptyContent />
+          </div>
+        ))}
+
+      {listQuery.isLoading && (
+        <div className="pt-[.56rem] flex justify-center">
+          <PrimaryLoading size=".56rem" />
         </div>
       )}
 
