@@ -18,6 +18,7 @@ import {
   SYSVAR_RENT_PUBKEY,
   Transaction,
   TransactionInstruction,
+  TransactionResponse,
 } from '@solana/web3.js';
 import { getSolanaScanTxUrl } from 'config/explorer';
 import { solanaPrograms } from 'config/sol';
@@ -330,10 +331,11 @@ export const solanaInitializeStakeManager =
         `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
       );
 
+      let transactionDetail: TransactionResponse | null | undefined = undefined;
       let retryCount = 0;
       while (retryCount < 20) {
         retryCount++;
-        const transactionDetail = await connection.getTransaction(txid, {
+        transactionDetail = await connection.getTransaction(txid, {
           commitment: 'finalized',
         });
         // console.log({ transactionDetail });
@@ -341,6 +343,10 @@ export const solanaInitializeStakeManager =
           break;
         }
         await sleep(3000);
+      }
+
+      if (!transactionDetail) {
+        throw new Error(TRANSACTION_FAILED_MESSAGE);
       }
 
       dispatch(
