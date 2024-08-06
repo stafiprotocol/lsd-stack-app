@@ -179,7 +179,9 @@ const Navbar = () => {
 
         <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW flex flex-col">
           <div className="h-full w-smallContentW xl:w-contentW 2xl:w-largeContentW text-text2 text-[.14rem] leading-[.21rem]">
-            {appEco === AppEco.Eth ? (
+            {appEco === AppEco.Eth ||
+            appEco === AppEco.Sol ||
+            appEco === AppEco.Lrt ? (
               <div>
                 Welcome to StaFi LSAAS platform, all parameters shown are
                 defaults (including some randomly generated addresses), which we
