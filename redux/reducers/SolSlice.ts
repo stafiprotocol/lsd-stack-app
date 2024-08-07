@@ -2,9 +2,7 @@ import { ASSOCIATED_PROGRAM_ID } from '@coral-xyz/anchor/dist/cjs/utils/token';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   createInitializeMint2Instruction,
-  createMint,
   getMinimumBalanceForRentExemptMint,
-  getMintLen,
   MINT_SIZE,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
@@ -13,7 +11,6 @@ import {
   Connection,
   Keypair,
   PublicKey,
-  sendAndConfirmTransaction,
   SystemProgram,
   SYSVAR_CLOCK_PUBKEY,
   SYSVAR_RENT_PUBKEY,
@@ -31,10 +28,9 @@ import * as crypto from 'crypto';
 import { AppThunk } from 'redux/store';
 import { sleep } from 'utils/commonUtils';
 import snackbarUtil from 'utils/snackbarUtils';
+import { sendSolanaTransaction } from 'utils/solanaUtils';
 import { isSolanaCancelError } from 'utils/web3Utils';
 import { setSubmitLoadingParams } from './AppSlice';
-import { useAnchorWallet } from '@solana/wallet-adapter-react';
-import { sendSolanaTransaction } from 'utils/solanaUtils';
 
 export interface SolState {
   solEcoLoading: boolean;
@@ -80,6 +76,8 @@ export const solanaInitializeStakeManager =
         })
       );
 
+      // const tokenProgramId = TOKEN_2022_PROGRAM_ID;
+      const tokenProgramId = TOKEN_PROGRAM_ID;
       const lsdProgramPubkey = new PublicKey(solanaPrograms.lsdProgramId);
       const transaction = new Transaction();
 
@@ -118,11 +116,11 @@ export const solanaInitializeStakeManager =
       );
       // console.log('stakePool:', stakePoolPubkey.toString());
 
-      const mintLamports = await getMinimumBalanceForRentExemptMint(connection);
-
       // createMint
       const keypair = Keypair.generate();
       const mintPubkey = keypair.publicKey;
+
+      const mintLamports = await getMinimumBalanceForRentExemptMint(connection);
 
       transaction.add(
         SystemProgram.createAccount({
@@ -130,14 +128,14 @@ export const solanaInitializeStakeManager =
           newAccountPubkey: keypair.publicKey,
           space: MINT_SIZE,
           lamports: mintLamports,
-          programId: TOKEN_PROGRAM_ID,
+          programId: tokenProgramId,
         }),
         createInitializeMint2Instruction(
           keypair.publicKey,
           9,
           stakePoolPubkey,
           null,
-          TOKEN_PROGRAM_ID
+          tokenProgramId
         )
       );
 
@@ -244,6 +242,55 @@ export const solanaInitializeStakeManager =
         data: data,
       });
       transaction.add(instruction);
+
+      // Add metadata
+      {
+        const metadataData = {
+          name: 'Solana Training Token',
+          symbol: 'TRAINING',
+          // Arweave / IPFS / Pinata etc link using metaplex standard for off-chain data
+          uri: 'https://arweave.net/1234',
+          sellerFeeBasisPoints: 0,
+          creators: null,
+          collection: null,
+          uses: null,
+        };
+
+        const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
+          solanaPrograms.tokenMetaplexProgramId
+        );
+
+        const metadataPDAAndBump = PublicKey.findProgramAddressSync(
+          [
+            Buffer.from('metadata'),
+            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+            mintPubkey.toBuffer(),
+          ],
+          TOKEN_METADATA_PROGRAM_ID
+        );
+
+        const metadataPDA = metadataPDAAndBump[0];
+
+        // const createMetadataAccountInstruction =
+        //   createCreateMetadataAccountV3Instruction(
+        //     {
+        //       metadata: metadataPDA,
+        //       mint: mintPubkey,
+        //       mintAuthority: userPublicKey,
+        //       payer: userPublicKey,
+        //       updateAuthority: userPublicKey,
+        //     },
+        //     {
+        //       createMetadataAccountArgsV3: {
+        //         collectionDetails: null,
+        //         data: metadataData,
+        //         isMutable: true,
+        //       },
+        //     }
+        //   );
+
+        // transaction.add(createMetadataAccountInstruction);
+      }
 
       // const txid = await sendTransaction(transaction, connection, {
       //   skipPreflight: true,

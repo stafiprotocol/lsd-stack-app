@@ -40,6 +40,8 @@ const ParameterPage = () => {
   const { publicKey: userPublicKey, sendTransaction, wallet } = useWallet();
   const displayAddress = userPublicKey?.toString();
 
+  const [tokenName, setTokenName] = useState('');
+  const [symbol, setSymbol] = useState('');
   const [validatorAddress, setValidatorAddress] = useState('');
   const [confirmModalOpened, setConfirmModalOpened] = useState(false);
   const [paramList, setParamList] = useState<ParamItem[]>([]);
@@ -205,6 +207,27 @@ const ParameterPage = () => {
                   disabled
                   placeholder="Example: HEL..."
                 />
+
+                {/* <InputItem
+                  label="Token Name"
+                  value={tokenName}
+                  onChange={(v) => setTokenName(v)}
+                  placeholder="Example: StaFi rSOL"
+                />
+                {tokenName.length > 50 && (
+                  <InputErrorTip msg="Token name must be less than 50 character" />
+                )}
+
+                <InputItem
+                  label="Symbol"
+                  value={symbol}
+                  onChange={(v) => setSymbol(v)}
+                  placeholder="Example: rSOL"
+                /> */}
+
+                {symbol.length > 10 && (
+                  <InputErrorTip msg="Symbol must be less than 10 character" />
+                )}
 
                 <InputItem
                   label="Validator Address"
