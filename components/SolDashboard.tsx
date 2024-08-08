@@ -37,6 +37,7 @@ import { AddSolValidatorModal } from './modal/sol/AddSolValidatorModal';
 import { RemoveSolValidatorModal } from './modal/sol/RemoveSolValidatorModal';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { PrimaryLoading } from './common/PrimaryLoading';
+import { UpdateSolRateChangeLimitModal } from './modal/sol/UpdateSolRateChangeLimitModal';
 
 export const SolDashboard = () => {
   const { publicKey } = useWallet();
@@ -130,6 +131,7 @@ interface DashboardInfo {
   formatStackCommissionRate: string;
   unbondingDuration: string;
   formatMinStakeAmount: string;
+  formatRateChangeLimit: string;
   latestEra: string;
 }
 
@@ -150,6 +152,8 @@ const DashboardItem = (props: { address: string }) => {
   });
   const [dashboardInfo, setDashboardInfo] = useState<DashboardInfo>();
   const [platformFeeModalOpen, setPlatformFeeModalOpen] = useState(false);
+  const [rateChangeLimitModalOpen, setRateChangeLimitModalOpen] =
+    useState(false);
   const [minDepositModalOpen, setMinDepositModalOpen] = useState(false);
   const [addValidatorModalOpen, setAddValidatorModalOpen] = useState(false);
   const [removeValidatorModalOpen, setRemoveValidatorModalOpen] =
@@ -214,6 +218,19 @@ const DashboardItem = (props: { address: string }) => {
           {
             decimals: 6,
             fixedDecimals: false,
+          }
+        ),
+        formatRateChangeLimit: formatNumber(
+          Number(
+            chainAmountToHuman(
+              stakeManagerAccount.rateChangeLimit.mul(new BN(100)).toString(),
+              9
+            )
+          ).toString(),
+          {
+            decimals: 2,
+            fixedDecimals: false,
+            roundMode: 'round',
           }
         ),
         unbondingDuration: stakeManagerAccount.unbondingDuration.toString(),
@@ -347,6 +364,15 @@ const DashboardItem = (props: { address: string }) => {
               {dashboardInfo ? dashboardInfo.latestEra : '--'}
             </div>
           </div>
+
+          <div className="flex items-center">
+            <div className="text-text2">Rate Change Limit:</div>
+            <div className="text-text1 ml-[.06rem] ">
+              {dashboardInfo
+                ? `${Number(dashboardInfo.formatRateChangeLimit)}%`
+                : '--'}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -396,6 +422,28 @@ const DashboardItem = (props: { address: string }) => {
             }}
           >
             <div className="text-color-text2 text-[.14rem]">Platform Fee</div>
+
+            <div className="w-[.13rem] h-[.13rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
+            onClick={() => {
+              if (dashboardInfo?.admin?.toString() !== userAddress) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
+              settingsPopupState.close();
+              setRateChangeLimitModalOpen(true);
+            }}
+          >
+            <div className="text-color-text2 text-[.14rem]">
+              Rate Change Limit
+            </div>
 
             <div className="w-[.13rem] h-[.13rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
@@ -580,6 +628,19 @@ const DashboardItem = (props: { address: string }) => {
         }}
         stakeManagerAddress={address}
         placeholder={dashboardInfo?.formatStackCommissionRate || ''}
+      />
+
+      <UpdateSolRateChangeLimitModal
+        open={rateChangeLimitModalOpen}
+        close={() => {
+          setRateChangeLimitModalOpen(false);
+        }}
+        onConnectWallet={connectWallet}
+        onRefresh={() => {
+          updateData();
+        }}
+        stakeManagerAddress={address}
+        placeholder={dashboardInfo?.formatRateChangeLimit || ''}
       />
 
       <UpdateSolMinDepositModal
