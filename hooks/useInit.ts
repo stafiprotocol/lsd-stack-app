@@ -17,8 +17,9 @@ import {
   ETH_STANDARD_CREATION_STEPS,
 } from 'constants/common';
 import { initIndexDb } from 'utils/dbUtils';
+import { useWallet } from '@solana/wallet-adapter-react';
 
-declare const window: { ethereum: any };
+declare const window: { ethereum: any; solana: any };
 declare const ethereum: any;
 
 export function useInit() {
@@ -26,6 +27,8 @@ export function useInit() {
 
   const dispatch = useAppDispatch();
   const { backRoute } = useAppSelector((state) => state.app);
+
+  const { disconnect } = useWallet();
 
   useEffect(() => {
     initIndexDb();
@@ -118,5 +121,11 @@ export function useInit() {
 
   useEffect(() => {
     document.body.style.backgroundColor = '#E8EFFD';
+  }, []);
+
+  useEffect(() => {
+    window.solana?.on('accountChanged', () => {
+      disconnect();
+    });
   }, []);
 }

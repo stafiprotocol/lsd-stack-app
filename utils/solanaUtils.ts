@@ -1,21 +1,19 @@
-import {
-  createAssociatedTokenAccountInstruction,
-  getAssociatedTokenAddress,
-} from '@solana/spl-token';
-import { Connection, PublicKey, Signer, Transaction } from '@solana/web3.js';
+import { Connection, Signer, Transaction } from '@solana/web3.js';
 
 declare const window: any;
 
 export function getSolanaExtension() {
-  if ('phantom' in window) {
-    const provider = window.phantom?.solana;
+  return window.solana;
 
-    if (provider?.isPhantom) {
-      return provider;
-    }
-  }
+  // if ('phantom' in window) {
+  //   const provider = window.phantom?.solana;
 
-  return undefined;
+  //   if (provider?.isPhantom) {
+  //     return provider;
+  //   }
+  // }
+
+  // return undefined;
 }
 
 export async function sendSolanaTransaction(
