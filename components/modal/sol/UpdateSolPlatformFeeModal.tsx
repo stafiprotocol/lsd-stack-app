@@ -9,6 +9,7 @@ import {
   PublicKey,
   Transaction,
   TransactionInstruction,
+  TransactionResponse,
 } from '@solana/web3.js';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
@@ -127,9 +128,10 @@ export const UpdateSolPlatformFeeModal = ({
       const txid = await sendSolanaTransaction(transaction, connection);
 
       let retryCount = 0;
+      let transactionDetail: TransactionResponse | null | undefined = undefined;
       while (retryCount < 20 && txid) {
         retryCount++;
-        const transactionDetail = await connection.getTransaction(txid, {
+        transactionDetail = await connection.getTransaction(txid, {
           commitment: 'finalized',
         });
         console.log({ transactionDetail });
@@ -143,10 +145,12 @@ export const UpdateSolPlatformFeeModal = ({
         `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
       );
 
-      if (txid) {
+      if (transactionDetail && !transactionDetail.meta?.err) {
         snackbarUtil.success('Update successfully');
         onRefresh();
         close();
+      } else {
+        snackbarUtil.error('Update failed, please try again later');
       }
     } catch (err: any) {
       console.log({ err });

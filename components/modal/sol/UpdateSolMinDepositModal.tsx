@@ -5,7 +5,7 @@ import {
   useConnection,
   useWallet,
 } from '@solana/wallet-adapter-react';
-import { PublicKey, Transaction } from '@solana/web3.js';
+import { PublicKey, Transaction, TransactionResponse } from '@solana/web3.js';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
@@ -90,9 +90,10 @@ export const UpdateSolMinDepositModal = ({
       const txid = await sendSolanaTransaction(transaction, connection);
 
       let retryCount = 0;
+      let transactionDetail: TransactionResponse | null | undefined = undefined;
       while (retryCount < 20 && txid) {
         retryCount++;
-        const transactionDetail = await connection.getTransaction(txid, {
+        transactionDetail = await connection.getTransaction(txid, {
           commitment: 'finalized',
         });
         console.log({ transactionDetail });
@@ -106,10 +107,12 @@ export const UpdateSolMinDepositModal = ({
         `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
       );
 
-      if (txid) {
+      if (transactionDetail && !transactionDetail.meta?.err) {
         snackbarUtil.success('Update successfully');
         onRefresh();
         close();
+      } else {
+        snackbarUtil.error('Update failed, please try again later');
       }
     } catch (err: any) {
       console.log({ err });
