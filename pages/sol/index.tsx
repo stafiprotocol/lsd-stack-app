@@ -291,28 +291,18 @@ const ParameterPage = () => {
               <br />
               Owner Permissions:
               <br />
-              - Upgrade contracts
+              - Manage validators
+              <br />
+              - Change balancer account
               <br />
               - Adjust commission fee
               <br />
-              - Adjust duration of era
+              - Adjust unbonding duration
               <br />
-              - Manage supported LSTs
+              - Adjust the minimum stake amount
               <br />
               <br />
-              Operator Address: must be registered operator on EigenLayer
-              <br />- Go and find{' '}
-              <a
-                className="underline text-text1"
-                href={
-                  getEthereumChainId() === 1
-                    ? 'https://app.eigenlayer.xyz/operator'
-                    : 'https://holesky.eigenlayer.xyz/operator'
-                }
-                target="_blank"
-              >
-                operators
-              </a>
+              Validator Address: Vote Account of the validator
             </div>
           </div>
         </div>

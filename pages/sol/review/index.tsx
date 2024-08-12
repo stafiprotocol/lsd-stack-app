@@ -144,7 +144,7 @@ const ReviewPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
-              Relay is an off-chain service responsible for interacting with LST
+              Relay is an off-chain service responsible for interacting with LSD
               contracts. There are two ways to run the relay:
               <br />
               1.{' '}
@@ -175,7 +175,7 @@ const ReviewPage = () => {
                 href={`${getDocHost()}/docs/develop_sol_lsd/lsd_app.html`}
                 target="_blank"
               >
-                How to build your own LRT App
+                How to build your own LSD App
               </a>
               <div className="relative w-[.12rem] h-[.12rem]">
                 <Image src={ExternalLinkImg} alt="link" layout="fill" />
