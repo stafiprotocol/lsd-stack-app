@@ -48,7 +48,7 @@ export async function saveModuleToDb(
 }
 
 export async function getModuleSettingFromDb(
-  type: 'point' | 'ai' | 'frontend',
+  type: 'point' | 'ai' | 'frontend' | 'ccip',
   tokenAddress?: string
 ): Promise<ModuleSetting | undefined> {
   if (!tokenAddress) {

@@ -26,7 +26,7 @@ import {
 interface ModuleTableItemProps {
   index: number;
   eco: AppEco;
-  type: 'ai' | 'point' | 'frontend';
+  type: 'ai' | 'point' | 'frontend' | 'ccip';
   lsdHistoryItem: LsdHistoryItem;
 }
 
@@ -84,7 +84,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
       </div>
 
       <div className="flex items-center justify-start text-[.16rem] text-color-text1">
-        {type !== 'frontend' && (
+        {(type === 'ai' || type === 'point') && (
           <ModuleStateTag
             state={
               !moduleSetting
@@ -93,7 +93,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
                 ? 'paused'
                 : 'running'
             }
-            className="ml-[.14rem]"
+            className="ml-[0rem]"
           />
         )}
       </div>
@@ -103,6 +103,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           <CustomButton
             type="primary"
             width="1.3rem"
+            className="mr-[.24rem]"
             onClick={() => {
               if (eco === AppEco.Cosmos) {
                 openLink(getCosmosStackAppUrl());
@@ -121,22 +122,23 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           >
             Preview
           </CustomButton>
-        ) : (
+        ) : type === 'ai' || type === 'point' ? (
           <CustomButton
             type="primary"
             width="1.3rem"
+            className="mr-[.24rem]"
             onClick={() => {
               setEditModalOpen(true);
             }}
           >
             Edit
           </CustomButton>
-        )}
+        ) : null}
 
         <CustomButton
           type="stroke"
           width="1.3rem"
-          className="ml-[.24rem]"
+          className=""
           onClick={() => {
             openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
           }}
@@ -144,7 +146,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           Tutorial
         </CustomButton>
 
-        {type !== 'frontend' && (
+        {(type === 'ai' || type === 'point') && (
           <CustomButton
             type="stroke"
             width="1.3rem"

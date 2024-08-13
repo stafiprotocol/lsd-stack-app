@@ -20,7 +20,7 @@ interface Props {
   lsdTokenAddress?: string;
 }
 
-export const FrontendModuleCard = (props: Props) => {
+export const CCIPModuleCard = (props: Props) => {
   const { lsdTokenAddress, lsdTokenName, eco } = props;
   const userAddress = useUserAddress(eco);
 
@@ -42,7 +42,7 @@ export const FrontendModuleCard = (props: Props) => {
               robotoSemiBold.className
             )}
           >
-            Frontend
+            Chainlink CCIP
           </div>
 
           <ModuleStatePanel state="stateless" text="Functions" />
@@ -50,8 +50,9 @@ export const FrontendModuleCard = (props: Props) => {
       </div>
 
       <div className="flex-1 text-[#6C86AD80] text-[.14rem] mt-[.16rem] leading-normal">
-        From local testing to live deployment, this module covers both frontend
-        preview and hosting.
+        By seamlessly integrating Chainlink&lsquo;s robust and secure CCIP
+        functions, this module empowers developers to build and operate dApps
+        with cross-chain capabilities.
       </div>
 
       <CustomButton
@@ -59,33 +60,6 @@ export const FrontendModuleCard = (props: Props) => {
         type="external"
         onClick={async () => {
           openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
-          // if (eco === AppEco.Cosmos) {
-          //   openLink(getCosmosStackAppUrl());
-          // } else if (eco === AppEco.Lrt) {
-          //   openLink(getLrtCaseUrl());
-          // } else if (eco === AppEco.Evm) {
-          //   openLink(getEvmCaseUrl());
-          // } else if (eco === AppEco.Eth) {
-          //   openLink(getEthStackAppUrl());
-          // } else {
-          //   openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
-          // }
-
-          // if (!userAddress || !lsdTokenAddress || !lsdTokenName) {
-          //   return;
-          // }
-          // const saved = await saveModuleToDb({
-          //   myKey: `frontend-${lsdTokenAddress}`,
-          //   eco: eco,
-          //   userAddress: userAddress,
-          //   disabled: false,
-          //   tokenName: lsdTokenName,
-          //   tokenAddress: lsdTokenAddress,
-          //   config: {
-          //     type: 'frontend',
-          //     config: {},
-          //   },
-          // });
         }}
       >
         Open External Module

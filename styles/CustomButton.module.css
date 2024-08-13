@@ -128,3 +128,16 @@
   background-image: url('../public/images/selected_bg.png');
   background-size: 100% 100%;
 }
+
+.button-external {
+  background: linear-gradient(
+    91.92deg,
+    #ffbd3c -15.55%,
+    #bfc39f 45.55%,
+    #80caff 77.72%
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

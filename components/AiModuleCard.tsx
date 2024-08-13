@@ -14,6 +14,7 @@ import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { ModuleStateTag } from './ModuleStateTag';
 import { useUserAddress } from 'hooks/useUserAddress';
 import { openLink } from 'utils/commonUtils';
+import { ModuleStatePanel } from './ModuleStatePanel';
 
 interface Props {
   eco: AppEco;
@@ -75,20 +76,16 @@ export const AiModuleCard = (props: Props) => {
             Validator Selection
           </div>
 
-          <div className="mt-[.06rem] flex items-center">
-            <div className="text-text2 text-[.14rem]">AI Agent</div>
-
-            <ModuleStateTag
-              state={
-                !existSetting
-                  ? 'not set'
-                  : existSetting.disabled
-                  ? 'paused'
-                  : 'running'
-              }
-              className="ml-[.14rem]"
-            />
-          </div>
+          <ModuleStatePanel
+            state={
+              !existSetting
+                ? 'not set'
+                : existSetting.disabled
+                ? 'paused'
+                : 'running'
+            }
+            text="AI Agent"
+          />
         </div>
       </div>
 

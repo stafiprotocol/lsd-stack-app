@@ -2,6 +2,7 @@ import { AppEco } from 'interfaces/common';
 import { AiModuleCard } from './AiModuleCard';
 import { FrontendModuleCard } from './FrontendModuleCard';
 import { PointSystemModuleCard } from './PointSystemModuleCard';
+import { CCIPModuleCard } from './CCIPModuleCard';
 
 interface Props {
   eco: AppEco;
@@ -39,6 +40,14 @@ export const ModuleDashboard = (props: Props) => {
         lsdTokenAddress={lsdTokenAddress}
         lsdTokenName={lsdTokenName}
       />
+
+      {eco === AppEco.Eth && (
+        <CCIPModuleCard
+          eco={eco}
+          lsdTokenAddress={lsdTokenAddress}
+          lsdTokenName={lsdTokenName}
+        />
+      )}
     </div>
   );
 };

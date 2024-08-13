@@ -14,7 +14,8 @@ type ButtonProps = React.PropsWithChildren<{
     | 'bg4'
     | 'small'
     | 'stroke'
-    | 'modal-bottom';
+    | 'modal-bottom'
+    | 'external';
   mt?: string;
   width?: string;
   height?: string;
@@ -36,7 +37,9 @@ export const CustomButton = (props: ButtonProps) => {
   return (
     <div
       className={classNames(
-        props.disabled
+        props.type === 'external'
+          ? styles['button-external']
+          : props.disabled
           ? props.type === 'stroke'
             ? styles['button-stroke-disabled']
             : styles['button-disabled']

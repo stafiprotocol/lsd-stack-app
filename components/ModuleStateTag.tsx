@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 
 interface Props {
-  state: 'running' | 'paused' | 'not set';
+  state: 'running' | 'paused' | 'not set' | 'stateless';
   className?: string;
 }
 

@@ -8,7 +8,7 @@ import { bindTrigger } from 'material-ui-popup-state';
 import others from 'public/images/tokens/others.svg';
 import { bindPopover, usePopupState } from 'material-ui-popup-state/hooks';
 import ArrowDownImg from 'public/images/arrow_down_gray.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { evmLsdTokens } from 'config/evm';
 import { Icomoon } from './icon/Icomoon';
@@ -38,6 +38,24 @@ export const ProfileModulePage = (props: Props) => {
     variant: 'popover',
     popupId: 'token',
   });
+
+  const indexList = useMemo(() => {
+    const res: string[] = [];
+    lsdHistoryList?.forEach((item, index) => {
+      if (eco === AppEco.Cosmos) {
+        res.push(`${index}:ai`);
+      }
+      if (eco !== AppEco.Cosmos && eco !== AppEco.Sol) {
+        res.push(`${index}:point`);
+      }
+      res.push(`${index}:frontend`);
+      if (eco === AppEco.Eth) {
+        res.push(`${index}:ccip`);
+      }
+    });
+
+    return res;
+  }, [eco, lsdHistoryList]);
 
   return (
     <div>
@@ -95,7 +113,7 @@ export const ProfileModulePage = (props: Props) => {
                 {eco === AppEco.Cosmos && (
                   <ModuleTableItem
                     type="ai"
-                    index={3 * index}
+                    index={indexList.indexOf(`${index}:ai`)}
                     lsdHistoryItem={item}
                     eco={eco}
                   />
@@ -104,7 +122,7 @@ export const ProfileModulePage = (props: Props) => {
                 {eco !== AppEco.Cosmos && eco !== AppEco.Sol && (
                   <ModuleTableItem
                     type="point"
-                    index={3 * index}
+                    index={indexList.indexOf(`${index}:point`)}
                     lsdHistoryItem={item}
                     eco={eco}
                   />
@@ -112,10 +130,19 @@ export const ProfileModulePage = (props: Props) => {
 
                 <ModuleTableItem
                   type="frontend"
-                  index={3 * index + 1}
+                  index={indexList.indexOf(`${index}:frontend`)}
                   lsdHistoryItem={item}
                   eco={eco}
                 />
+
+                {eco === AppEco.Eth && (
+                  <ModuleTableItem
+                    type="ccip"
+                    index={indexList.indexOf(`${index}:ccip`)}
+                    lsdHistoryItem={item}
+                    eco={eco}
+                  />
+                )}
               </div>
             ))
           ))}
