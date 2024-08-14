@@ -140,7 +140,27 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           width="1.3rem"
           className=""
           onClick={() => {
-            openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+            if (type === 'frontend') {
+              openLink(
+                'https://lsaas-docs.stafi.io/docs/modules/frontend.html'
+              );
+            } else if (type === 'ai') {
+              openLink(
+                'https://lsaas-docs.stafi.io/docs/modules/validator_selection_ai_agent.html'
+              );
+            } else if (type === 'point') {
+              openLink(
+                'https://lsaas-docs.stafi.io/docs/modules/point_system.html'
+              );
+            } else if (type === 'ccip') {
+              openLink(
+                'https://lsaas-docs.stafi.io/docs/modules/ccip_modules.html'
+              );
+            } else {
+              openLink(
+                'https://lsaas-docs.stafi.io/docs/modules/introduction.html'
+              );
+            }
           }}
         >
           Tutorial
