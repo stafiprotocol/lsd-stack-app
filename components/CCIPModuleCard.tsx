@@ -59,7 +59,9 @@ export const CCIPModuleCard = (props: Props) => {
         className="mb-[.24rem]"
         type="external"
         onClick={async () => {
-          openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+          openLink(
+            'https://lsaas-docs.stafi.io/docs/modules/ccip_modules.html'
+          );
         }}
       >
         Open External Module
