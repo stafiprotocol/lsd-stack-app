@@ -135,6 +135,19 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           </CustomButton>
         ) : null}
 
+        {type === 'ccip' && (
+          <CustomButton
+            type="external"
+            width="1.3rem"
+            className="mr-[.24rem]"
+            onClick={() => {
+              openLink('https://chain.link/cross-chain');
+            }}
+          >
+            Open External
+          </CustomButton>
+        )}
+
         <CustomButton
           type="stroke"
           width="1.3rem"

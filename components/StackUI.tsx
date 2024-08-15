@@ -162,7 +162,7 @@ export const StackUI = () => {
             text="CUSTOM"
             isBlank
             icon={customLstImg}
-            url="https://lsaas-docs.stafi.io/docs/introduction/getstarted.html"
+            url="https://discord.com/invite/jB77etn"
             className="ml-[.32rem]"
           />
 

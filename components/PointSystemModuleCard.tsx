@@ -38,7 +38,7 @@ export const PointSystemModuleCard = (props: Props) => {
   }, [lsdTokenAddress]);
 
   return (
-    <div className="w-[3.1rem] h-[3rem] flex flex-col items-stretch px-[.24rem] bg-color-bg2 rounded-[.3rem] border-[.01rem] border-color-border1">
+    <div className="w-[3.1rem] h-[3.16rem]  flex flex-col items-stretch px-[.24rem] bg-color-bg2 rounded-[.3rem] border-[.01rem] border-color-border1">
       <div className="mt-[.2rem] flex items-center">
         <div className="w-[.34rem] h-[.34rem] relative">
           <Image src="/images/module/ai_color.svg" layout="fill" alt="icon" />

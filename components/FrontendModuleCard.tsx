@@ -25,7 +25,7 @@ export const FrontendModuleCard = (props: Props) => {
   const userAddress = useUserAddress(eco);
 
   return (
-    <div className="w-[3.1rem] h-[3rem] flex flex-col items-stretch px-[.24rem] bg-color-bg2 rounded-[.3rem] border-[.01rem] border-color-border1">
+    <div className="w-[3.1rem] h-[3.16rem]  flex flex-col items-stretch px-[.24rem] bg-color-bg2 rounded-[.3rem] border-[.01rem] border-color-border1">
       <div className="mt-[.2rem] flex items-center">
         <div className="w-[.34rem] h-[.34rem] relative">
           <Image
@@ -55,40 +55,49 @@ export const FrontendModuleCard = (props: Props) => {
       </div>
 
       <CustomButton
-        className="mb-[.24rem]"
-        type="external"
+        className="mb-[.12rem]"
+        type="primary"
         onClick={async () => {
-          openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
-          // if (eco === AppEco.Cosmos) {
-          //   openLink(getCosmosStackAppUrl());
-          // } else if (eco === AppEco.Lrt) {
-          //   openLink(getLrtCaseUrl());
-          // } else if (eco === AppEco.Evm) {
-          //   openLink(getEvmCaseUrl());
-          // } else if (eco === AppEco.Eth) {
-          //   openLink(getEthStackAppUrl());
-          // } else {
-          //   openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
-          // }
+          if (eco === AppEco.Cosmos) {
+            openLink(getCosmosStackAppUrl());
+          } else if (eco === AppEco.Lrt) {
+            openLink(getLrtCaseUrl());
+          } else if (eco === AppEco.Evm) {
+            openLink(getEvmCaseUrl());
+          } else if (eco === AppEco.Eth) {
+            openLink(getEthStackAppUrl());
+          } else {
+            openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+          }
 
-          // if (!userAddress || !lsdTokenAddress || !lsdTokenName) {
-          //   return;
-          // }
-          // const saved = await saveModuleToDb({
-          //   myKey: `frontend-${lsdTokenAddress}`,
-          //   eco: eco,
-          //   userAddress: userAddress,
-          //   disabled: false,
-          //   tokenName: lsdTokenName,
-          //   tokenAddress: lsdTokenAddress,
-          //   config: {
-          //     type: 'frontend',
-          //     config: {},
-          //   },
-          // });
+          if (!userAddress || !lsdTokenAddress || !lsdTokenName) {
+            return;
+          }
+          const saved = await saveModuleToDb({
+            myKey: `frontend-${lsdTokenAddress}`,
+            eco: eco,
+            userAddress: userAddress,
+            disabled: false,
+            tokenName: lsdTokenName,
+            tokenAddress: lsdTokenAddress,
+            config: {
+              type: 'frontend',
+              config: {},
+            },
+          });
         }}
       >
-        Open External Module
+        Preview
+      </CustomButton>
+
+      <CustomButton
+        className="mb-[.24rem]"
+        type="stroke"
+        onClick={() => {
+          openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+        }}
+      >
+        Tutorial
       </CustomButton>
     </div>
   );
