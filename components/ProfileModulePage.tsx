@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useModuleList } from 'hooks/useModuleList';
 import { useUserAddress } from 'hooks/useUserAddress';
-import { AppEco, EvmLsdTokenConfig } from 'interfaces/common';
+import { AppEco, EvmLsdTokenConfig, ModuleType } from 'interfaces/common';
 import { ModuleTableItem } from './ModuleTableItem';
 import { EmptyContent } from './common/EmptyContent';
 import { bindTrigger } from 'material-ui-popup-state';
@@ -15,6 +15,8 @@ import { Icomoon } from './icon/Icomoon';
 import { Popover } from '@mui/material';
 import { openLink } from 'utils/commonUtils';
 import { PrimaryLoading } from './common/PrimaryLoading';
+import { modularConfigs } from 'config/modular';
+import { ExternalModuleTableItem } from './ExternalModuleTableItem';
 
 interface Props {
   eco: AppEco;
@@ -39,23 +41,45 @@ export const ProfileModulePage = (props: Props) => {
     popupId: 'token',
   });
 
+  const supportAi = modularConfigs.supportList[eco].includes(ModuleType.Ai);
+  const supportPointSystem = modularConfigs.supportList[eco].includes(
+    ModuleType.PointSystem
+  );
+  const supportFrontend = modularConfigs.supportList[eco].includes(
+    ModuleType.Frontend
+  );
+
+  const supportExternalModules = modularConfigs.externalModules.filter(
+    (module) => {
+      return modularConfigs.supportList[eco].includes(module.type);
+    }
+  );
+
   const indexList = useMemo(() => {
     const res: string[] = [];
     lsdHistoryList?.forEach((item, index) => {
-      if (eco === AppEco.Cosmos) {
-        res.push(`${index}:ai`);
+      if (supportAi) {
+        res.push(`${index}:${ModuleType.Ai}`);
       }
-      if (eco !== AppEco.Cosmos && eco !== AppEco.Sol) {
-        res.push(`${index}:point`);
+      if (supportPointSystem) {
+        res.push(`${index}:${ModuleType.PointSystem}`);
       }
-      res.push(`${index}:frontend`);
-      if (eco === AppEco.Eth) {
-        res.push(`${index}:ccip`);
+      if (supportFrontend) {
+        res.push(`${index}:${ModuleType.Frontend}`);
       }
+      supportExternalModules.forEach((module) => {
+        res.push(`${index}:${module.type}`);
+      });
     });
 
     return res;
-  }, [eco, lsdHistoryList]);
+  }, [
+    lsdHistoryList,
+    supportExternalModules,
+    supportAi,
+    supportPointSystem,
+    supportFrontend,
+  ]);
 
   return (
     <div>
@@ -110,7 +134,7 @@ export const ProfileModulePage = (props: Props) => {
           ) : (
             lsdHistoryList.map((item, index) => (
               <div key={index}>
-                {eco === AppEco.Cosmos && (
+                {supportAi && (
                   <ModuleTableItem
                     type="ai"
                     index={indexList.indexOf(`${index}:ai`)}
@@ -119,7 +143,7 @@ export const ProfileModulePage = (props: Props) => {
                   />
                 )}
 
-                {eco !== AppEco.Cosmos && eco !== AppEco.Sol && (
+                {supportPointSystem && (
                   <ModuleTableItem
                     type="point"
                     index={indexList.indexOf(`${index}:point`)}
@@ -128,21 +152,24 @@ export const ProfileModulePage = (props: Props) => {
                   />
                 )}
 
-                <ModuleTableItem
-                  type="frontend"
-                  index={indexList.indexOf(`${index}:frontend`)}
-                  lsdHistoryItem={item}
-                  eco={eco}
-                />
-
-                {eco === AppEco.Eth && (
+                {supportFrontend && (
                   <ModuleTableItem
-                    type="ccip"
-                    index={indexList.indexOf(`${index}:ccip`)}
+                    type="frontend"
+                    index={indexList.indexOf(`${index}:frontend`)}
                     lsdHistoryItem={item}
                     eco={eco}
                   />
                 )}
+
+                {supportExternalModules.map((module, index) => (
+                  <ExternalModuleTableItem
+                    key={index}
+                    config={module}
+                    index={indexList.indexOf(`${index}:ccip`)}
+                    lsdHistoryItem={item}
+                    eco={eco}
+                  />
+                ))}
               </div>
             ))
           ))}

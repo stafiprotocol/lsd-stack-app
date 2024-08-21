@@ -1,8 +1,10 @@
-import { AppEco } from 'interfaces/common';
+import { AppEco, ModuleType } from 'interfaces/common';
 import { AiModuleCard } from './AiModuleCard';
 import { FrontendModuleCard } from './FrontendModuleCard';
 import { PointSystemModuleCard } from './PointSystemModuleCard';
 import { CCIPModuleCard } from './CCIPModuleCard';
+import { modularConfigs } from 'config/modular';
+import { ExternalModulerCard } from './ExternalModulerCard';
 
 interface Props {
   eco: AppEco;
@@ -17,9 +19,23 @@ export const ModuleDashboard = (props: Props) => {
     return null;
   }
 
+  const supportAi = modularConfigs.supportList[eco].includes(ModuleType.Ai);
+  const supportPointSystem = modularConfigs.supportList[eco].includes(
+    ModuleType.PointSystem
+  );
+  const supportFrontend = modularConfigs.supportList[eco].includes(
+    ModuleType.Frontend
+  );
+
+  const supportExternalModules = modularConfigs.externalModules.filter(
+    (module) => {
+      return modularConfigs.supportList[eco].includes(module.type);
+    }
+  );
+
   return (
     <div className="flex gap-[.36rem]">
-      {eco === AppEco.Cosmos && (
+      {supportAi && (
         <AiModuleCard
           eco={eco}
           lsdTokenAddress={lsdTokenAddress}
@@ -27,7 +43,7 @@ export const ModuleDashboard = (props: Props) => {
         />
       )}
 
-      {eco !== AppEco.Sol && eco !== AppEco.Cosmos && (
+      {supportPointSystem && (
         <PointSystemModuleCard
           eco={eco}
           lsdTokenAddress={lsdTokenAddress}
@@ -35,19 +51,23 @@ export const ModuleDashboard = (props: Props) => {
         />
       )}
 
-      <FrontendModuleCard
-        eco={eco}
-        lsdTokenAddress={lsdTokenAddress}
-        lsdTokenName={lsdTokenName}
-      />
-
-      {eco === AppEco.Eth && (
-        <CCIPModuleCard
+      {supportFrontend && (
+        <FrontendModuleCard
           eco={eco}
           lsdTokenAddress={lsdTokenAddress}
           lsdTokenName={lsdTokenName}
         />
       )}
+
+      {supportExternalModules.map((module, index) => (
+        <ExternalModulerCard
+          key={index}
+          eco={eco}
+          config={module}
+          lsdTokenAddress={lsdTokenAddress}
+          lsdTokenName={lsdTokenName}
+        />
+      ))}
     </div>
   );
 };

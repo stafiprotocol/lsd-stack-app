@@ -1,4 +1,4 @@
-import { AppEco } from './common';
+import { AppEco, ModuleType } from './common';
 
 export interface ModuleSetting {
   //   type: 'ai' | 'point' | 'frontend';
@@ -34,3 +34,11 @@ export interface PointModuleConfig {
 }
 
 export interface FrontendModuleConfig {}
+
+export interface ExternalModuleCardConfig {
+  type: ModuleType;
+  title: string;
+  description: string;
+  externalLink: string;
+  tutorialLink: string;
+}
