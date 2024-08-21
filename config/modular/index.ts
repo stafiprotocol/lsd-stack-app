@@ -11,6 +11,15 @@ export const modularConfigs = {
       tutorialLink:
         'https://lsaas-docs.stafi.io/docs/modules/ccip_modules.html',
     },
+    {
+      type: ModuleType.Blinks,
+      title: 'Blinks',
+      description:
+        'With Solana Actions and blockchain links, or blinks, transactions can open up to anywhere on the internet — no dApp required.',
+      externalLink: 'https://solana.com/solutions/actions',
+      tutorialLink:
+        'https://lsaas-docs.stafi.io/docs/modules/blinks_module.html',
+    },
   ],
   supportList: {
     [AppEco.Eth]: [
@@ -21,8 +30,8 @@ export const modularConfigs = {
     [AppEco.Evm]: [ModuleType.PointSystem, ModuleType.Frontend],
     [AppEco.Lrt]: [ModuleType.PointSystem, ModuleType.Frontend],
     [AppEco.Cosmos]: [ModuleType.Ai, ModuleType.Frontend],
-    [AppEco.Sol]: [ModuleType.Frontend],
-    [AppEco.Polkadot]: [],
-    [AppEco.Others]: [],
+    [AppEco.Sol]: [ModuleType.Frontend, ModuleType.Blinks],
+    [AppEco.Polkadot]: [ModuleType.Frontend],
+    [AppEco.Others]: [ModuleType.Frontend],
   },
 };

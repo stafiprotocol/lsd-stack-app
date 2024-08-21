@@ -7,7 +7,7 @@ import {
   ModuleSetting,
   PointModuleConfig,
 } from 'interfaces/module';
-import { AppEco } from 'interfaces/common';
+import { AppEco, ModuleType } from 'interfaces/common';
 import { ModuleStateTag } from './ModuleStateTag';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { openLink } from 'utils/commonUtils';
@@ -26,7 +26,7 @@ import {
 interface ModuleTableItemProps {
   index: number;
   eco: AppEco;
-  type: 'ai' | 'point' | 'frontend' | 'ccip';
+  type: ModuleType;
   lsdHistoryItem: LsdHistoryItem;
 }
 

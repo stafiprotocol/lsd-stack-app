@@ -28,18 +28,16 @@ export function getEcoTokenIcon(eco: AppEco | null) {
     : EcoEthImg;
 }
 
-export function getModuleIcon(
-  moduleType: 'ai' | 'point' | 'frontend' | 'ccip'
-) {
+export function getModuleIcon(moduleType: ModuleType) {
   switch (moduleType) {
-    case 'ai':
+    case ModuleType.Ai:
       return ai;
-    case 'point':
+    case ModuleType.PointSystem:
       return pointSystem;
-    case 'frontend':
-    case 'ccip':
+    case ModuleType.Frontend:
       return frontend;
   }
+  return frontend;
 }
 
 export function getModuleStateIcon(
@@ -59,19 +57,15 @@ export function getModuleStateIcon(
   }
 }
 
-export function getModuleName(
-  moduleType: 'ai' | 'point' | 'frontend' | 'ccip'
-) {
+export function getModuleName(moduleType: ModuleType) {
   switch (moduleType) {
-    case 'ai':
+    case ModuleType.Ai:
       return 'Validator Selection';
-    case 'point':
+    case ModuleType.PointSystem:
       return 'Point System';
-    case 'frontend':
+    case ModuleType.Frontend:
       return 'Frontend';
-    case 'ccip':
-      return 'Chainlink CCIP';
   }
 
-  return ai;
+  return '';
 }

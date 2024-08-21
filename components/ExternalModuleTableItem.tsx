@@ -1,28 +1,13 @@
 import classNames from 'classnames';
-import Image from 'next/image';
-import { getEcoTokenIcon, getModuleIcon, getModuleName } from 'utils/iconUtils';
-import { CustomButton } from './common/CustomButton';
-import {
-  AiValidatorModuleConfig,
-  ExternalModuleCardConfig,
-  ModuleSetting,
-  PointModuleConfig,
-} from 'interfaces/module';
-import { AppEco } from 'interfaces/common';
-import { ModuleStateTag } from './ModuleStateTag';
-import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
-import { openLink } from 'utils/commonUtils';
-import { useCallback, useEffect, useState } from 'react';
-import { SetPointSystemModal } from './modal/SetPointSystemModal';
-import { SetAiValidatorModal } from './modal/SetAiValidatorModal';
-import { useUserAddress } from 'hooks/useUserAddress';
 import { LsdHistoryItem } from 'hooks/useModuleList';
-import {
-  getCosmosStackAppUrl,
-  getEthStackAppUrl,
-  getEvmCaseUrl,
-  getLrtCaseUrl,
-} from 'config/eth/env';
+import { useUserAddress } from 'hooks/useUserAddress';
+import { AppEco } from 'interfaces/common';
+import { ExternalModuleCardConfig, ModuleSetting } from 'interfaces/module';
+import Image from 'next/image';
+import { useState } from 'react';
+import { openLink } from 'utils/commonUtils';
+import { getEcoTokenIcon, getModuleIcon } from 'utils/iconUtils';
+import { CustomButton } from './common/CustomButton';
 
 interface ModuleTableItemProps {
   index: number;
@@ -33,9 +18,6 @@ interface ModuleTableItemProps {
 
 export const ExternalModuleTableItem = (props: ModuleTableItemProps) => {
   const { index, config, eco, lsdHistoryItem } = props;
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const userAddress = useUserAddress(eco);
-  const [moduleSetting, setModuleSetting] = useState<ModuleSetting>();
 
   return (
     <div

@@ -136,7 +136,7 @@ export const ProfileModulePage = (props: Props) => {
               <div key={index}>
                 {supportAi && (
                   <ModuleTableItem
-                    type="ai"
+                    type={ModuleType.Ai}
                     index={indexList.indexOf(`${index}:ai`)}
                     lsdHistoryItem={item}
                     eco={eco}
@@ -145,7 +145,7 @@ export const ProfileModulePage = (props: Props) => {
 
                 {supportPointSystem && (
                   <ModuleTableItem
-                    type="point"
+                    type={ModuleType.PointSystem}
                     index={indexList.indexOf(`${index}:point`)}
                     lsdHistoryItem={item}
                     eco={eco}
@@ -154,7 +154,7 @@ export const ProfileModulePage = (props: Props) => {
 
                 {supportFrontend && (
                   <ModuleTableItem
-                    type="frontend"
+                    type={ModuleType.Frontend}
                     index={indexList.indexOf(`${index}:frontend`)}
                     lsdHistoryItem={item}
                     eco={eco}

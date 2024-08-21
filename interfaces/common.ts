@@ -13,6 +13,7 @@ export enum ModuleType {
   PointSystem = 'point',
   Frontend = 'frontend',
   Ccip = 'ccip',
+  Blinks = 'blinks',
 }
 
 export interface NavigationItem {

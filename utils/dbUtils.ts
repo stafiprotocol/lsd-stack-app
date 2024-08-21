@@ -1,5 +1,5 @@
 import { openDB } from 'idb';
-import { AppEco } from 'interfaces/common';
+import { AppEco, ModuleType } from 'interfaces/common';
 import { ModuleSetting } from 'interfaces/module';
 
 export const indexDbName = 'lsaas-database';
@@ -48,7 +48,7 @@ export async function saveModuleToDb(
 }
 
 export async function getModuleSettingFromDb(
-  type: 'point' | 'ai' | 'frontend' | 'ccip',
+  type: ModuleType,
   tokenAddress?: string
 ): Promise<ModuleSetting | undefined> {
   if (!tokenAddress) {
