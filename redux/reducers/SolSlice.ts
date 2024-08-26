@@ -22,6 +22,7 @@ import { getSolanaScanTxUrl } from 'config/explorer';
 import { solanaPrograms } from 'config/sol';
 import {
   CANCELLED_MESSAGE,
+  INSUFFICIENT_FEE_MESSAGE,
   TRANSACTION_FAILED_MESSAGE,
 } from 'constants/common';
 import * as crypto from 'crypto';
@@ -31,6 +32,7 @@ import snackbarUtil from 'utils/snackbarUtils';
 import { sendSolanaTransaction } from 'utils/solanaUtils';
 import { isSolanaCancelError } from 'utils/web3Utils';
 import { setSubmitLoadingParams } from './AppSlice';
+import { amountToChain } from 'utils/numberUtils';
 
 export interface SolState {
   solEcoLoading: boolean;
@@ -75,6 +77,19 @@ export const solanaInitializeStakeManager =
           txHash: '',
         })
       );
+
+      const balance = await connection.getBalance(userPublicKey);
+      if (balance < Number(amountToChain('0.01'))) {
+        dispatch(
+          setSubmitLoadingParams({
+            status: 'error',
+            modalOpened: false,
+            txHash: '',
+          })
+        );
+        snackbarUtil.error(INSUFFICIENT_FEE_MESSAGE);
+        return;
+      }
 
       // const tokenProgramId = TOKEN_2022_PROGRAM_ID;
       const tokenProgramId = TOKEN_PROGRAM_ID;

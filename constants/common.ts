@@ -23,6 +23,8 @@ export const CANCELLED_ERR_MESSAGE3 =
   "Cannot read properties of undefined (reading 'symbol')";
 export const CANCELLED_ERR_MESSAGE4 = 'user rejected transaction';
 
+export const INSUFFICIENT_FEE_MESSAGE = 'Insufficient Balance for Fee';
+
 // creation steps
 export const ETH_STANDARD_CREATION_STEPS = [
   'ETH Eco',

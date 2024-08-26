@@ -24,7 +24,6 @@ export async function sendSolanaTransaction(
   try {
     const solana = getSolanaExtension();
     if (!solana || !solana.isConnected) {
-      console.log('111');
       return null;
     }
 
@@ -42,8 +41,9 @@ export async function sendSolanaTransaction(
       }
     );
     return txid;
-  } catch (err) {
+  } catch (err: any) {
     console.log({ err });
-    return undefined;
+    // return undefined;
+    throw new Error(err.message);
   }
 }
