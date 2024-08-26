@@ -9,7 +9,7 @@ import { getDocHost } from 'config/common';
 import { ModuleSetting, PointModuleConfig } from 'interfaces/module';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { useWalletAccount } from 'hooks/useWalletAccount';
-import { AppEco } from 'interfaces/common';
+import { AppEco, ModuleType } from 'interfaces/common';
 import { ModuleStateTag } from './ModuleStateTag';
 import { useUserAddress } from 'hooks/useUserAddress';
 import { openLink } from 'utils/commonUtils';
@@ -30,7 +30,10 @@ export const PointSystemModuleCard = (props: Props) => {
 
   useEffect(() => {
     (async () => {
-      const record = await getModuleSettingFromDb('point', lsdTokenAddress);
+      const record = await getModuleSettingFromDb(
+        ModuleType.PointSystem,
+        lsdTokenAddress
+      );
       if (record) {
         setExistSetting(record);
       }

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { SetAiValidatorModal } from './modal/SetAiValidatorModal';
 import { SetAiValidatorReadyModal } from './modal/SetAiValidatorReadyModal';
 import { getDocHost } from 'config/common';
-import { AppEco } from 'interfaces/common';
+import { AppEco, ModuleType } from 'interfaces/common';
 import { AiValidatorModuleConfig, ModuleSetting } from 'interfaces/module';
 import { useWalletAccount } from 'hooks/useWalletAccount';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
@@ -31,7 +31,10 @@ export const AiModuleCard = (props: Props) => {
 
   useEffect(() => {
     (async () => {
-      const record = await getModuleSettingFromDb('ai', lsdTokenAddress);
+      const record = await getModuleSettingFromDb(
+        ModuleType.Ai,
+        lsdTokenAddress
+      );
       if (record) {
         setExistSetting(record);
       }
