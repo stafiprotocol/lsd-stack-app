@@ -9,13 +9,11 @@ LSD Stack is an open-source software suite designed to promote the public good i
 3. Enter project root directory then install all dependencies via terminal: `yarn`
 4. Start app by: `yarn dev`
 
-## Config your app
+## Request to add new External Module
 
-In normal case you do not need update ABI files, but if you modify the contracts then you probably want to update abi files which are in `config/abi` folder.
-
-- Change branding links and text here: `config/appConf/app.json`
-- Set your network contract address on Holesky here: `config/appConf/dev.json`
-- Set your network contract address on Mainnet here: `config/appConf/prod.json`
+- Add a new enum type in: `interfaces/common.ts` `ModuleType`
+- Add your module config here: `config/modular/index.ts` `externalModules`
+- Config the networks that support your module here: `config/modular/index.ts` `supportList`
 
 ## Customize theme
 
