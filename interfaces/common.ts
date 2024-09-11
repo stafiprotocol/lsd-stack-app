@@ -14,6 +14,7 @@ export enum ModuleType {
   Frontend = 'frontend',
   Ccip = 'ccip',
   Blinks = 'blinks',
+  Connext = 'connext',
 }
 
 export interface NavigationItem {

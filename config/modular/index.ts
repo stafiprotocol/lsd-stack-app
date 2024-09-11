@@ -20,15 +20,29 @@ export const modularConfigs = {
       tutorialLink:
         'https://lsaas-docs.stafi.io/docs/modules/blinks_module.html',
     },
+    {
+      type: ModuleType.Connext,
+      title: 'Connext',
+      description:
+        'Connext protocol allows users to bridge funds and developers to build asynchronous Solidity for the first time!',
+      externalLink: 'https://www.connext.network/',
+      tutorialLink:
+        'https://lsaas-docs.stafi.io/docs/modules/l2_restaking_module.html',
+    },
   ],
   supportList: {
     [AppEco.Eth]: [
       ModuleType.PointSystem,
       ModuleType.Frontend,
       ModuleType.Ccip,
+      ModuleType.Connext,
     ],
     [AppEco.Evm]: [ModuleType.PointSystem, ModuleType.Frontend],
-    [AppEco.Lrt]: [ModuleType.PointSystem, ModuleType.Frontend],
+    [AppEco.Lrt]: [
+      ModuleType.PointSystem,
+      ModuleType.Frontend,
+      ModuleType.Connext,
+    ],
     [AppEco.Cosmos]: [ModuleType.Ai, ModuleType.Frontend],
     [AppEco.Sol]: [ModuleType.Frontend, ModuleType.Blinks],
     [AppEco.Polkadot]: [ModuleType.Frontend],
