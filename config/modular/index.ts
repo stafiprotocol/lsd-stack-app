@@ -27,7 +27,7 @@ export const modularConfigs = {
         'Connext protocol allows users to bridge funds and developers to build asynchronous Solidity for the first time!',
       externalLink: 'https://www.connext.network/',
       tutorialLink:
-        'https://lsaas-docs.stafi.io/docs/modules/l2_native_restaking_module.html',
+        'https://lsaas-docs.stafi.io/docs/modules/l2_restaking_module.html',
     },
   ],
   supportList: {
