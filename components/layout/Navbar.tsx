@@ -1,6 +1,7 @@
 import { Popover } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 import classNames from 'classnames';
 import { CreationStep } from 'components/common/CreationStep';
 import { CustomButton } from 'components/common/CustomButton';
@@ -181,7 +182,8 @@ const Navbar = () => {
           <div className="h-full w-smallContentW xl:w-contentW 2xl:w-largeContentW text-text2 text-[.14rem] leading-[.21rem]">
             {appEco === AppEco.Eth ||
             appEco === AppEco.Sol ||
-            appEco === AppEco.Lrt ? (
+            appEco === AppEco.Lrt ||
+            appEco === AppEco.Ton ? (
               <div>
                 Welcome to StaFi LSAAS platform, all parameters shown are
                 defaults (including some randomly generated addresses), which we
@@ -275,6 +277,7 @@ const UserInfo = () => {
   const userAddress = useUserAddress(appEco);
   const { disconnectAsync } = useDisconnect();
   const { disconnect: solDisconnect } = useWallet();
+  const [tonConnectUI] = useTonConnectUI();
 
   const addressPopupState = usePopupState({
     variant: 'popover',
@@ -310,6 +313,8 @@ const UserInfo = () => {
       dispatch(disconnectWallet());
     } else if (appEco === AppEco.Sol) {
       solDisconnect();
+    } else if (appEco === AppEco.Ton) {
+      tonConnectUI.disconnect();
     } else {
       await disconnectAsync();
     }
@@ -446,6 +451,7 @@ const ConnectButton = () => {
   });
   const { connectors, connectAsync } = useConnect();
   const solWalletModal = useWalletModal();
+  const [tonConnectUI] = useTonConnectUI();
 
   const clickConnectWallet = async () => {
     if (
@@ -484,6 +490,8 @@ const ConnectButton = () => {
       dispatch(connectKeplrAccount([neutronChainConfig]));
     } else if (appEco == AppEco.Sol) {
       solWalletModal.setVisible(true);
+    } else if (appEco === AppEco.Ton) {
+      tonConnectUI.openModal();
     }
   };
 

@@ -41,16 +41,20 @@ export const ProfileModulePage = (props: Props) => {
     popupId: 'token',
   });
 
+  // @ts-ignore
   const supportAi = modularConfigs.supportList[eco].includes(ModuleType.Ai);
+  // @ts-ignore
   const supportPointSystem = modularConfigs.supportList[eco].includes(
     ModuleType.PointSystem
   );
+  // @ts-ignore
   const supportFrontend = modularConfigs.supportList[eco].includes(
     ModuleType.Frontend
   );
 
   const supportExternalModules = modularConfigs.externalModules.filter(
     (module) => {
+      // @ts-ignore
       return modularConfigs.supportList[eco].includes(module.type);
     }
   );

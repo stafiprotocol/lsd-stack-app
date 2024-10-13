@@ -133,3 +133,10 @@ export function getSolanaScanAccountUrl(account: string | undefined) {
   }
   return `${solanaExplorer}/address/${account}`;
 }
+
+export function getTonScanTxUrl(txHash: string | undefined) {
+  if (isDev()) {
+    return `https://testnet.tonviewer.com/transaction/${txHash}`;
+  }
+  return `https://tonscan.org/tx/${txHash}`;
+}

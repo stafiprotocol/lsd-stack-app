@@ -49,7 +49,7 @@ export const ConfirmModal = ({ open, close, paramList, create }: Props) => {
               className="px-[.32rem] text-[.16rem] leading-[.18rem] font-[400] text-text2 mb-[.16rem] flex items-start"
             >
               <div className="w-[1.3rem] text-end">{param.name}:</div>
-              <span className="ml-[.12rem] font-[700] break-all">
+              <span className="ml-[.12rem] font-[700] break-all w-[3.6rem]">
                 {param.value}
               </span>
             </div>

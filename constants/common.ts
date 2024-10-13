@@ -22,6 +22,7 @@ export const CANCELLED_ERR_MESSAGE2 = 'User rejected the request';
 export const CANCELLED_ERR_MESSAGE3 =
   "Cannot read properties of undefined (reading 'symbol')";
 export const CANCELLED_ERR_MESSAGE4 = 'user rejected transaction';
+export const CANCELLED_ERR_MESSAGE5 = 'Reject request';
 
 export const INSUFFICIENT_FEE_MESSAGE = 'Insufficient Balance for Fee';
 
@@ -70,3 +71,5 @@ export const LRT_CREATION_STEPS = [
 ];
 
 export const SOL_CREATION_STEPS = ['SOL Eco', 'Parameters', 'Deploy', 'Module'];
+
+export const TON_CREATION_STEPS = ['TON Eco', 'Parameters', 'Deploy'];

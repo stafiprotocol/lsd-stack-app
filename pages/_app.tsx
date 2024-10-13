@@ -12,13 +12,15 @@ import { wagmiConfig } from 'config/walletConnect';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { MaterialDesignContent, SnackbarProvider } from 'notistack';
-import { ReactElement, ReactNode, useEffect, useMemo } from 'react';
+import { ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from 'redux/store';
 import 'styles/globals.css';
 import { theme } from 'styles/material-ui-theme';
 import { SnackbarUtilsConfigurator } from 'utils/snackbarUtils';
 import { WagmiConfig } from 'wagmi';
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { useRouter } from 'next/router';
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,10 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page: any) => page);
 
+  const [host, setHost] = useState(
+    typeof window !== 'undefined' ? window.location.origin : ''
+  );
+
   const StyledMaterialDesignContent = useMemo(() => {
     const successBg = '#E8EFFD';
     const successTextColor = '#222C3C';
@@ -85,6 +91,11 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
     }));
   }, []);
 
+  // useEffect(() => {
+  //   setHost(window.location.origin);
+  //   console.log(window.location.origin);
+  // }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <SnackbarProvider
@@ -102,21 +113,25 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
         }}
       >
         <WagmiConfig config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <ConnectionProvider
-              endpoint={solanaRestEndpoint}
-              config={{
-                wsEndpoint: solanaWsEndpoint,
-              }}
-            >
-              <WalletProvider wallets={[]} autoConnect>
-                <WalletModalProvider>
-                  <SnackbarUtilsConfigurator />
-                  <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
-                </WalletModalProvider>
-              </WalletProvider>
-            </ConnectionProvider>
-          </QueryClientProvider>
+          <TonConnectUIProvider
+            manifestUrl={`${host}/tonconnect-manifest.json`}
+          >
+            <QueryClientProvider client={queryClient}>
+              <ConnectionProvider
+                endpoint={solanaRestEndpoint}
+                config={{
+                  wsEndpoint: solanaWsEndpoint,
+                }}
+              >
+                <WalletProvider wallets={[]} autoConnect>
+                  <WalletModalProvider>
+                    <SnackbarUtilsConfigurator />
+                    <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
+                  </WalletModalProvider>
+                </WalletProvider>
+              </ConnectionProvider>
+            </QueryClientProvider>
+          </TonConnectUIProvider>
         </WagmiConfig>
       </SnackbarProvider>
     </ThemeProvider>

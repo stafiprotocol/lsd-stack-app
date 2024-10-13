@@ -28,6 +28,7 @@ import ethLstImg from 'public/images/lst/eth.svg';
 import moreLstImg from 'public/images/lst/more.svg';
 import moveLstImg from 'public/images/lst/move.png';
 import solLstImg from 'public/images/lst/sol.svg';
+import tonLstImg from 'public/images/lst/ton.svg';
 import { useState } from 'react';
 import { setAppEco } from 'redux/reducers/AppSlice';
 import { RootState } from 'redux/store';
@@ -147,6 +148,13 @@ export const StackUI = () => {
             text="LRT"
             icon={dotLstImg}
             url={'/lrt'}
+            className="ml-[.32rem]"
+          />
+
+          <LsdCaseCardV2
+            text="TON LST"
+            icon={tonLstImg}
+            url={'/ton'}
             className="ml-[.32rem]"
           />
 

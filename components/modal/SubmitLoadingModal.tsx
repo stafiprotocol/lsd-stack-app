@@ -2,7 +2,11 @@ import { Box, Modal } from '@mui/material';
 import classNames from 'classnames';
 import { PrimaryLoading } from 'components/common/PrimaryLoading';
 import { Icomoon } from 'components/icon/Icomoon';
-import { getNeutronExplorerTxUrl, getEtherScanTxUrl } from 'config/explorer';
+import {
+  getNeutronExplorerTxUrl,
+  getEtherScanTxUrl,
+  getTonScanTxUrl,
+} from 'config/explorer';
 import { roboto } from 'config/font';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { AppEco } from 'interfaces/common';
@@ -131,6 +135,8 @@ export const SubmitLoadingModal = () => {
                 submitLoadingParams.explorerUrl ||
                 (appEco === AppEco.Cosmos
                   ? getNeutronExplorerTxUrl(submitLoadingParams.txHash)
+                  : appEco === AppEco.Ton
+                  ? getTonScanTxUrl(submitLoadingParams.txHash)
                   : getEtherScanTxUrl(submitLoadingParams.txHash))
               }
               target="_blank"

@@ -13,6 +13,7 @@ import logoImg from 'public/images/logo.svg';
 import homeVectorImg from 'public/images/home_vector.png';
 import EcoEthImg from 'public/images/eco/eth.png';
 import EcoCosmosImg from 'public/images/eco/cosmos.svg';
+import EcoTonImg from 'public/images/eco/ton.svg';
 import arrowTrImg from 'public/images/arrow_tr.svg';
 import ethCaseImg from 'public/images/case/eth.png';
 import cosmosCaseImg from 'public/images/case/cosmos.png';
@@ -202,6 +203,8 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
               ? EcoEvmImg
               : eco === AppEco.Sol
               ? EcoSolanaImg
+              : eco === AppEco.Ton
+              ? EcoTonImg
               : EcoEthImg
           }
           fill
