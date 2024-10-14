@@ -16,6 +16,8 @@ import EcoCosmosImg from 'public/images/eco/cosmos.svg';
 import EcoEthImg from 'public/images/eco/eth.png';
 import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
+import EcoSolanaImg from 'public/images/eco/solana.png';
+import EcoTonImg from 'public/images/eco/ton.svg';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import { setAppEco } from 'redux/reducers/AppSlice';
@@ -181,22 +183,27 @@ const EcoSelector = () => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos, AppEco.Sol].map(
-          (eco) => (
-            <div key={eco}>
-              <EcoItem
-                eco={eco}
-                onClosePopup={() => {
-                  popupState.close();
-                }}
-              />
+        {[
+          AppEco.Eth,
+          AppEco.Lrt,
+          AppEco.Evm,
+          AppEco.Cosmos,
+          AppEco.Sol,
+          AppEco.Ton,
+        ].map((eco) => (
+          <div key={eco}>
+            <EcoItem
+              eco={eco}
+              onClosePopup={() => {
+                popupState.close();
+              }}
+            />
 
-              {eco !== AppEco.Others && (
-                <div className="bg-[#E8EFFD0D] h-[.01rem]" />
-              )}
-            </div>
-          )
-        )}
+            {eco !== AppEco.Others && (
+              <div className="bg-[#E8EFFD0D] h-[.01rem]" />
+            )}
+          </div>
+        ))}
       </Popover>
     </div>
   );
@@ -236,6 +243,10 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
               ? EcoLrtImg
               : eco === AppEco.Evm
               ? EcoEvmImg
+              : eco === AppEco.Sol
+              ? EcoSolanaImg
+              : eco === AppEco.Ton
+              ? EcoTonImg
               : EcoEthImg
           }
           fill

@@ -63,9 +63,6 @@ export const sendNewStakePool =
     tonConnectUI: TonConnectUI,
     tokenName: string,
     tokenSymbol: string,
-    tokenDecimals: string,
-    tokenDescription: string,
-    tokenImage: string,
     cb?: (success: boolean) => void
   ): AppThunk =>
   async (dispatch, getState) => {
@@ -169,11 +166,11 @@ export const sendNewStakePool =
         Dictionary.Keys.BigUint(256),
         metadataDictionaryValue
       )
-        .set(toMetadataKey('decimals'), tokenDecimals)
+        .set(toMetadataKey('decimals'), '9')
         .set(toMetadataKey('symbol'), tokenSymbol)
         .set(toMetadataKey('name'), tokenName)
-        .set(toMetadataKey('description'), tokenDescription)
-        .set(toMetadataKey('image'), tokenImage);
+        .set(toMetadataKey('description'), 'StaFi liquid staking protocol')
+        .set(toMetadataKey('image'), 'https://xx/xx.png');
 
       const content = beginCell()
         .storeUint(0, 8)

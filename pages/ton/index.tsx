@@ -1,18 +1,4 @@
-import {
-  CHAIN,
-  SendTransactionRequest,
-  TonConnectButton,
-  useTonAddress,
-  useTonConnectUI,
-} from '@tonconnect/ui-react';
-import { TonClient, Address } from '@ton/ton';
-import {
-  beginCell,
-  ContractProvider,
-  Sender,
-  SenderArguments,
-  toNano,
-} from '@ton/core';
+import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputItem } from 'components/common/InputItem';
@@ -24,7 +10,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
 import Image from 'next/image';
 import ExternalLinkImg from 'public/images/external_link.svg';
-import { Stack } from '../../config/ton/wrappers/stack';
 import { useTonClient } from 'hooks/ton/useTonClient';
 import { sendNewStakePool } from 'redux/reducers/TonSlice';
 import { InputErrorTip } from 'components/common/InputErrorTip';
@@ -47,9 +32,6 @@ const TonPage = () => {
   // parameters
   const [tokenName, setTokenName] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('');
-  const [tokenDecimals, setTokenDecimals] = useState('');
-  const [tokenDescription, setTokenDescription] = useState('');
-  const [tokenImage, setTokenImage] = useState('');
 
   const [confirmModalOpened, setConfirmModalOpened] = useState(false);
   const [paramList, setParamList] = useState<ParamItem[]>([]);
@@ -82,9 +64,6 @@ const TonPage = () => {
     setParamList([
       { name: 'Token Name', value: tokenName },
       { name: 'Symbol', value: tokenSymbol },
-      { name: 'Decimals', value: tokenDecimals },
-      { name: 'Description', value: tokenDescription },
-      { name: 'Image', value: tokenImage },
       { name: 'Owner Address', value: tonAddress },
     ]);
     setConfirmModalOpened(true);
@@ -103,16 +82,7 @@ const TonPage = () => {
     };
 
     dispatch(
-      sendNewStakePool(
-        tonClient,
-        tonConnectUI,
-        tokenName,
-        tokenSymbol,
-        tokenDecimals,
-        tokenDescription,
-        tokenImage,
-        cb
-      )
+      sendNewStakePool(tonClient, tonConnectUI, tokenName, tokenSymbol, cb)
     );
   };
 
@@ -129,25 +99,12 @@ const TonPage = () => {
       setSubmittable(true);
       return;
     }
-    if (
-      !tokenName ||
-      !tokenSymbol ||
-      !tokenDecimals ||
-      !tokenDescription ||
-      !tokenImage
-    ) {
+    if (!tokenName || !tokenSymbol) {
       setSubmittable(false);
       return;
     }
     setSubmittable(true);
-  }, [
-    tonAddress,
-    tokenName,
-    tokenSymbol,
-    tokenDecimals,
-    tokenDescription,
-    tokenImage,
-  ]);
+  }, [tonAddress, tokenName, tokenSymbol]);
 
   useEffect(() => {
     dispatch(
@@ -173,7 +130,7 @@ const TonPage = () => {
                   label="Token Name"
                   value={tokenName}
                   onChange={(v) => setTokenName(v)}
-                  placeholder="Example: StaFi lsdTon"
+                  placeholder="Example: StaFi rTon"
                 />
                 {tokenName.length > 50 && (
                   <InputErrorTip msg="Token name must be less than 50 character" />
@@ -182,30 +139,11 @@ const TonPage = () => {
                   label="Symbol"
                   value={tokenSymbol}
                   onChange={(v) => setTokenSymbol(v)}
-                  placeholder="Example: lsdTon"
+                  placeholder="Example: rTon"
                 />
                 {tokenSymbol.length > 10 && (
                   <InputErrorTip msg="Symbol must be less than 10 character" />
                 )}
-                <InputItem
-                  label="Decimals"
-                  isInteger
-                  value={tokenDecimals}
-                  onChange={(v) => setTokenDecimals(v)}
-                  placeholder="Example: 9"
-                />
-                <InputItem
-                  label="Description"
-                  value={tokenDescription}
-                  onChange={(v) => setTokenDescription(v)}
-                  placeholder="Example: StaFi liquid staking protocol"
-                />
-                <InputItem
-                  label="Image"
-                  value={tokenImage}
-                  onChange={(v) => setTokenImage(v)}
-                  placeholder="Example: https://xx/xxx.png"
-                />
                 <InputItem
                   label="Owner Address"
                   value={tonAddress}

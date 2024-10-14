@@ -31,6 +31,7 @@ import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import LogoTextImg from 'public/images/logo_text.svg';
 import neutronLogo from 'public/images/neutron.png';
 import solanaLogo from 'public/images/solana.svg';
+import tonLogo from 'public/images/ton.svg';
 import { useMemo } from 'react';
 import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
 import {
@@ -294,6 +295,8 @@ const UserInfo = () => {
         return neutronLogo;
       case AppEco.Sol:
         return solanaLogo;
+      case AppEco.Ton:
+        return tonLogo;
     }
     return ethereumLogo;
   };

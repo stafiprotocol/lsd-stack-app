@@ -19,6 +19,7 @@ import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoSolanaImg from 'public/images/eco/solana.png';
+import EcoTonImg from 'public/images/eco/ton.svg';
 import EcoUnselectedImg from 'public/images/eco/unselected.svg';
 import homeVectorImg from 'public/images/home_vector.png';
 import atomLstImg from 'public/images/lst/atom.svg';
@@ -220,22 +221,27 @@ const EcoSelector = (props: { popupState: any }) => {
           '& .MuiBox-root': {},
         }}
       >
-        {[AppEco.Eth, AppEco.Lrt, AppEco.Evm, AppEco.Cosmos, AppEco.Sol].map(
-          (eco) => (
-            <div key={eco}>
-              <EcoItem
-                eco={eco}
-                onClosePopup={() => {
-                  popupState.close();
-                }}
-              />
+        {[
+          AppEco.Eth,
+          AppEco.Lrt,
+          AppEco.Evm,
+          AppEco.Cosmos,
+          AppEco.Sol,
+          AppEco.Ton,
+        ].map((eco) => (
+          <div key={eco}>
+            <EcoItem
+              eco={eco}
+              onClosePopup={() => {
+                popupState.close();
+              }}
+            />
 
-              {eco !== AppEco.Others && (
-                <div className="bg-[#E8EFFD0D] h-[.01rem]" />
-              )}
-            </div>
-          )
-        )}
+            {eco !== AppEco.Others && (
+              <div className="bg-[#E8EFFD0D] h-[.01rem]" />
+            )}
+          </div>
+        ))}
       </Popover>
     </div>
   );
@@ -277,6 +283,8 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
               ? EcoEvmImg
               : eco === AppEco.Sol
               ? EcoSolanaImg
+              : eco === AppEco.Ton
+              ? EcoTonImg
               : EcoEthImg
           }
           fill
