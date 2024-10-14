@@ -113,7 +113,12 @@ const TonPage = () => {
         activedIndex: 1,
       })
     );
-  });
+  }, []);
+
+  // useEffect(() => {
+  //   if (!tonClient || !tonConnectUI || !tonConnectUI.account) return;
+  //   parseBoc(tonClient, tonConnectUI.account.address);
+  // }, [tonClient, tonConnectUI]);
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
@@ -199,23 +204,16 @@ const TonPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2 max-h-[5.6rem] overflow-y-auto">
-              Owner Address: sets the owner of the LRT network being created.
+              Owner Address: sets the owner of the LST network being created.
               <br />
               <br />
               Owner Permissions:
               <br />
-              - Manage validators
-              <br />
-              - Change balancer account
+              - Upgrade contracts
               <br />
               - Adjust commission fee
+              <br />- Adjust the minimum stake amount
               <br />
-              - Adjust unbonding duration
-              <br />
-              - Adjust the minimum stake amount
-              <br />
-              <br />
-              Validator Address: Vote Account of the validator
             </div>
           </div>
         </div>

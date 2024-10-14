@@ -96,18 +96,6 @@ const ReviewPage = () => {
                     name="Token Symbol"
                     value={deployInfo.tokenSymbol.toString()}
                   />
-                  <DeployInfoItem
-                    name="Token Decimals"
-                    value={deployInfo.tokenDecimals.toString()}
-                  />
-                  <DeployInfoItem
-                    name="Token Description"
-                    value={deployInfo.tokenDescription.toString()}
-                  />
-                  <DeployInfoItem
-                    name="Token Image"
-                    value={deployInfo.tokenImage.toString()}
-                  />
                 </div>
               )}
 

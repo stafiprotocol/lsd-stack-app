@@ -42,6 +42,7 @@ export class Stack implements Contract {
       sendMode?: SendMode;
       queryId?: bigint;
       sequence?: bigint;
+      content: Cell;
     }
   ) {
     await this.sendMessage(provider, via, {
@@ -52,6 +53,7 @@ export class Stack implements Contract {
         .storeUint(0x04dc78b9, 32)
         .storeUint(opts.queryId ?? 0, 64)
         .storeUint(opts.sequence ?? 0, 8)
+        .storeRef(opts.content)
         .endCell(),
     });
   }

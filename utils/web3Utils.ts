@@ -10,6 +10,7 @@ import {
   CANCELLED_ERR_MESSAGE4,
   CANCELLED_ERR_MESSAGE5,
 } from 'constants/common';
+import { beginCell, Message, storeMessage, Transaction } from '@ton/core';
 
 declare const window: any;
 
@@ -147,4 +148,12 @@ export const isSolanaCancelError = (err: any) => {
 
 export const isTonCancelError = (err: any) => {
   return err.message.indexOf(CANCELLED_ERR_MESSAGE5) >= 0;
+};
+
+export const parseTonTxHash = (tx: Transaction): string => {
+  const msgCell = beginCell()
+    .store(storeMessage(tx.inMessage as Message))
+    .endCell();
+  const inMsgHash = msgCell.hash().toString('hex');
+  return inMsgHash;
 };

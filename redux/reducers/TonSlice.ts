@@ -3,23 +3,16 @@ import { AppThunk } from 'redux/store';
 import {
   Address,
   beginCell,
-  Cell,
   Dictionary,
-  Message,
   Sender,
   SenderArguments,
-  storeMessage,
-  toNano,
   TonClient,
-  WalletContractV3R2,
   WalletContractV4,
 } from '@ton/ton';
 import { Stack } from 'config/ton/wrappers/stack';
 import { stackContractAddress } from 'config/ton';
 import { TonConnectUI } from '@tonconnect/ui-react';
-import { StakePool } from 'config/ton/wrappers/stakePool';
 import {
-  LsdTokenMaster,
   metadataDictionaryValue,
   toMetadataKey,
 } from 'config/ton/wrappers/lsdTokenMaster';
@@ -30,10 +23,8 @@ import {
   TRANSACTION_FAILED_MESSAGE,
 } from 'constants/common';
 import { sleep } from 'utils/commonUtils';
-import { i } from '@tanstack/query-core/build/legacy/queryClient-aPcvMwE9';
-import { isTonCancelError } from 'utils/web3Utils';
+import { isTonCancelError, parseTonTxHash } from 'utils/web3Utils';
 import snackbarUtil from 'utils/snackbarUtils';
-import tonweb from 'tonweb';
 
 export interface TonState {
   sendNewStakePoolLoading: boolean;
@@ -83,7 +74,7 @@ export const sendNewStakePool =
     // console.log(tonweb.utils.bytesToHex(bocCellBytes));
     // const hashBase64 = tonweb.utils.bytesToBase64(bocCellBytes);
     // console.log({ hashBase64 });
-    let txHash: string = '';
+    // let txHash: string = '';
 
     const sender: Sender = {
       send: async (args: SenderArguments) => {
@@ -98,17 +89,6 @@ export const sendNewStakePool =
             ],
             validUntil: Date.now() + 5 * 60 * 1000,
           });
-          const tonAddress = Address.parse(tonConnectUI.account!.address);
-          const state = await tonClient.getContractState(tonAddress);
-          if (!state.lastTransaction) return;
-          const { lt, hash } = state.lastTransaction!;
-          const tx = await tonClient.getTransaction(tonAddress, lt, hash);
-          if (!tx) return;
-          const msgCell = beginCell()
-            .store(storeMessage(tx.inMessage as Message))
-            .endCell();
-          const inMsgHash = msgCell.hash().toString('hex');
-          txHash = inMsgHash;
         } catch (err: any) {
           if (isTonCancelError(err)) {
             throw new Error(CANCELLED_ERR_MESSAGE5);
@@ -125,43 +105,16 @@ export const sendNewStakePool =
       });
       const wallet = tonClient.open(walletContract);
 
-      let curSeqNo = await wallet.getSeqno();
-      await sleep(1000);
+      // let curSeqNo = await wallet.getSeqno();
+      // await sleep(1000);
 
       const contract = tonClient.open(
         new Stack(Address.parse(stackContractAddress))
       );
       const fee = await contract.getNewStakePoolFee();
-      await sleep(1000);
 
-      const stakeResult = await contract.sendNewStakePool(sender, {
-        value: fee,
-      });
-      // console.log({ stakeResult });
+      const lastTxHash = await getLastTxHash(tonClient, tonConnectUI);
 
-      while (true) {
-        const newSeqNo = await wallet.getSeqno();
-        if (newSeqNo > curSeqNo) {
-          curSeqNo = newSeqNo;
-          break;
-        }
-        await sleep(1000);
-      }
-      await sleep(1000);
-
-      const contractAddresses = await contract.getContractAddresses(
-        Address.parse(tonConnectUI.account!.address),
-        BigInt(0)
-      );
-      const stakePool = tonClient.open(
-        new StakePool(contractAddresses.stakePool)
-      );
-      const lsdTokenMaster = tonClient.open(
-        new LsdTokenMaster(contractAddresses.lsdTokenMaster)
-      );
-      await sleep(1000);
-
-      // const stakePoolBalance = await stakePool.getBalance();
       const contentDict = Dictionary.empty(
         Dictionary.Keys.BigUint(256),
         metadataDictionaryValue
@@ -169,80 +122,27 @@ export const sendNewStakePool =
         .set(toMetadataKey('decimals'), '9')
         .set(toMetadataKey('symbol'), tokenSymbol)
         .set(toMetadataKey('name'), tokenName)
-        .set(toMetadataKey('description'), 'StaFi liquid staking protocol')
-        .set(toMetadataKey('image'), 'https://xx/xx.png');
-
+        .set(toMetadataKey('description'), '')
+        .set(toMetadataKey('image'), '');
       const content = beginCell()
         .storeUint(0, 8)
         .storeDict(contentDict)
         .endCell();
 
-      const result = await stakePool.sendProxySetContent(sender, {
-        value: toNano('0.1'),
-        dst: lsdTokenMaster.address,
+      await contract.sendNewStakePool(sender, {
+        value: fee,
         content,
       });
 
+      let txHash: string | undefined;
       while (true) {
-        const newSeqNo = await wallet.getSeqno();
-        // console.log({ newSeqNo });
-        if (newSeqNo > curSeqNo) {
-          curSeqNo = newSeqNo;
-          break;
-        }
+        txHash = await getLastTxHash(tonClient, tonConnectUI);
+        if (txHash && txHash !== lastTxHash) break;
         await sleep(1000);
       }
-      await sleep(1000);
 
-      let jettonData = await lsdTokenMaster.getJettonData();
+      await sleep(8000);
 
-      const cell = jettonData[3];
-      const slice = cell.beginParse();
-      const prefix = slice.loadUint(8);
-      if (prefix !== 0) {
-        console.info('Expected a zero prefix for metadata but got %s', prefix);
-        return;
-      }
-      const metadata = slice.loadDict(
-        Dictionary.Keys.BigUint(256),
-        metadataDictionaryValue
-      );
-
-      const labelsMap: Record<string, string | undefined> = {};
-      labelsMap[toMetadataKey('decimals').toString()] = 'decimals';
-      labelsMap[toMetadataKey('symbol').toString()] = 'symbol';
-      labelsMap[toMetadataKey('name').toString()] = 'name';
-      labelsMap[toMetadataKey('description').toString()] = 'description';
-      labelsMap[toMetadataKey('image').toString()] = 'image';
-
-      // console.info();
-      // console.info('Jetton Metadata');
-      // console.info('===============');
-      for (const key of [
-        'decimals',
-        'symbol',
-        'name',
-        'description',
-        'image',
-      ]) {
-        // console.info(
-        //   '    %s: %s',
-        //   key.padStart(12),
-        //   metadata.get(toMetadataKey(key)) ?? ''
-        // );
-        metadata.delete(toMetadataKey(key));
-      }
-      // console.info();
-
-      // if (metadata.size > 0) {
-      //   console.info('Unknown Keys');
-      //   console.info('------------');
-      //   for (const key of metadata.keys()) {
-      //     console.info('    %s: %s', key.toString(), metadata.get(key));
-      //   }
-      //   console.info();
-      // }
-      await sleep(2000);
       dispatch(
         setSubmitLoadingParams({
           status: 'success',
@@ -279,3 +179,16 @@ export const sendNewStakePool =
       dispatch(setSendNewStakePoolLoading(false));
     }
   };
+
+const getLastTxHash = async (
+  tonClient: TonClient,
+  tonConnectUI: TonConnectUI
+): Promise<string | undefined> => {
+  const tonAddress = Address.parse(tonConnectUI.account!.address);
+  const state = await tonClient.getContractState(tonAddress);
+  if (!state.lastTransaction) return;
+  const { lt, hash } = state.lastTransaction!;
+  const tx = await tonClient.getTransaction(tonAddress, lt, hash);
+  if (!tx) return;
+  return parseTonTxHash(tx);
+};
