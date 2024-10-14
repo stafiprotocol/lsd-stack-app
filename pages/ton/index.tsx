@@ -130,7 +130,7 @@ const TonPage = () => {
                   label="Token Name"
                   value={tokenName}
                   onChange={(v) => setTokenName(v)}
-                  placeholder="Example: StaFi rTon"
+                  placeholder="Example: StaFi rTON"
                 />
                 {tokenName.length > 50 && (
                   <InputErrorTip msg="Token name must be less than 50 character" />
@@ -139,7 +139,7 @@ const TonPage = () => {
                   label="Symbol"
                   value={tokenSymbol}
                   onChange={(v) => setTokenSymbol(v)}
-                  placeholder="Example: rTon"
+                  placeholder="Example: rTON"
                 />
                 {tokenSymbol.length > 10 && (
                   <InputErrorTip msg="Symbol must be less than 10 character" />

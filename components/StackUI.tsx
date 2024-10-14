@@ -293,7 +293,7 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
       </div>
 
       <div className="ml-[.12rem] text-[.16rem] text-white">
-        {eco === AppEco.Lrt ? 'Eigenlayer LRT' : eco}
+        {eco === AppEco.Lrt ? 'Eigenlayer LRT' : eco.toUpperCase()}
       </div>
 
       {appEco === eco ? (
