@@ -206,7 +206,7 @@ const RegisterPoolPage = () => {
                   fee.
                 </div>
               }
-              link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#pool-registration-fee `}
+              link={`${getDocHost()}/develop_cosmos_lsd/deploy/#pool-registration-fee `}
               className="mt-[.36rem]"
             />
 
@@ -236,7 +236,7 @@ const RegisterPoolPage = () => {
 
         <FaqCard
           title="Parameter Tips"
-          link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#parameter-tips`}
+          link={`${getDocHost()}/develop_cosmos_lsd/deploy/#parameter-tips`}
         >
           <>
             Connection ID:

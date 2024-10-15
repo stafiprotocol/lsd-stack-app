@@ -18,7 +18,7 @@ import { EmptyContent } from './common/EmptyContent';
 import { PrimaryLoading } from './common/PrimaryLoading';
 import { useTonClient } from 'hooks/ton/useTonClient';
 import { Stack } from 'config/ton/wrappers/stack';
-import { Address } from '@ton/core';
+import { Address, Dictionary } from '@ton/core';
 import { stackContractAddress } from 'config/ton';
 import { useTonAddress } from '@tonconnect/ui-react';
 import { getStorage, STORAGE_TON_SEQNO } from 'utils/storageUtils';
@@ -30,6 +30,11 @@ import {
   formatNumber,
   formatScientificNumber,
 } from 'utils/numberUtils';
+import {
+  LsdTokenMaster,
+  metadataDictionaryValue,
+  toMetadataKey,
+} from 'config/ton/wrappers/lsdTokenMaster';
 
 export const TonDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +43,7 @@ export const TonDashboard = () => {
   useEffect(() => {
     setIsLoading(true);
     const seqNoStr = getStorage(STORAGE_TON_SEQNO);
-    const seqNo = isNaN(Number(seqNoStr)) ? 0 : Number(seqNoStr);
+    const seqNo = seqNoStr === null ? 0 : Number(seqNoStr);
     const seqs: number[] = [0];
     for (let i = 1; i < seqNo; i++) {
       seqs.push(i);
@@ -99,6 +104,7 @@ const DashboardItem = (props: { sequence: number }) => {
   const [balance, setBalance] = useState<string>('');
   const [stakePoolAddress, setStakePoolAddress] = useState<string>('');
   const [lsdTokenAddress, setLsdTokenAddress] = useState<string>('');
+  const [tokenSymbol, setTokenSymbol] = useState<string>('');
 
   const settingsPopupState = usePopupState({
     variant: 'popover',
@@ -135,6 +141,33 @@ const DashboardItem = (props: { sequence: number }) => {
 
       setStakePoolConfig(stakePoolState);
       setBalance(stakePoolBalance.toString());
+
+      const lsdTokenMaster = tonClient.open(
+        new LsdTokenMaster(contractAddress.lsdTokenMaster)
+      );
+      let jettonData = await lsdTokenMaster.getJettonData();
+
+      const cell = jettonData[3];
+      const slice = cell.beginParse();
+      const prefix = slice.loadUint(8);
+      if (prefix !== 0) {
+        console.info('Expected a zero prefix for metadata but got %s', prefix);
+        return;
+      }
+      const metadata = slice.loadDict(
+        Dictionary.Keys.BigUint(256),
+        metadataDictionaryValue
+      );
+
+      const labelsMap: Record<string, string | undefined> = {};
+      labelsMap[toMetadataKey('decimals').toString()] = 'decimals';
+      labelsMap[toMetadataKey('symbol').toString()] = 'symbol';
+      labelsMap[toMetadataKey('name').toString()] = 'name';
+      labelsMap[toMetadataKey('description').toString()] = 'description';
+      labelsMap[toMetadataKey('image').toString()] = 'image';
+
+      const tokenSymbol = metadata.get(toMetadataKey('symbol'));
+      setTokenSymbol(tokenSymbol || '');
     } catch (err: any) {
       console.log({ err });
     }
@@ -174,7 +207,7 @@ const DashboardItem = (props: { sequence: number }) => {
             <Image src={tonLogoImg} layout="fill" alt="icon" />
           </div>
 
-          {stakePoolConfig ? (
+          {tokenSymbol ? (
             <Link href={getTonScanAccountUrl(stakePoolAddress)} target="_blank">
               <div className="flex items-center cursor-pointer">
                 <div
@@ -183,7 +216,7 @@ const DashboardItem = (props: { sequence: number }) => {
                     robotoSemiBold.className
                   )}
                 >
-                  {/* {dashboardInfo.symbol} */}
+                  {tokenSymbol}
                 </div>
 
                 <Icomoon icon="share" size=".12rem" />

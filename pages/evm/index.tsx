@@ -70,7 +70,7 @@ const CosmosPage = () => {
                 <TipBar
                   content={'FIXME'}
                   isWarning
-                  link={`${getDocHost()}/docs/fixme`}
+                  link={`${getDocHost()}/fixme`}
                   className="mt-[.24rem] hidden"
                 />
 
@@ -216,7 +216,7 @@ const CosmosPage = () => {
 
             <FaqCard
               title="Choose Network"
-              link={`${getDocHost()}/docs/develop_evm_lsd/getstarted.html`}
+              link={`${getDocHost()}/develop_evm_lsd/getstarted/`}
             >
               <>
                 Supported Networks:

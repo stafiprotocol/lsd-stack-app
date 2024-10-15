@@ -43,6 +43,7 @@ const ReviewPage = () => {
   const onBack = () => {
     router.replace('/');
   };
+  console.log({ deployInfo });
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
@@ -57,7 +58,7 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link={`${getDocHost()}/docs/develop_sol_lsd/deploy.html#save-all-the-information-generated`}
+                  link={`${getDocHost()}/develop_ton_lsd/deploy/`}
                   isWarning
                 />
               </div>
@@ -137,7 +138,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_sol_lsd/relay.html`}
+                href={`${getDocHost()}/docs/develop_ton_lsd/relay/`}
                 target="_blank"
               >
                 How to run your relay service
@@ -153,7 +154,7 @@ const ReviewPage = () => {
               <br />
               <a
                 className="underline"
-                href={`${getDocHost()}/docs/develop_sol_lsd/relay.html`}
+                href={`${getDocHost()}/docs/develop_ton_lsd/relay/`}
                 target="_blank"
               >
                 Follow our doc
@@ -164,7 +165,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_sol_lsd/lsd_app.html`}
+                href={`${getDocHost()}/docs/develop_ton_lsd/deploy/`}
                 target="_blank"
               >
                 How to build your own LSD App

@@ -125,7 +125,7 @@ const LrtTokenTypeSelector = () => {
                   once it is set.
                 </div>
               }
-              link={`${getDocHost()}/docs/developlrt/deploy.html#why-lrd-token-could-not-be-changed`}
+              link={`${getDocHost()}/developlrt/deploy/#why-lrd-token-could-not-be-changed`}
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ const LrtTokenTypeSelector = () => {
         <div className="flex items-center gap-[.12rem]">
           <a
             className="text-[.24rem] text-text1 leading-[.36rem] underline"
-            href={`${getDocHost()}/docs/developlrt/deploy.html#which-token-type-should-i-choose`}
+            href={`${getDocHost()}/developlrt/deploy/#which-token-type-should-i-choose`}
             target="_blank"
           >
             Compare Token Types

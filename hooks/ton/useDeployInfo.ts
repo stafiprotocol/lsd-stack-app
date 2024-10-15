@@ -11,6 +11,7 @@ import {
 } from 'config/ton/wrappers/lsdTokenMaster';
 import { sleep } from 'utils/commonUtils';
 import { isDev } from 'config/common';
+import { getStorage, STORAGE_TON_SEQNO } from 'utils/storageUtils';
 
 export interface TonDeployInfo {
   stakePool: string;
@@ -24,7 +25,6 @@ export interface TonDeployInfo {
 }
 
 export const useDeployInfo = () => {
-  // TODO
   const tonAddress = useTonAddress();
   const tonClient = useTonClient();
 
@@ -36,15 +36,17 @@ export const useDeployInfo = () => {
     setFetchLoading(true);
     await sleep(3000);
 
+    const seqNoStr = getStorage(STORAGE_TON_SEQNO);
+    const seqNo = seqNoStr === null ? 0 : Number(seqNoStr);
+
     const stack = tonClient.open(
       new Stack(Address.parse(stackContractAddress))
     );
     try {
       const contractAddresses = await stack.getContractAddresses(
         Address.parse(tonAddress),
-        BigInt(0)
+        BigInt(seqNo)
       );
-
       const lsdTokenMasterAddress = contractAddresses.lsdTokenMaster.toString({
         testOnly: isDev(),
       });

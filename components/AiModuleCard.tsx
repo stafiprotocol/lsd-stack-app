@@ -160,7 +160,7 @@ export const AiModuleCard = (props: Props) => {
       />
 
       <SetAiValidatorReadyModal
-        tutorialUrl={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html`}
+        tutorialUrl={`${getDocHost()}/develop_cosmos_lsd/deploy/`}
         open={readyModalOpen}
         close={() => {
           setReadyModalOpen(false);

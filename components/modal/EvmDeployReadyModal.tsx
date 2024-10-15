@@ -87,9 +87,7 @@ export const EvmDeployReadyModal = ({
           <CustomButton
             width="1.75rem"
             height=".46rem"
-            onClick={() =>
-              openLink(`${getDocHost()}/docs/develop_evm_lsd/deploy.html`)
-            }
+            onClick={() => openLink(`${getDocHost()}/develop_evm_lsd/deploy/`)}
             border="none"
             trRaidus="0"
             brRaidus="0.16rem"

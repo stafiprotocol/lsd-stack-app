@@ -357,7 +357,7 @@ const ParameterPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link={`${getDocHost()}/docs/developlrt/deploy.html#rewards-distribution`}
+                  link={`${getDocHost()}/developlrt/deploy/#rewards-distribution`}
                 />
               </div>
 
@@ -388,7 +388,7 @@ const ParameterPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/developlrt/deploy.html#parameter-tips`}
+                href={`${getDocHost()}/developlrt/deploy/#parameter-tips`}
                 target="_blank"
               >
                 Parameter Tips

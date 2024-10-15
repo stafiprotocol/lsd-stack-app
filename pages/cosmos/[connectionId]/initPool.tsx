@@ -340,7 +340,7 @@ const InitPoolPage = () => {
                     as 10%.
                   </div>
                 }
-                link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html##rewards-distribution`}
+                link={`${getDocHost()}/develop_cosmos_lsd/deploy/##rewards-distribution`}
                 className="mt-[.16rem]"
               />
 
@@ -447,7 +447,7 @@ const InitPoolPage = () => {
                     fee.
                   </div>
                 }
-                link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#pool-initialization-fee`}
+                link={`${getDocHost()}/develop_cosmos_lsd/deploy/#pool-initialization-fee`}
                 className="mt-[.36rem]"
               />
 
@@ -511,7 +511,7 @@ const InitPoolPage = () => {
 
         <FaqCard
           title="Parameter Tips"
-          link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#parameter-tips`}
+          link={`${getDocHost()}/develop_cosmos_lsd/deploy/#parameter-tips`}
         >
           <>
             Fee Receiver:
@@ -626,7 +626,7 @@ const ReviewPage = (props: {
       <TipBar
         isWarning
         content={<div>Please back up the following information</div>}
-        link={`${getDocHost()}/docs/developethlsd/deploy.html#save-all-the-information-generated`}
+        link={`${getDocHost()}/developethlsd/deploy/#save-all-the-information-generated`}
         className="mt-[.16rem]"
       />
 
@@ -831,7 +831,7 @@ const ReviewPage = (props: {
           height=".56rem"
           onClick={() =>
             openLink(
-              `${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#re-edit-parameters`
+              `${getDocHost()}/develop_cosmos_lsd/deploy/#re-edit-parameters`
             )
           }
           width="2.62rem"

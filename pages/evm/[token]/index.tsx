@@ -119,7 +119,7 @@ const ParameterPage = () => {
                     once it is set.
                   </div>
                 }
-                link={`${getDocHost()}/docs/develop_evm_lsd/deploy.html#why-lsd-token-could-not-be-changed`}
+                link={`${getDocHost()}/develop_evm_lsd/deploy/#why-lsd-token-could-not-be-changed`}
               />
             </div>
           </div>
@@ -129,7 +129,7 @@ const ParameterPage = () => {
           <div className="flex items-center gap-[.12rem]">
             <a
               className="text-[.24rem] text-text1 leading-[.36rem] underline"
-              href={`${getDocHost()}/docs/develop_evm_lsd/deploy.html#which-token-type-should-i-choose`}
+              href={`${getDocHost()}/develop_evm_lsd/deploy/#which-token-type-should-i-choose`}
               target="_blank"
             >
               Compare Token Types

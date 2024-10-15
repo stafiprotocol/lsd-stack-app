@@ -80,7 +80,7 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link={`${getDocHost()}/docs/develop_evm_lsd/deploy.html#save-all-the-information-generated`}
+                  link={`${getDocHost()}/develop_evm_lsd/deploy/#save-all-the-information-generated`}
                   isWarning
                 />
               </div>
@@ -162,7 +162,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_evm_lsd/deploy.html#step2-run-relay-service`}
+                href={`${getDocHost()}/develop_evm_lsd/deploy/#step2-run-relay-service`}
                 target="_blank"
               >
                 How to run your relay service
@@ -190,7 +190,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_evm_lsd/evm_lsd_app.html`}
+                href={`${getDocHost()}/develop_evm_lsd/evm_lsd_app/`}
                 target="_blank"
               >
                 How to deploy your own LSD APP

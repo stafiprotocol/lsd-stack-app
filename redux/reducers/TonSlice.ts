@@ -82,7 +82,7 @@ export const sendNewStakePool =
     // let txHash: string = '';
 
     const seqNoStr = getStorage(STORAGE_TON_SEQNO);
-    const seqNo = isNaN(Number(seqNoStr)) ? -1 : Number(seqNoStr);
+    const seqNo = seqNoStr === null ? -1 : Number(seqNoStr);
 
     const sender: Sender = {
       send: async (args: SenderArguments) => {

@@ -88,7 +88,7 @@ const DeployPage = () => {
           }}
           onClick={() => {
             openLink(
-              `${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#step2-run-relay-service`
+              `${getDocHost()}/develop_cosmos_lsd/deploy/#step2-run-relay-service`
             );
           }}
         >
@@ -205,7 +205,7 @@ const DeployPage = () => {
         <div>
           <FaqCard
             title="How to run your LSD relay service?"
-            link={`${getDocHost()}/docs/develop_cosmos_lsd/app.html`}
+            link={`${getDocHost()}/develop_cosmos_lsd/app/`}
           >
             <>
               - Two servers recommended
@@ -220,7 +220,7 @@ const DeployPage = () => {
 
           <FaqCard
             title="How to run your ICQ relay service?"
-            link={`${getDocHost()}/docs/develop_cosmos_lsd/icq_relay.html`}
+            link={`${getDocHost()}/develop_cosmos_lsd/icq_relay/`}
           >
             <>
               - At least two servers
@@ -235,7 +235,7 @@ const DeployPage = () => {
 
           <FaqCard
             title="How to run your own LSD App?"
-            link={`${getDocHost()}/docs/develop_cosmos_lsd/app.html`}
+            link={`${getDocHost()}/develop_cosmos_lsd/app/`}
           >
             <>
               - Basic frontend knowledge required to customize branding stuffs

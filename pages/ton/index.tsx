@@ -161,7 +161,7 @@ const TonPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link={`${getDocHost()}/docs/develop_sol_lsd/deploy.html#rewards-distribution`}
+                  link={`${getDocHost()}/develop_ton_lsd/deploy/`}
                 />
               </div>
 
@@ -193,7 +193,7 @@ const TonPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_sol_lsd/deploy.html#parameter-tips`}
+                href={`${getDocHost()}/docs/develop_ton_lsd/deploy/#parameter-tips`}
                 target="_blank"
               >
                 Parameter Tips

@@ -69,9 +69,7 @@ export const LrtDeployReadyModal = ({ open, close, lrtTokenName }: Props) => {
           <CustomButton
             width="1.75rem"
             height=".46rem"
-            onClick={() =>
-              openLink(`${getDocHost()}/docs/developlrt/app.html`)
-            }
+            onClick={() => openLink(`${getDocHost()}/developlrt/app/`)}
             border="none"
             trRaidus="0"
             brRaidus="0.16rem"

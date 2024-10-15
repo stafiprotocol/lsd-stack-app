@@ -72,7 +72,7 @@ const CosmosPage = () => {
                     'ATOM Liquid Staking utilizes Neutron infrastructure. Please acknowledge the inherent risks before proceeding.'
                   }
                   isWarning
-                  link={`${getDocHost()}/docs/develop_cosmos_lsd/deploy.html#neutron-risks-awareness`}
+                  link={`${getDocHost()}/develop_cosmos_lsd/deploy/#neutron-risks-awareness`}
                   className="mt-[.24rem]"
                 />
 
@@ -214,7 +214,7 @@ const CosmosPage = () => {
 
             <FaqCard
               title="Neutron vs Native contract"
-              link={`${getDocHost()}/docs/develop_cosmos_lsd/getstarted.html`}
+              link={`${getDocHost()}/develop_cosmos_lsd/getstarted/`}
             >
               <>
                 Neutron Contract:

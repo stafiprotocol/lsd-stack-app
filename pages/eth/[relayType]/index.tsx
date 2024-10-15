@@ -202,7 +202,7 @@ const ParameterPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link={`${getDocHost()}/docs/developethlsd/deploy.html#rewards-distribution`}
+                  link={`${getDocHost()}/developethlsd/deploy/#rewards-distribution`}
                 />
               </div>
 
@@ -233,7 +233,7 @@ const ParameterPage = () => {
 
           <FaqCard
             title="Parameter Tips"
-            link={`${getDocHost()}/docs/developethlsd/deploy.html#parameter-tips`}
+            link={`${getDocHost()}/developethlsd/deploy/#parameter-tips`}
           >
             <>
               Owner Address: sets the owner of the LSD network being created.
