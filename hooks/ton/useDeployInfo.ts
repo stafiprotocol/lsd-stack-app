@@ -10,6 +10,7 @@ import {
   toMetadataKey,
 } from 'config/ton/wrappers/lsdTokenMaster';
 import { sleep } from 'utils/commonUtils';
+import { isDev } from 'config/common';
 
 export interface TonDeployInfo {
   stakePool: string;
@@ -44,8 +45,12 @@ export const useDeployInfo = () => {
         BigInt(0)
       );
 
-      const lsdTokenMasterAddress = contractAddresses.lsdTokenMaster.toString();
-      const stakePoolAddress = contractAddresses.stakePool.toString();
+      const lsdTokenMasterAddress = contractAddresses.lsdTokenMaster.toString({
+        testOnly: isDev(),
+      });
+      const stakePoolAddress = contractAddresses.stakePool.toString({
+        testOnly: isDev(),
+      });
 
       const lsdTokenMaster = tonClient.open(
         new LsdTokenMaster(contractAddresses.lsdTokenMaster)

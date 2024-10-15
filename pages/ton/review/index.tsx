@@ -77,24 +77,24 @@ const ReviewPage = () => {
               {!fetchLoading && deployInfo && (
                 <div className="mb-[.32rem] max-h-[3.6rem] overflow-y-auto px-[.3rem]">
                   <DeployInfoItem
-                    name="Owner address"
-                    value={deployInfo.ownerAddress.toString()}
-                  />
-                  <DeployInfoItem
-                    name="Stake Pool address"
-                    value={deployInfo.stakePool.toString()}
-                  />
-                  <DeployInfoItem
-                    name="LSD Token address"
-                    value={deployInfo.lsdTokenMaster.toString()}
-                  />
-                  <DeployInfoItem
                     name="Token Name"
                     value={deployInfo.tokenName.toString()}
                   />
                   <DeployInfoItem
                     name="Token Symbol"
                     value={deployInfo.tokenSymbol.toString()}
+                  />
+                  <DeployInfoItem
+                    name="LSD Token Address"
+                    value={deployInfo.lsdTokenMaster.toString()}
+                  />
+                  <DeployInfoItem
+                    name="Stake Pool Address"
+                    value={deployInfo.stakePool.toString()}
+                  />
+                  <DeployInfoItem
+                    name="Owner Address"
+                    value={deployInfo.ownerAddress.toString()}
                   />
                 </div>
               )}
@@ -149,20 +149,8 @@ const ReviewPage = () => {
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2">
               Relay is an off-chain service responsible for interacting with LSD
-              contracts. There are two ways to run the relay:
+              contracts.
               <br />
-              1.{' '}
-              <a
-                className="underline"
-                href="https://discord.com/invite/jB77etn"
-                target="_blank"
-              >
-                Contact with StaFi team
-              </a>{' '}
-              to whitelist your LST, so that you do not have to maintain the
-              Relay service by yourself
-              <br />
-              2.{' '}
               <a
                 className="underline"
                 href={`${getDocHost()}/docs/develop_sol_lsd/relay.html`}
