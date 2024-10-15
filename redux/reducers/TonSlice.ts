@@ -25,6 +25,11 @@ import {
 import { sleep } from 'utils/commonUtils';
 import { isTonCancelError, parseTonTxHash } from 'utils/web3Utils';
 import snackbarUtil from 'utils/snackbarUtils';
+import {
+  getStorage,
+  saveTonSeqNo,
+  STORAGE_TON_SEQNO,
+} from 'utils/storageUtils';
 
 export interface TonState {
   sendNewStakePoolLoading: boolean;
@@ -75,6 +80,9 @@ export const sendNewStakePool =
     // const hashBase64 = tonweb.utils.bytesToBase64(bocCellBytes);
     // console.log({ hashBase64 });
     // let txHash: string = '';
+
+    const seqNoStr = getStorage(STORAGE_TON_SEQNO);
+    const seqNo = isNaN(Number(seqNoStr)) ? -1 : Number(seqNoStr);
 
     const sender: Sender = {
       send: async (args: SenderArguments) => {
@@ -131,6 +139,7 @@ export const sendNewStakePool =
 
       await contract.sendNewStakePool(sender, {
         value: fee,
+        sequence: BigInt(seqNo + 1),
         content,
       });
 
@@ -153,6 +162,8 @@ export const sendNewStakePool =
       );
       cb && cb(true);
       dispatch(setSendNewStakePoolLoading(false));
+
+      saveTonSeqNo(seqNo + 1 + '');
     } catch (err) {
       console.log(err);
       if (isTonCancelError(err)) {

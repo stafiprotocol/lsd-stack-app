@@ -114,7 +114,7 @@ export function amountToChain(
   return res;
 }
 
-function formatScientificNumber(x: any): string {
+export function formatScientificNumber(x: any): string {
   if (Math.abs(x) < 1.0) {
     var e = parseInt(x.toString().split('e-')[1]);
     if (e) {

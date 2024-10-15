@@ -140,3 +140,10 @@ export function getTonScanTxUrl(txHash: string | undefined) {
   }
   return `https://tonscan.org/tx/${txHash}`;
 }
+
+export function getTonScanAccountUrl(address: string | undefined) {
+  if (isDev()) {
+    return `https://testnet.tonviewer.com/${address}`;
+  }
+  return `https://tonscan.org/address/${address}`;
+}

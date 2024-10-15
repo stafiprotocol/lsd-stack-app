@@ -15,6 +15,7 @@ import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
 import EcoSolanaImg from 'public/images/eco/solana.png';
+import EcoTonImg from 'public/images/eco/ton.svg';
 
 export function getEcoTokenIcon(eco: AppEco | null) {
   return eco === AppEco.Cosmos
@@ -25,6 +26,8 @@ export function getEcoTokenIcon(eco: AppEco | null) {
     ? EcoEvmImg
     : eco === AppEco.Sol
     ? EcoSolanaImg
+    : eco === AppEco.Ton
+    ? EcoTonImg
     : EcoEthImg;
 }
 

@@ -1,7 +1,8 @@
-export const STORAGE_KEY_DISCONNECT_METAMASK = "eth_lsd_disconnect_metamask";
-export const STORAGE_KEY_LSD_TOKEN_NAME = "lsd_token_name";
-export const STORAGE_KEY_OWNER_ADDRESS = "owner_address";
-export const STORAGE_KEPLR_WALLET_ALLOWED = "lsd_stack_keplr_network_allowed_";
+export const STORAGE_KEY_DISCONNECT_METAMASK = 'eth_lsd_disconnect_metamask';
+export const STORAGE_KEY_LSD_TOKEN_NAME = 'lsd_token_name';
+export const STORAGE_KEY_OWNER_ADDRESS = 'owner_address';
+export const STORAGE_KEPLR_WALLET_ALLOWED = 'lsd_stack_keplr_network_allowed_';
+export const STORAGE_TON_SEQNO = 'ton_stack_seqno';
 
 export function saveStorage(key: string, value: string) {
   localStorage.setItem(key, value);
@@ -16,7 +17,7 @@ export function removeStorage(key: string) {
 }
 
 export function saveCosmosNetworkAllowedFlag(chainId: string) {
-  saveStorage(STORAGE_KEPLR_WALLET_ALLOWED + chainId, "1");
+  saveStorage(STORAGE_KEPLR_WALLET_ALLOWED + chainId, '1');
 }
 
 export function clearCosmosNetworkAllowedFlag(chainId: string) {
@@ -25,4 +26,8 @@ export function clearCosmosNetworkAllowedFlag(chainId: string) {
 
 export function isCosmosNetworkAllowed(chainId: string) {
   return getStorage(STORAGE_KEPLR_WALLET_ALLOWED + chainId);
+}
+
+export function saveTonSeqNo(seqNo: string) {
+  saveStorage(STORAGE_TON_SEQNO, seqNo);
 }
