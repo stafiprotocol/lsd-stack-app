@@ -274,7 +274,8 @@ const DashboardItem = (props: { sequence: number }) => {
               {stakePoolConfig
                 ? formatScientificNumber(
                     chainAmountToHuman(
-                      stakePoolConfig.totalStakersTon.toString()
+                      stakePoolConfig.totalStakersTon.toString(),
+                      9
                     )
                   )
                 : '--'}{' '}
@@ -286,11 +287,8 @@ const DashboardItem = (props: { sequence: number }) => {
             <div className="text-text2">Total LSD Token:</div>
             <div className="text-text1 ml-[.06rem] ">
               {stakePoolConfig
-                ? formatScientificNumber(
-                    chainAmountToHuman(stakePoolConfig.totalLsdToken.toString())
-                  )
+                ? stakePoolConfig.totalLsdToken.toString()
                 : '--'}{' '}
-              TON
             </div>
           </div>
 
@@ -300,7 +298,8 @@ const DashboardItem = (props: { sequence: number }) => {
               {stakePoolConfig
                 ? formatScientificNumber(
                     chainAmountToHuman(
-                      stakePoolConfig.totalUnstakingTon.toString()
+                      stakePoolConfig.totalUnstakingTon.toString(),
+                      9
                     )
                   )
                 : '--'}{' '}
@@ -314,7 +313,8 @@ const DashboardItem = (props: { sequence: number }) => {
               {stakePoolConfig
                 ? formatScientificNumber(
                     chainAmountToHuman(
-                      stakePoolConfig.totalBorrowersTon.toString()
+                      stakePoolConfig.totalBorrowersTon.toString(),
+                      9
                     )
                   )
                 : '--'}{' '}
@@ -328,7 +328,8 @@ const DashboardItem = (props: { sequence: number }) => {
               {stakePoolConfig
                 ? formatScientificNumber(
                     chainAmountToHuman(
-                      stakePoolConfig.totalBorrowersLoan.toString()
+                      stakePoolConfig.totalBorrowersLoan.toString(),
+                      9
                     )
                   )
                 : '--'}{' '}
@@ -342,7 +343,8 @@ const DashboardItem = (props: { sequence: number }) => {
               {stakePoolConfig
                 ? formatScientificNumber(
                     chainAmountToHuman(
-                      stakePoolConfig.totalPlatformFee.toString()
+                      stakePoolConfig.totalPlatformFee.toString(),
+                      9
                     )
                   )
                 : '--'}{' '}
@@ -356,7 +358,8 @@ const DashboardItem = (props: { sequence: number }) => {
               {stakePoolConfig
                 ? formatScientificNumber(
                     chainAmountToHuman(
-                      stakePoolConfig.platformFeeReserved.toString()
+                      stakePoolConfig.platformFeeReserved.toString(),
+                      9
                     )
                   )
                 : '--'}{' '}
