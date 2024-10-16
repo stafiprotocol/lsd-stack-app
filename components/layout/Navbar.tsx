@@ -89,6 +89,20 @@ const Navbar = () => {
     }
   };
 
+  const getArchitectureLink = (appEco: AppEco) => {
+    if (appEco === AppEco.Eth) {
+      return `${getDocHost()}/architetcture__ethlsd/`;
+    } else if (appEco === AppEco.Sol) {
+      return `${getDocHost()}/architetcture__solana_lsd/`;
+    } else if (appEco === AppEco.Lrt) {
+      return `${getDocHost()}/architetcture_el_lrt/`;
+    } else if (appEco === AppEco.Ton) {
+      return `${getDocHost()}/architetcture_ton_lsd/`;
+    } else {
+      return getDocHost();
+    }
+  };
+
   return (
     <div>
       <div className="bg-color-bgPage py-[.24rem] flex items-center justify-center">
@@ -191,7 +205,7 @@ const Navbar = () => {
                 recommend using for testing purposes. More information around
                 parameter customization and guidance can be found in the{' '}
                 <a
-                  href={getDocHost()}
+                  href={getArchitectureLink(appEco)}
                   target="_blank"
                   className="underline text-text1"
                 >

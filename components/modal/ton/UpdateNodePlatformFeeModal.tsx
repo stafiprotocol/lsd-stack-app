@@ -1,6 +1,7 @@
 import { Box, Modal } from '@mui/material';
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { useAppDispatch } from 'hooks/common';
 import { useTonClient } from 'hooks/ton/useTonClient';
@@ -37,8 +38,14 @@ export const UpdatePlatformFeeModal = ({
     setPlatformValue('');
   }, [open]);
 
+  const platformValueTooLarge = Number(platformValue) >= 100;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
-    if (!platformValue || Number(platformValue) === 0) {
+    if (
+      !platformValue ||
+      Number(platformValue) === 0 ||
+      platformValueTooLarge
+    ) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
@@ -113,6 +120,12 @@ export const UpdatePlatformFeeModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {platformValueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Platform Fee must be < 100" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton

@@ -1,5 +1,5 @@
 {
-  "url": "http://localhost:5001",
+  "url": "https://stack-test-app.stafi.io/",
   "name": "StaFi LSD Stack",
   "iconUrl": "https://ton.vote/logo.png"
 }

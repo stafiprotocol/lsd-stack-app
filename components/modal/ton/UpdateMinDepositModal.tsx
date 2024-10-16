@@ -1,6 +1,7 @@
 import { Box, Modal } from '@mui/material';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { CustomButton } from 'components/common/CustomButton';
+import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
 import { useAppDispatch } from 'hooks/common';
 import { useTonClient } from 'hooks/ton/useTonClient';
@@ -37,8 +38,10 @@ export const UpdateMinDepositModal = ({
     setValue('');
   }, [open]);
 
+  const valueTooLarge = Number(value) >= 100000;
+
   const [buttonDisabled, buttonText] = useMemo(() => {
-    if (!value || Number(value) === 0) {
+    if (!value || Number(value) === 0 || valueTooLarge) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];
@@ -113,6 +116,12 @@ export const UpdateMinDepositModal = ({
             className="mt-[.16rem]"
           />
         </div>
+
+        {valueTooLarge && (
+          <div className="mt-[.12rem] pl-[.2rem]">
+            <InputErrorTip msg="Min Deposit Amount must be < 100000" />
+          </div>
+        )}
 
         <div className="mt-[.56rem] mb-[.36rem] flex justify-center">
           <CustomButton
