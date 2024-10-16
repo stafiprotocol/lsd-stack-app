@@ -161,7 +161,7 @@ const TonPage = () => {
               <div className="w-[5.47rem] mx-auto mt-[.24rem]">
                 <TipBar
                   content="Commission fee is set defaults as 10%, StaFi Stack Fee set as 10%."
-                  link={`${getDocHost()}/develop_ton_lsd/deploy/`}
+                  link={`${getDocHost()}/develop_ton_lsd/deploy/#rewards-distribution`}
                 />
               </div>
 

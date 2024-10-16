@@ -91,13 +91,13 @@ const Navbar = () => {
 
   const getArchitectureLink = (appEco: AppEco) => {
     if (appEco === AppEco.Eth) {
-      return `${getDocHost()}/architetcture__ethlsd/`;
+      return `${getDocHost()}/architecture_eth_lsd/`;
     } else if (appEco === AppEco.Sol) {
-      return `${getDocHost()}/architetcture__solana_lsd/`;
+      return `${getDocHost()}/architecture_solana_lsd/`;
     } else if (appEco === AppEco.Lrt) {
-      return `${getDocHost()}/architetcture_el_lrt/`;
+      return `${getDocHost()}/architecture_el_lrt/`;
     } else if (appEco === AppEco.Ton) {
-      return `${getDocHost()}/architetcture_ton_lsd/`;
+      return `${getDocHost()}/architecture_ton_lsd/`;
     } else {
       return getDocHost();
     }
