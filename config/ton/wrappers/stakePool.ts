@@ -11,6 +11,7 @@ import {
   SendMode,
   Slice,
 } from '@ton/core';
+import { op } from './common';
 
 export interface StakePoolConfig {
   sequence: bigint;
@@ -192,6 +193,52 @@ export class StakePool implements Contract {
         .storeUint(opts.queryId ?? 0, 64)
         .storeAddress(opts.dst)
         .storeRef(opts.content)
+        .endCell(),
+    });
+  }
+
+  async sendSetPlatformCommissionRate(
+    provider: ContractProvider,
+    via: Sender,
+    opts: {
+      value: bigint | string;
+      bounce?: boolean;
+      sendMode?: SendMode;
+      queryId?: bigint;
+      rate: bigint;
+    }
+  ) {
+    await this.sendMessage(provider, via, {
+      value: opts.value,
+      bounce: opts.bounce,
+      sendMode: opts.sendMode,
+      body: beginCell()
+        .storeUint(op.setPlatformCommissionRate, 32)
+        .storeUint(opts.queryId ?? 0, 64)
+        .storeUint(opts.rate, 16)
+        .endCell(),
+    });
+  }
+
+  async sendSetMinStakeAmount(
+    provider: ContractProvider,
+    via: Sender,
+    opts: {
+      value: bigint | string;
+      bounce?: boolean;
+      sendMode?: SendMode;
+      queryId?: bigint;
+      minStakeAmount: bigint;
+    }
+  ) {
+    await this.sendMessage(provider, via, {
+      value: opts.value,
+      bounce: opts.bounce,
+      sendMode: opts.sendMode,
+      body: beginCell()
+        .storeUint(op.setMinStakeAmount, 32)
+        .storeUint(opts.queryId ?? 0, 64)
+        .storeCoins(opts.minStakeAmount)
         .endCell(),
     });
   }

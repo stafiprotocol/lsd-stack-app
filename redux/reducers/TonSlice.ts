@@ -6,6 +6,7 @@ import {
   Dictionary,
   Sender,
   SenderArguments,
+  toNano,
   TonClient,
   WalletContractV4,
 } from '@ton/ton';
@@ -30,6 +31,7 @@ import {
   saveTonSeqNo,
   STORAGE_TON_SEQNO,
 } from 'utils/storageUtils';
+import { StakePool } from 'config/ton/wrappers/stakePool';
 
 export interface TonState {
   sendNewStakePoolLoading: boolean;
@@ -203,3 +205,113 @@ const getLastTxHash = async (
   if (!tx) return;
   return parseTonTxHash(tx);
 };
+
+const getSender = (tonConnectUI: TonConnectUI) => {
+  const sender: Sender = {
+    send: async (args: SenderArguments) => {
+      try {
+        await tonConnectUI.sendTransaction({
+          messages: [
+            {
+              address: args.to.toString(),
+              amount: args.value.toString(),
+              payload: args.body?.toBoc().toString('base64'),
+            },
+          ],
+          validUntil: Date.now() + 5 * 60 * 1000,
+        });
+      } catch (err: any) {
+        if (isTonCancelError(err)) {
+          throw new Error(CANCELLED_ERR_MESSAGE5);
+        }
+      }
+    },
+  };
+  return sender;
+};
+
+export const sendSetPlatformCommissionRate =
+  (
+    tonConnectUI: TonConnectUI,
+    tonClient: TonClient,
+    stakePoolAddress: string,
+    rate: string,
+    cb?: (success: boolean, cancelled?: boolean) => void
+  ): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const stakePool = tonClient.open(
+        new StakePool(Address.parse(stakePoolAddress))
+      );
+      const sender = getSender(tonConnectUI);
+
+      const lastTxHash = await getLastTxHash(tonClient, tonConnectUI);
+
+      await stakePool.sendSetPlatformCommissionRate(sender, {
+        value: toNano('0.1'),
+        rate: BigInt(Number(rate) * 100),
+      });
+
+      let txHash: string | undefined;
+      while (true) {
+        txHash = await getLastTxHash(tonClient, tonConnectUI);
+        if (txHash && txHash !== lastTxHash) break;
+        await sleep(1000);
+      }
+
+      await sleep(8000);
+
+      cb && cb(true);
+    } catch (err) {
+      console.log(err);
+      if (isTonCancelError(err)) {
+        snackbarUtil.error(CANCELLED_MESSAGE);
+        cb && cb(true, true);
+        return;
+      }
+      cb && cb(false);
+    }
+  };
+
+export const sendSetMinStakeAmount =
+  (
+    tonConnectUI: TonConnectUI,
+    tonClient: TonClient,
+    stakePoolAddress: string,
+    amount: string,
+    cb?: (success: boolean, cancelled?: boolean) => void
+  ): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const stakePool = tonClient.open(
+        new StakePool(Address.parse(stakePoolAddress))
+      );
+      const sender = getSender(tonConnectUI);
+
+      const lastTxHash = await getLastTxHash(tonClient, tonConnectUI);
+
+      await stakePool.sendSetMinStakeAmount(sender, {
+        value: toNano('0.1'),
+        minStakeAmount: BigInt(Number(amount) * Math.pow(10, 9)),
+      });
+
+      let txHash: string | undefined;
+      while (true) {
+        txHash = await getLastTxHash(tonClient, tonConnectUI);
+        if (txHash && txHash !== lastTxHash) break;
+        await sleep(1000);
+      }
+
+      await sleep(8000);
+
+      cb && cb(true);
+    } catch (err) {
+      console.log(err);
+      if (isTonCancelError(err)) {
+        snackbarUtil.error(CANCELLED_MESSAGE);
+        cb && cb(true, true);
+        return;
+      }
+      cb && cb(false);
+    }
+  };

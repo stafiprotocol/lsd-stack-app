@@ -10,6 +10,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import cup from 'public/images/cup.svg';
+import edit from 'public/images/edit.svg';
 import tonLogoImg from 'public/images/ton.svg';
 import { useCallback, useEffect, useState } from 'react';
 import { DataLoading } from './common/DataLoading';
@@ -35,6 +36,8 @@ import {
   metadataDictionaryValue,
   toMetadataKey,
 } from 'config/ton/wrappers/lsdTokenMaster';
+import { UpdatePlatformFeeModal } from './modal/ton/UpdateNodePlatformFeeModal';
+import { UpdateMinDepositModal } from './modal/ton/UpdateMinDepositModal';
 
 export const TonDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,8 +47,8 @@ export const TonDashboard = () => {
     setIsLoading(true);
     const seqNoStr = getStorage(STORAGE_TON_SEQNO);
     const seqNo = seqNoStr === null ? 0 : Number(seqNoStr);
-    const seqs: number[] = [0];
-    for (let i = 1; i < seqNo; i++) {
+    const seqs: number[] = [];
+    for (let i = 0; i <= seqNo; i++) {
       seqs.push(i);
     }
     setSequences(seqs);
@@ -105,6 +108,13 @@ const DashboardItem = (props: { sequence: number }) => {
   const [stakePoolAddress, setStakePoolAddress] = useState<string>('');
   const [lsdTokenAddress, setLsdTokenAddress] = useState<string>('');
   const [tokenSymbol, setTokenSymbol] = useState<string>('');
+
+  const [refresh, setRefresh] = useState(1);
+
+  const [updatePlatformFeeModalOpen, setUpdatePlatformFeeModalOpen] =
+    useState(false);
+  const [updateMinDepositModalOpen, setUpdateMinDepositModalOpen] =
+    useState(false);
 
   const settingsPopupState = usePopupState({
     variant: 'popover',
@@ -175,29 +185,11 @@ const DashboardItem = (props: { sequence: number }) => {
 
   useEffect(() => {
     updateData();
-  }, [updateData]);
+  }, [updateData, refresh]);
 
-  // const connectWallet = async () => {
-  //   if (metaMaskAccount && switchNetworkAsync) {
-  //     await switchNetworkAsync(getEthereumChainId());
-  //     return;
-  //   }
-  //   const metamaskConnector = getInjectedConnector(connectors);
-  //   if (!metamaskConnector) {
-  //     return;
-  //   }
-  //   try {
-  //     await connectAsync({
-  //       chainId: getEthereumChainId(),
-  //       connector: metamaskConnector,
-  //     });
-  //   } catch (err: any) {
-  //     if (err.code === 4001) {
-  //     } else {
-  //       console.error(err);
-  //     }
-  //   }
-  // };
+  if (!stakePoolConfig) {
+    return null;
+  }
 
   return (
     <div className="mt-[.24rem] bg-bg2 rounded-[.12rem] border border-[#ffffff] px-[.24rem] pt-[.32rem] pb-[.4rem]">
@@ -228,19 +220,19 @@ const DashboardItem = (props: { sequence: number }) => {
         </div>
 
         <div className="flex items-center">
-          {/* <div
+          <div
             className={classNames(
               'cursor-pointer ml-[.3rem] w-[.42rem] h-[.42rem] flex items-center justify-center rounded-[.12rem]',
               settingsPopupState.isOpen
                 ? 'bg-color-selected'
                 : 'bg-color-bgPage'
             )}
-            {...(dashboardInfo ? bindTrigger(settingsPopupState) : {})}
+            {...(stakePoolConfig ? bindTrigger(settingsPopupState) : {})}
           >
             <div className="w-[.15rem] h-[.15rem] relative">
               <Image src={edit} layout="fill" alt="icon" />
             </div>
-          </div> */}
+          </div>
 
           <div
             className={classNames(
@@ -410,6 +402,72 @@ const DashboardItem = (props: { sequence: number }) => {
       </div>
 
       <Popover
+        {...bindPopover(settingsPopupState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#ffffff80',
+            border: '0.01rem solid #FFFFFF',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div
+          className={classNames(
+            'w-[2.6rem] pl-[.16rem] text-[.14rem] pr-[.24rem] py-[.32rem]'
+          )}
+        >
+          <div
+            className="cursor-pointer flex items-center justify-between"
+            onClick={() => {
+              setUpdatePlatformFeeModalOpen(true);
+              settingsPopupState.close();
+            }}
+          >
+            <div className="text-color-text2 text-[.14rem]">
+              Platform Fee Commission
+            </div>
+
+            <div className="w-[.13rem] h-[.13rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+
+          <div
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
+            onClick={() => {
+              settingsPopupState.close();
+              setUpdateMinDepositModalOpen(true);
+            }}
+          >
+            <div className="text-color-text2 text-[.14rem]">
+              Min Deposit Amount
+            </div>
+
+            <div className="w-[.13rem] h-[.13rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
+        </div>
+      </Popover>
+
+      <Popover
         {...bindPopover(linksPopupState)}
         anchorOrigin={{
           vertical: 'bottom',
@@ -473,6 +531,34 @@ const DashboardItem = (props: { sequence: number }) => {
           </Link>
         </div>
       </Popover>
+
+      {updatePlatformFeeModalOpen && (
+        <UpdatePlatformFeeModal
+          open={updatePlatformFeeModalOpen}
+          close={() => setUpdatePlatformFeeModalOpen(false)}
+          contractAddress={stakePoolAddress}
+          platformCommissionPlaceholder={formatRate(
+            stakePoolConfig.platformCommissionRate
+          )}
+          onRefresh={() => {
+            setRefresh((prev) => prev + 1);
+          }}
+        />
+      )}
+
+      {updateMinDepositModalOpen && (
+        <UpdateMinDepositModal
+          open={updateMinDepositModalOpen}
+          close={() => setUpdateMinDepositModalOpen(false)}
+          contractAddress={stakePoolAddress}
+          placeholder={formatScientificNumber(
+            chainAmountToHuman(Number(stakePoolConfig.minStakeAmount), 9)
+          )}
+          onRefresh={() => {
+            setRefresh((prev) => prev + 1);
+          }}
+        />
+      )}
     </div>
   );
 };

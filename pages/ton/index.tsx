@@ -193,7 +193,7 @@ const TonPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_ton_lsd/deploy/#parameter-tips`}
+                href={`${getDocHost()}/develop_ton_lsd/deploy/#parameter-tips`}
                 target="_blank"
               >
                 Parameter Tips

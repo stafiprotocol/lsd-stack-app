@@ -138,7 +138,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_ton_lsd/relay/`}
+                href={`${getDocHost()}/develop_ton_lsd/relay/`}
                 target="_blank"
               >
                 How to run your relay service
@@ -154,7 +154,7 @@ const ReviewPage = () => {
               <br />
               <a
                 className="underline"
-                href={`${getDocHost()}/docs/develop_ton_lsd/relay/`}
+                href={`${getDocHost()}/develop_ton_lsd/relay/`}
                 target="_blank"
               >
                 Follow our doc
@@ -165,7 +165,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/docs/develop_ton_lsd/deploy/`}
+                href={`${getDocHost()}/develop_ton_lsd/deploy/`}
                 target="_blank"
               >
                 How to build your own LSD App
