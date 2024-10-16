@@ -13,6 +13,7 @@ import { openLink } from 'utils/commonUtils';
 import { saveModuleToDb } from 'utils/dbUtils';
 import { CustomButton } from './common/CustomButton';
 import { ModuleStatePanel } from './ModuleStatePanel';
+import { getTonStackAppUrl } from 'config/ton';
 
 interface Props {
   eco: AppEco;
@@ -66,6 +67,8 @@ export const FrontendModuleCard = (props: Props) => {
             openLink(getEvmCaseUrl());
           } else if (eco === AppEco.Eth) {
             openLink(getEthStackAppUrl());
+          } else if (eco === AppEco.Ton) {
+            openLink(getTonStackAppUrl());
           } else {
             openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
           }
@@ -94,7 +97,7 @@ export const FrontendModuleCard = (props: Props) => {
         className="mb-[.24rem]"
         type="stroke"
         onClick={() => {
-          openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+          openLink('https://docs.stafi.io/lsaas/modules/frontend/');
         }}
       >
         Tutorial

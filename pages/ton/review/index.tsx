@@ -43,7 +43,6 @@ const ReviewPage = () => {
   const onBack = () => {
     router.replace('/');
   };
-  console.log({ deployInfo });
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
@@ -113,23 +112,12 @@ const ReviewPage = () => {
                   width="2.62rem"
                   height=".56rem"
                   onClick={() => {
-                    router.push(
-                      `/sol/module?stakeManagerAddress=${router.query.stakeManagerAddress}`
-                    );
+                    router.push(`/ton/module`);
                   }}
-                  // disabled={!deployInfo}
-                  disabled
+                  disabled={!deployInfo}
                 >
                   Next
                 </CustomButton>
-                {/* <CustomButton
-                  width="2.62rem"
-                  height=".56rem"
-                  onClick={() => setReadyModalOpened(true)}
-                  disabled={!deployInfo}
-                >
-                  Confirm
-                </CustomButton> */}
               </div>
             </div>
           </div>

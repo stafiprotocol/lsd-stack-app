@@ -9,3 +9,7 @@ export const tonRestEndpoint = isDev()
 export const stackContractAddress = isDev()
   ? devConfig.stackContractAddress
   : prodConfig.stackContractAddress;
+
+export const getTonStackAppUrl = () => {
+  return 'https://docs.stafi.io/lsaas/develop_ton_lsd/deploy/';
+};
