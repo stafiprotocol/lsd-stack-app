@@ -62,7 +62,7 @@ const ReviewPage = () => {
                 />
               </div>
 
-              {fetchLoading && (
+              {(fetchLoading || !deployInfo) && (
                 <div className="mt-[.32rem] w-[5.8rem] mx-auto">
                   <Skeleton height=".4rem" className="bg-bg3" />
                   <Skeleton height=".4rem" className="bg-bg3" />
@@ -70,9 +70,9 @@ const ReviewPage = () => {
                 </div>
               )}
 
-              {!fetchLoading && !deployInfo && (
+              {/* {!fetchLoading && !deployInfo && (
                 <div className="mt-[.32rem] w-[5.47rem] mx-auto">Empty</div>
-              )}
+              )} */}
 
               {!fetchLoading && deployInfo && (
                 <div className="mb-[.32rem] max-h-[3.6rem] overflow-y-auto px-[.3rem]">

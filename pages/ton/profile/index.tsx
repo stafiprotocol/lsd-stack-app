@@ -49,7 +49,7 @@ const TonProfilePage = () => {
               Stack
             </div>
 
-            {/* <div
+            <div
               className={classNames(
                 'w-[1.12rem] rounded-[.4rem] flex items-center justify-center cursor-pointer',
                 tab === 'module' ? 'text-white bg-text1' : 'text-text1'
@@ -59,7 +59,7 @@ const TonProfilePage = () => {
               }}
             >
               Module
-            </div> */}
+            </div>
           </div>
 
           {!userAddress ? (
@@ -110,7 +110,7 @@ const TonProfilePage = () => {
           ) : tab === 'stack' ? (
             <TonDashboard />
           ) : (
-            <ProfileModulePage eco={AppEco.Sol} />
+            <ProfileModulePage eco={AppEco.Ton} />
           )}
         </div>
       </div>
