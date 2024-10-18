@@ -626,7 +626,7 @@ const ReviewPage = (props: {
       <TipBar
         isWarning
         content={<div>Please back up the following information</div>}
-        link={`${getDocHost()}/developethlsd/deploy/#save-all-the-information-generated`}
+        link={`${getDocHost()}/develop_eth_lsd/deploy/#save-all-the-information-generated`}
         className="mt-[.16rem]"
       />
 

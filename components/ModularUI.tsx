@@ -107,7 +107,7 @@ export const ModularUI = () => {
               )}
 
               <Link
-                href="https://lsaas-docs.stafi.io/docs/modules/introduction.html"
+                href="https://docs.stafi.io/lsaas/modules/introduction/"
                 target="_blank"
               >
                 <div

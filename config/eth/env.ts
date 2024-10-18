@@ -135,9 +135,9 @@ export function getEthStackAppUrl() {
 }
 
 export function getLrtCaseUrl() {
-  return 'https://lsaas-docs.stafi.io/docs/architecture/el_lrt.html';
+  return 'https://docs.stafi.io/lsaas/architecture_el_lrt/';
 }
 
 export function getEvmCaseUrl() {
-  return 'https://lsaas-docs.stafi.io/docs/architecture/evmlsd.html';
+  return 'https://docs.stafi.io/lsaas/architecture_evm_lsd/';
 }

@@ -123,7 +123,7 @@ export const AiModuleCard = (props: Props) => {
         type="stroke"
         onClick={() => {
           openLink(
-            'https://lsaas-docs.stafi.io/docs/modules/validator_selection_ai_agent.html'
+            'https://docs.stafi.io/lsaas/modules/validator_selection_ai_agent/'
           );
         }}
       >

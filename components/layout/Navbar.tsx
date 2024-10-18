@@ -218,7 +218,7 @@ const Navbar = () => {
                 Current liquid staking supports chains like SEI, BNB. We&apos;ll
                 support more in the future. Please check the{' '}
                 <a
-                  href={`${getDocHost()}/architecture__evmlsd/`}
+                  href={`${getDocHost()}/architecture__evm_lsd/`}
                   target="_blank"
                   className="underline text-text1"
                 >
@@ -233,7 +233,7 @@ const Navbar = () => {
                 for chains like SEI and INJ (Cosmwasm) in the future. Please
                 check the{' '}
                 <a
-                  href={`${getDocHost()}/architecture_cosmoslsd/`}
+                  href={`${getDocHost()}/architecture_cosmos_lsd/`}
                   target="_blank"
                   className="underline text-text1"
                 >

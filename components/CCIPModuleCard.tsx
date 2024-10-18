@@ -69,9 +69,7 @@ export const CCIPModuleCard = (props: Props) => {
         className="mb-[.24rem]"
         type="stroke"
         onClick={() => {
-          openLink(
-            'https://lsaas-docs.stafi.io/docs/modules/ccip_modules.html'
-          );
+          openLink('https://docs.stafi.io/lsaas/modules/ccip_modules/');
         }}
       >
         Tutorial

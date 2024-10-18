@@ -84,7 +84,9 @@ export const DeployReadyModal = ({
           <CustomButton
             width="1.75rem"
             height=".46rem"
-            onClick={() => openLink(`${getDocHost()}/developethlsd/ethlsdapp/`)}
+            onClick={() =>
+              openLink(`${getDocHost()}/develop_eth_lsd/ethlsdapp/`)
+            }
             border="none"
             trRaidus="0"
             brRaidus="0.16rem"

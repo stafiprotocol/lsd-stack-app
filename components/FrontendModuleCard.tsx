@@ -70,7 +70,7 @@ export const FrontendModuleCard = (props: Props) => {
           } else if (eco === AppEco.Ton) {
             openLink(getTonStackAppUrl());
           } else {
-            openLink('https://lsaas-docs.stafi.io/docs/modules/frontend.html');
+            openLink('https://docs.stafi.io/lsaas/modules/frontend/');
           }
 
           if (!userAddress || !lsdTokenAddress || !lsdTokenName) {

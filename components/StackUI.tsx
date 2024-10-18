@@ -86,7 +86,7 @@ export const StackUI = () => {
               )}
 
               {!showSelectEco && (
-                <Link href="https://lsaas-docs.stafi.io" target="_blank">
+                <Link href="https://docs.stafi.io/lsaas" target="_blank">
                   <div
                     className={classNames(
                       robotoSemiBold.className,
@@ -179,7 +179,7 @@ export const StackUI = () => {
             text="MORE"
             isBlank
             icon={moreLstImg}
-            url="https://lsaas-docs.stafi.io/docs/introduction/getstarted.html"
+            url="https://docs.stafi.io/lsaas/"
             className="ml-[.32rem]"
           />
         </div>

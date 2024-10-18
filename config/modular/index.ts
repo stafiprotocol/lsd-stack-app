@@ -17,8 +17,7 @@ export const modularConfigs = {
       description:
         'With Solana Actions and blockchain links, or blinks, transactions can open up to anywhere on the internet — no dApp required.',
       externalLink: 'https://solana.com/solutions/actions',
-      tutorialLink:
-        'https://lsaas-docs.stafi.io/docs/modules/blinks_module.html',
+      tutorialLink: 'https://docs.stafi.io/lsaas/modules/blinks_module/',
     },
     {
       type: ModuleType.Connext,
@@ -26,8 +25,7 @@ export const modularConfigs = {
       description:
         'Connext protocol allows users to bridge funds and developers to build asynchronous Solidity for the first time!',
       externalLink: 'https://www.connext.network/',
-      tutorialLink:
-        'https://lsaas-docs.stafi.io/docs/modules/l2_restaking_module.html',
+      tutorialLink: 'https://docs.stafi.io/lsaas/modules/l2_restaking_module/',
     },
   ],
   supportList: {

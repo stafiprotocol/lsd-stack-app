@@ -99,9 +99,7 @@ export const PointSystemModuleCard = (props: Props) => {
         className="mb-[.24rem]"
         type="stroke"
         onClick={() => {
-          openLink(
-            'https://lsaas-docs.stafi.io/docs/modules/point_system.html'
-          );
+          openLink('https://docs.stafi.io/lsaas/modules/point_system/');
         }}
       >
         Tutorial

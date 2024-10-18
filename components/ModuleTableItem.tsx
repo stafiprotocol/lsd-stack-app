@@ -114,9 +114,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
               } else if (eco === AppEco.Eth) {
                 openLink(getEthStackAppUrl());
               } else {
-                openLink(
-                  'https://lsaas-docs.stafi.io/docs/modules/frontend.html'
-                );
+                openLink('https://docs.stafi.io/lsaas/modules/frontend/');
               }
             }}
           >
@@ -154,25 +152,17 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           className=""
           onClick={() => {
             if (type === 'frontend') {
-              openLink(
-                'https://lsaas-docs.stafi.io/docs/modules/frontend.html'
-              );
+              openLink('https://docs.stafi.io/lsaas/modules/frontend/');
             } else if (type === 'ai') {
               openLink(
-                'https://lsaas-docs.stafi.io/docs/modules/validator_selection_ai_agent.html'
+                'https://docs.stafi.io/lsaas/modules/validator_selection_ai_agent/'
               );
             } else if (type === 'point') {
-              openLink(
-                'https://lsaas-docs.stafi.io/docs/modules/point_system.html'
-              );
+              openLink('https://docs.stafi.io/lsaas/modules/point_system/');
             } else if (type === 'ccip') {
-              openLink(
-                'https://lsaas-docs.stafi.io/docs/modules/ccip_modules.html'
-              );
+              openLink('https://docs.stafi.io/lsaas/modules/ccip_modules/');
             } else {
-              openLink(
-                'https://lsaas-docs.stafi.io/docs/modules/introduction.html'
-              );
+              openLink('https://docs.stafi.io/lsaas/modules/introduction/');
             }
           }}
         >

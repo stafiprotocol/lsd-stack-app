@@ -137,7 +137,7 @@ const RelayTypeSelector = ({ onChooseCustomize }: RelayTypeSelectorProps) => {
           <div className="mt-[.24rem] w-[5.31rem] mx-auto">
             <TipBar
               content="You can change into the other mode anytime"
-              link={`${getDocHost()}/developethlsd/deploy/#how-to-switch-to-custom-relay-service`}
+              link={`${getDocHost()}/develop_eth_lsd/deploy/#how-to-switch-to-custom-relay-service`}
             />
           </div>
         </div>
@@ -147,7 +147,7 @@ const RelayTypeSelector = ({ onChooseCustomize }: RelayTypeSelectorProps) => {
         <div className="flex items-center gap-[.12rem]">
           <a
             className="text-[.24rem] text-text1 leading-[.36rem] underline"
-            href={`${getDocHost()}/developethlsd/deploy/#which-relay-type-should-i-choose`}
+            href={`${getDocHost()}/develop_eth_lsd/deploy/#which-relay-type-should-i-choose`}
             target="_blank"
           >
             Compare Relay Types
@@ -225,7 +225,7 @@ const LsdTokenTypeSelector = () => {
                   once it is set.
                 </div>
               }
-              link={`${getDocHost()}/developethlsd/deploy/#why-lsd-token-could-not-be-changed`}
+              link={`${getDocHost()}/develop_eth_lsd/deploy/#why-lsd-token-could-not-be-changed`}
             />
           </div>
         </div>
@@ -235,7 +235,7 @@ const LsdTokenTypeSelector = () => {
         <div className="flex items-center gap-[.12rem]">
           <a
             className="text-[.24rem] text-text1 leading-[.36rem] underline"
-            href={`${getDocHost()}/developethlsd/deploy/#which-token-type-should-i-choose`}
+            href={`${getDocHost()}/develop_eth_lsd/deploy/#which-token-type-should-i-choose`}
             target="_blank"
           >
             Compare Token Types

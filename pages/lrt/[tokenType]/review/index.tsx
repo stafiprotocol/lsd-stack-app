@@ -69,7 +69,7 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link={`${getDocHost()}/developlrt/deploy/#save-all-the-information-generated`}
+                  link={`${getDocHost()}/develop_lrt/deploy/#save-all-the-information-generated`}
                   isWarning
                 />
               </div>
@@ -151,7 +151,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/developlrt/deploy/#step2-run-relay-service`}
+                href={`${getDocHost()}/develop_lrt/deploy/#step2-run-relay-service`}
                 target="_blank"
               >
                 How to run your relay service
@@ -179,7 +179,7 @@ const ReviewPage = () => {
               2.{' '}
               <a
                 className="underline"
-                href={`${getDocHost()}/developlrt/deploy/#step2-run-relay-service`}
+                href={`${getDocHost()}/develop_lrt/deploy/#step2-run-relay-service`}
                 target="_blank"
               >
                 Follow our doc
@@ -190,7 +190,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem] mt-[.3rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/developlrt/app/`}
+                href={`${getDocHost()}/develop_lrt/app/`}
                 target="_blank"
               >
                 How to build your own LRT App

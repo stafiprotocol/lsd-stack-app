@@ -65,7 +65,7 @@ const ReviewPage = () => {
               <div className="mt-[.27rem] w-[5.8rem] mx-auto">
                 <TipBar
                   content="Please make sure you save the following information"
-                  link={`${getDocHost()}/developethlsd/deploy/#save-all-the-information-generated`}
+                  link={`${getDocHost()}/develop_eth_lsd/deploy/#save-all-the-information-generated`}
                   isWarning
                 />
               </div>
@@ -161,7 +161,7 @@ const ReviewPage = () => {
             <div className="flex items-center gap-[.12rem]">
               <a
                 className="text-[.24rem] text-text1 leading-[.36rem] underline"
-                href={`${getDocHost()}/developethlsd/ethlsdapp/`}
+                href={`${getDocHost()}/develop_eth_lsd/ethlsdapp/`}
                 target="_blank"
               >
                 How to deploy your own LSD APP
