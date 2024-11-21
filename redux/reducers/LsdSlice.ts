@@ -17,6 +17,7 @@ import {
 import snackbarUtil from 'utils/snackbarUtils';
 import { createPublicClient, createWalletClient, custom } from 'viem';
 import { isDev } from 'config/common';
+import { sleep } from 'utils/commonUtils';
 
 export interface LsdTokenInWhiteListInfo {
   inWhiteList: boolean;
@@ -221,4 +222,27 @@ export const queryLsdTokenInWhiteList =
         })
       );
     }
+  };
+
+export const demoCreateLsdNetworkStandard =
+  (cb?: (success: boolean) => void): AppThunk =>
+  async (dispatch) => {
+    dispatch(
+      setSubmitLoadingParams({
+        status: 'loading',
+        modalOpened: true,
+        txHash: '',
+      })
+    );
+
+    await sleep(2000);
+
+    dispatch(
+      setSubmitLoadingParams({
+        status: 'success',
+        modalOpened: true,
+        txHash: '',
+      })
+    );
+    cb && cb(true);
   };

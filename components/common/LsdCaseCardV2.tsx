@@ -48,7 +48,7 @@ export const LsdCaseCardV2 = (props: LsdCaseCardProps) => {
 
         <div
           className={classNames(
-            'text-[.14rem] mt-[.1rem]',
+            'text-[.14rem] mt-[.1rem] max-w-[.8rem] text-center leading-[.16rem]',
             isComing ? 'text-text1' : 'text-text1'
           )}
         >

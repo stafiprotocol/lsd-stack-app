@@ -28,12 +28,13 @@ interface ModuleTableItemProps {
   eco: AppEco;
   type: ModuleType;
   lsdHistoryItem: LsdHistoryItem;
+  userAddress?: string;
 }
 
 export const ModuleTableItem = (props: ModuleTableItemProps) => {
-  const { index, type, eco, lsdHistoryItem } = props;
+  const { index, type, eco, lsdHistoryItem, userAddress: ua } = props;
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const userAddress = useUserAddress(eco);
+  const userAddress = ua ? ua : useUserAddress(eco);
   const [moduleSetting, setModuleSetting] = useState<ModuleSetting>();
 
   const updateModule = useCallback(async () => {

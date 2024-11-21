@@ -19,11 +19,12 @@ interface Props {
   eco: AppEco;
   lsdTokenName?: string;
   lsdTokenAddress?: string;
+  userAddress?: string;
 }
 
 export const PointSystemModuleCard = (props: Props) => {
-  const { lsdTokenAddress, lsdTokenName, eco } = props;
-  const userAddress = useUserAddress(eco);
+  const { lsdTokenAddress, lsdTokenName, eco, userAddress: ua } = props;
+  const userAddress = ua ? ua : useUserAddress(eco);
   const [setttingModalOpen, setSettingModalOpen] = useState(false);
   const [readyModalOpen, setReadyModalOpen] = useState(false);
   const [existSetting, setExistSetting] = useState<ModuleSetting>();

@@ -79,7 +79,11 @@ const Navbar = () => {
 
   const clickProfile = () => {
     if (appEco) {
-      router.push(`/${appEco.toLowerCase()}/profile`);
+      if (router.pathname.startsWith('/eth-case')) {
+        router.push('/eth-case/profile');
+      } else {
+        router.push(`/${appEco.toLowerCase()}/profile`);
+      }
     }
   };
 

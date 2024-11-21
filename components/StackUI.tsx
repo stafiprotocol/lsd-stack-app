@@ -121,7 +121,7 @@ export const StackUI = () => {
           </div>
         </div>
 
-        <div className={classNames('relative ml-[.2rem] flex items-center')}>
+        <div className={classNames('relative ml-[.2rem] flex justify-start')}>
           <LsdCaseCardV2 text="ETH LST" icon={ethLstImg} url={'/eth'} />
 
           <LsdCaseCardV2
@@ -181,6 +181,13 @@ export const StackUI = () => {
             icon={moreLstImg}
             url="https://docs.stafi.io/lsaas/"
             className="ml-[.32rem]"
+          />
+
+          <LsdCaseCardV2
+            text="ETH LST Demo Case"
+            icon={ethLstImg}
+            url="/eth-case"
+            className="ml-[.24rem]"
           />
         </div>
       </div>

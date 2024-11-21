@@ -10,10 +10,11 @@ interface Props {
   eco: AppEco;
   lsdTokenName?: string;
   lsdTokenAddress?: string;
+  userAddress?: string;
 }
 
 export const ModuleDashboard = (props: Props) => {
-  const { lsdTokenName, lsdTokenAddress, eco } = props;
+  const { lsdTokenName, lsdTokenAddress, eco, userAddress } = props;
 
   if (!lsdTokenName || !lsdTokenAddress) {
     return null;
@@ -52,6 +53,7 @@ export const ModuleDashboard = (props: Props) => {
           eco={eco}
           lsdTokenAddress={lsdTokenAddress}
           lsdTokenName={lsdTokenName}
+          userAddress={userAddress}
         />
       )}
 
