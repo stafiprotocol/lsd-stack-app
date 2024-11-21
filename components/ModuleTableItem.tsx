@@ -11,7 +11,7 @@ import { AppEco, ModuleType } from 'interfaces/common';
 import { ModuleStateTag } from './ModuleStateTag';
 import { getModuleSettingFromDb, saveModuleToDb } from 'utils/dbUtils';
 import { openLink } from 'utils/commonUtils';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SetPointSystemModal } from './modal/SetPointSystemModal';
 import { SetAiValidatorModal } from './modal/SetAiValidatorModal';
 import { useUserAddress } from 'hooks/useUserAddress';
@@ -34,7 +34,7 @@ interface ModuleTableItemProps {
 export const ModuleTableItem = (props: ModuleTableItemProps) => {
   const { index, type, eco, lsdHistoryItem, userAddress: ua } = props;
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const userAddress = ua ? ua : useUserAddress(eco);
+  const userAddress = useUserAddress(eco);
   const [moduleSetting, setModuleSetting] = useState<ModuleSetting>();
 
   const updateModule = useCallback(async () => {
@@ -44,6 +44,10 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
     );
     setModuleSetting(moduleSetting);
   }, [lsdHistoryItem.tokenAddress, type]);
+
+  const address = useMemo(() => {
+    return ua || userAddress;
+  }, [ua, userAddress]);
 
   useEffect(() => {
     updateModule();
@@ -194,7 +198,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
 
       <SetPointSystemModal
         eco={eco}
-        userAddress={userAddress}
+        userAddress={address}
         open={editModalOpen && type === 'point'}
         close={() => {
           setEditModalOpen(false);
@@ -204,7 +208,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           const saved = await saveModuleToDb({
             myKey: `point-${lsdHistoryItem.tokenAddress}`,
             eco: eco,
-            userAddress: userAddress || '',
+            userAddress: address || '',
             disabled: false,
             tokenName: lsdHistoryItem.tokenName,
             tokenAddress: lsdHistoryItem.tokenAddress,
@@ -219,7 +223,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
       />
 
       <SetAiValidatorModal
-        userAddress={userAddress}
+        userAddress={address}
         open={editModalOpen && type === 'ai'}
         close={() => {
           setEditModalOpen(false);
@@ -229,7 +233,7 @@ export const ModuleTableItem = (props: ModuleTableItemProps) => {
           const saved = await saveModuleToDb({
             myKey: `ai-${lsdHistoryItem.tokenAddress}`,
             eco: eco,
-            userAddress: userAddress || '',
+            userAddress: address || '',
             disabled: false,
             tokenName: lsdHistoryItem.tokenName,
             tokenAddress: lsdHistoryItem.tokenAddress,

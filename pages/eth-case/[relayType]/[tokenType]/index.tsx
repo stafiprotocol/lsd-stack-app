@@ -73,10 +73,10 @@ const ParameterPage = () => {
     '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
   );
   const [lsdTokenAddress, setLsdTokenAddress] = useState(
-    '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+    '0x5b01439ab024Ba75B7B1f9c05aB55fa25e402809'
   );
-  const [voteNumber, setVoteNumber] = useState('10');
-  const [threshold, setThreshold] = useState('8');
+  const [voteNumber, setVoteNumber] = useState('3');
+  const [threshold, setThreshold] = useState('2');
   const [votersAddrs, setVotersAddrs] = useState<string[]>([]);
   const [confirmModalOpened, setConfirmModalOpened] = useState(false);
   const [paramList, setParamList] = useState<ParamItem[]>([]);
@@ -113,8 +113,13 @@ const ParameterPage = () => {
     if (!submittable) return;
     if (!voterParamsOpened) {
       const list = [];
+      const voters = [
+        '0x51a1cb1efda3eC0fbBb1748B3a55FCAB2154aDcE',
+        '0xFb8d9179C0741285f3623146a390D07c0f83Bb82',
+        '0x5b01439ab024Ba75B7B1f9c05aB55fa25e402809',
+      ];
       for (let i = 0; i < Number(voteNumber); i++) {
-        list.push('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
+        list.push(voters[i % 3]);
       }
       setVotersAddrs(list);
       setVoterParamsOpened(true);

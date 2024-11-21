@@ -241,7 +241,8 @@ export const demoCreateLsdNetworkStandard =
       setSubmitLoadingParams({
         status: 'success',
         modalOpened: true,
-        txHash: '',
+        txHash:
+          '0x327d1fb1fe51c091a789056766c79b2ccc8fc3e65a7183ded209991f534c477b',
       })
     );
     cb && cb(true);

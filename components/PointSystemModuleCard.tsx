@@ -3,7 +3,7 @@ import { robotoSemiBold } from 'config/font';
 import Image from 'next/image';
 import { CustomButton } from './common/CustomButton';
 import { SetPointSystemModal } from './modal/SetPointSystemModal';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SetPointSystemReadyModal } from './modal/SetPointSystemReadyModal';
 import { getDocHost } from 'config/common';
 import { ModuleSetting, PointModuleConfig } from 'interfaces/module';
@@ -24,10 +24,14 @@ interface Props {
 
 export const PointSystemModuleCard = (props: Props) => {
   const { lsdTokenAddress, lsdTokenName, eco, userAddress: ua } = props;
-  const userAddress = ua ? ua : useUserAddress(eco);
+  const userAddress = useUserAddress(eco);
   const [setttingModalOpen, setSettingModalOpen] = useState(false);
   const [readyModalOpen, setReadyModalOpen] = useState(false);
   const [existSetting, setExistSetting] = useState<ModuleSetting>();
+
+  const address = useMemo(() => {
+    return ua || userAddress;
+  }, [ua, userAddress]);
 
   useEffect(() => {
     (async () => {
@@ -108,20 +112,20 @@ export const PointSystemModuleCard = (props: Props) => {
 
       <SetPointSystemModal
         eco={eco}
-        userAddress={userAddress}
+        userAddress={address}
         open={setttingModalOpen}
         close={() => {
           setSettingModalOpen(false);
         }}
         currentConfig={existSetting?.config?.config as PointModuleConfig}
         onSuccess={async (config: PointModuleConfig) => {
-          if (!userAddress || !lsdTokenName || !lsdTokenAddress) {
+          if (!address || !lsdTokenName || !lsdTokenAddress) {
             return;
           }
           const saved = await saveModuleToDb({
             myKey: `point-${lsdTokenAddress}`,
             eco: eco,
-            userAddress: userAddress,
+            userAddress: address,
             disabled: false,
             tokenName: lsdTokenName,
             tokenAddress: lsdTokenAddress,

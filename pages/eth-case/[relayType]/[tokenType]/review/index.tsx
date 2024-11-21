@@ -62,14 +62,18 @@ const ReviewPage = () => {
 
     setDeployInfo({
       ownerAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      lsdTokenAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      feePoolAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      networkBalancesAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      networkProposalAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      networkWithdrawAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      nodeDepositAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      userDepositAddress: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-      voters: ['0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'],
+      lsdTokenAddress: '0xF05F0f14bF27cFf32c4bC3E84e480aa805330Db1',
+      feePoolAddress: '0xB3e1be012FCE61945B0841be277E708040ED8E8F',
+      networkBalancesAddress: '0xa7f761969E19769499f7681cC67FF03EF53Fb13B',
+      networkProposalAddress: '0x1Fe48ee6F850db0a4717b2F807742fa12de73504',
+      networkWithdrawAddress: '0x8e697589aA4ae35540f53F8C93068d19302BA2D5',
+      nodeDepositAddress: '0x1D8f7EA16eD32B222F3710A532d6598fC209BB20',
+      userDepositAddress: '0x17D3f36fee98a0b47C39d05D0748816De7a255Ae',
+      voters: [
+        '0x51a1cb1efda3eC0fbBb1748B3a55FCAB2154aDcE',
+        '0xFb8d9179C0741285f3623146a390D07c0f83Bb82',
+        '0x5b01439ab024Ba75B7B1f9c05aB55fa25e402809',
+      ],
       lsdTokenName: 'rETH',
     });
   };

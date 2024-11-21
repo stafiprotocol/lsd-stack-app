@@ -28,7 +28,7 @@ import { getFactoryContract } from 'config/eth/contract';
 export const EthDashboard = () => {
   return (
     <div>
-      <DashboardItem address={'0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b'} />
+      <DashboardItem address={'0xF05F0f14bF27cFf32c4bC3E84e480aa805330Db1'} />
 
       <div className="mt-[.8rem] flex flex-col items-center">
         <div className="w-[.4rem] h-[.3rem] relative">
@@ -91,29 +91,25 @@ const DashboardItem = (props: { address: string }) => {
     symbol: 'rETH',
     _admin: '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
     _voters: [
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-      '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
+      '0x51a1cb1efda3eC0fbBb1748B3a55FCAB2154aDcE',
+      '0xFb8d9179C0741285f3623146a390D07c0f83Bb82',
+      '0x5b01439ab024Ba75B7B1f9c05aB55fa25e402809',
     ],
-    _feePool: '0xdf7c3E7f2E9e9E87C6c6A8C2cEeE7A4b4a9b4a9b',
-    _userDeposit: '',
-    _networkProposal: '',
-    _networkWithdraw: '',
-    _nodeDeposit: '',
-    _networkBalances: '',
+    _feePool: '0xB3e1be012FCE61945B0841be277E708040ED8E8F',
+    _userDeposit: '0x17D3f36fee98a0b47C39d05D0748816De7a255Ae',
+    _networkProposal: '0x1Fe48ee6F850db0a4717b2F807742fa12de73504',
+    _networkWithdraw: '0x8e697589aA4ae35540f53F8C93068d19302BA2D5',
+    _nodeDeposit: '0x1D8f7EA16eD32B222F3710A532d6598fC209BB20',
+    _networkBalances: '0xa7f761969E19769499f7681cC67FF03EF53Fb13B',
     formatNodeCommissionFee: '5',
     formatPlatformCommissionFee: '5',
     formatStackCommissionFee: '10',
-    formatMinDeposit: '0',
+    formatMinDeposit: '0.01',
     trustNodeDepositEnabled: true,
     soloNodeDepositEnabled: true,
-    formatSoloNodeDepositAmount: '0',
-    updateBalancesEpochs: 10,
-    threshold: 5,
+    formatSoloNodeDepositAmount: '0.01',
+    updateBalancesEpochs: 288,
+    threshold: 2,
     isEntrusted: true,
   });
   const [updateNodeFeeModalOpen, setUpdateNodeFeeModalOpen] = useState(false);
