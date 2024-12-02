@@ -67,11 +67,11 @@ export const StackUI = () => {
               {showSelectEco ? (
                 <EcoSelector popupState={popupState} />
               ) : (
-                <div className="flex h-[.56rem] items-stretch rounded-[.56rem] border border-[#222C3C80] hover:border-[#222C3C] active:border-[#222C3C80]">
+                <div className="flex h-[.56rem] items-stretch rounded-[.56rem] border border-[#222C3C80] hover:border-[#222C3C] active:border-[#222C3C80] bg-[#222c3c]">
                   <div
                     className={classNames(
                       robotoSemiBold.className,
-                      ' px-[.3rem] flex items-center cursor-pointer text-text1'
+                      ' px-[.3rem] flex items-center cursor-pointer text-[#80CAFF]'
                     )}
                     onClick={() => {
                       setShowSelectEco(true);
@@ -86,14 +86,14 @@ export const StackUI = () => {
               )}
 
               {!showSelectEco && (
-                <Link href="https://docs.stafi.io/lsaas" target="_blank">
+                <Link href="/eth-case">
                   <div
                     className={classNames(
                       robotoSemiBold.className,
-                      'mx-[.3rem] flex items-center cursor-pointer text-text1'
+                      'mx-[.3rem] flex items-center cursor-pointer text-text1 border border-[#222c3c80] h-[.56rem] px-[.3rem] rounded-[.56rem] hover:border-[#222c3c] active:border-[#222c3c80]'
                     )}
                   >
-                    Learn More
+                    Demo Mockup
                   </div>
                 </Link>
               )}
@@ -181,13 +181,6 @@ export const StackUI = () => {
             icon={moreLstImg}
             url="https://docs.stafi.io/lsaas/"
             className="ml-[.32rem]"
-          />
-
-          <LsdCaseCardV2
-            text="ETH LST Demo Case"
-            icon={ethLstImg}
-            url="/eth-case"
-            className="ml-[.24rem]"
           />
         </div>
       </div>
