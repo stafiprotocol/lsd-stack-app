@@ -45,7 +45,7 @@ export const StackUI = () => {
   return (
     <div className="flex-1 bg-blue flex flex-col justify-center pb-[.6rem]">
       <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto ">
-        <div className="flex gap-[.3rem] pt-[.67rem] justify-center">
+        <div className="flex pt-[.67rem] justify-between ml-[.2rem] mr-[.3rem]">
           <div>
             <div
               className={classNames(
@@ -116,12 +116,16 @@ export const StackUI = () => {
               </div> */}
           </div>
 
-          <div className="mt-[-.45rem] relative w-[8rem] h-[4.4rem] ml-[.2rem]">
+          <div className="mt-[-.45rem] relative w-[6.9rem] h-[3.8rem] ml-[.2rem] scale-110">
             <Image src={homeVectorImg} fill alt="lsaas" />
           </div>
         </div>
 
-        <div className={classNames('relative ml-[.2rem] flex justify-start')}>
+        <div
+          className={classNames(
+            'relative ml-[.2rem] flex justify-start mt-[.2rem]'
+          )}
+        >
           <LsdCaseCardV2 text="ETH LST" icon={ethLstImg} url={'/eth'} />
 
           <LsdCaseCardV2
