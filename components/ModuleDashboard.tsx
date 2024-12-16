@@ -39,7 +39,7 @@ export const ModuleDashboard = (props: Props) => {
   );
 
   return (
-    <div className="flex gap-[.36rem]">
+    <div className="flex gap-[.36rem] flex-wrap">
       {supportAi && (
         <AiModuleCard
           eco={eco}

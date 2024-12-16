@@ -48,7 +48,7 @@ const ReviewPage = () => {
 
   return (
     <div className="w-smallContentW xl:w-contentW 2xl:w-largeContentW mx-auto">
-      <div className="my-[.36rem] mr-[.56rem]">
+      <div className="my-[.36rem] mr-[.16rem]">
         <ModuleDashboard
           eco={AppEco.Eth}
           lsdTokenName={deployInfo?.lsdTokenName}

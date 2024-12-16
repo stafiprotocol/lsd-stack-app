@@ -6,7 +6,7 @@ export const modularConfigs = {
       type: ModuleType.Ccip,
       title: 'Chainlink CCIP',
       description:
-        'By seamlessly integrating Chainlink&lsquo;s robust and secure CCIP functions, this module empowers developers to build and operate dApps with cross-chain capabilities.',
+        "By seamlessly integrating Chainlink's robust and secure CCIP functions, this module empowers developers to build and operate dApps with cross-chain capabilities.",
       externalLink: 'https://chain.link/cross-chain',
       tutorialLink:
         'https://lsaas-docs.stafi.io/docs/modules/ccip_modules.html',
@@ -27,6 +27,16 @@ export const modularConfigs = {
       externalLink: 'https://www.connext.network/',
       tutorialLink: 'https://docs.stafi.io/lsaas/modules/l2_restaking_module/',
     },
+    {
+      type: ModuleType.ZkMe,
+      title: 'ZkMe zkKYC',
+      description:
+        "By leveraging ZKMe's zkKYC module, users benefit from seamless privacy protection, ensuring a trusted liquid staking experience while maintaining user anonymity and ecosystem integrity.",
+      externalLink:
+        'https://docs.zk.me/zkme-dochub/verify-with-zkme-protocol/integration-checklist',
+      tutorialLink:
+        'https://docs.zk.me/zkme-dochub/verify-with-zkme-protocol/integration-checklist',
+    },
   ],
   supportList: {
     [AppEco.Eth]: [
@@ -34,6 +44,7 @@ export const modularConfigs = {
       ModuleType.Frontend,
       ModuleType.Ccip,
       ModuleType.Connext,
+      ModuleType.ZkMe,
     ],
     [AppEco.Evm]: [ModuleType.PointSystem, ModuleType.Frontend],
     [AppEco.Lrt]: [

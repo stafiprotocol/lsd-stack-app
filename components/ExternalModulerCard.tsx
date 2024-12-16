@@ -51,7 +51,7 @@ export const ExternalModulerCard = (props: Props) => {
         </div>
       </div>
 
-      <div className="flex-1 text-[#6C86AD80] text-[.14rem] mt-[.16rem] leading-normal">
+      <div className="flex-1 text-[#6C86AD80] text-[.14rem] mt-[.16rem] leading-[.21rem] tracking-tight">
         {config.description}
       </div>
 

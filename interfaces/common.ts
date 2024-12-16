@@ -16,6 +16,7 @@ export enum ModuleType {
   Ccip = 'ccip',
   Blinks = 'blinks',
   Connext = 'connext',
+  ZkMe = 'ZkMe',
 }
 
 export interface NavigationItem {
