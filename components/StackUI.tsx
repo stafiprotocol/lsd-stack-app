@@ -151,7 +151,7 @@ export const StackUI = () => {
 
           <LsdCaseCardV2
             text="LRT"
-            icon={dotLstImg}
+            icon={ethLstImg}
             url={'/lrt'}
             className="ml-[.32rem]"
           />
