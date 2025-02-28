@@ -17,6 +17,7 @@ export enum ModuleType {
   Blinks = 'blinks',
   Connext = 'connext',
   ZkMe = 'ZkMe',
+  OpenOcean = 'OpenOcean',
 }
 
 export interface NavigationItem {

@@ -37,6 +37,14 @@ export const modularConfigs = {
       tutorialLink:
         'https://docs.zk.me/zkme-dochub/verify-with-zkme-protocol/integration-checklist',
     },
+    {
+      type: ModuleType.OpenOcean,
+      title: 'OpenOcean Swap',
+      description:
+        "OpenOcean's Swap Module empowers StaFi LSaaS users with an aggregated, efficient, and cost-effective trading and bridging experience. ",
+      externalLink: 'https://apis.openocean.finance',
+      tutorialLink: 'https://apis.openocean.finance',
+    },
   ],
   supportList: {
     [AppEco.Eth]: [
@@ -45,15 +53,25 @@ export const modularConfigs = {
       ModuleType.Ccip,
       ModuleType.Connext,
       ModuleType.ZkMe,
+      ModuleType.OpenOcean,
     ],
-    [AppEco.Evm]: [ModuleType.PointSystem, ModuleType.Frontend],
+    [AppEco.Evm]: [
+      ModuleType.PointSystem,
+      ModuleType.Frontend,
+      ModuleType.OpenOcean,
+    ],
     [AppEco.Lrt]: [
       ModuleType.PointSystem,
       ModuleType.Frontend,
       ModuleType.Connext,
+      ModuleType.OpenOcean,
     ],
     [AppEco.Cosmos]: [ModuleType.Ai, ModuleType.Frontend],
-    [AppEco.Sol]: [ModuleType.Frontend, ModuleType.Blinks],
+    [AppEco.Sol]: [
+      ModuleType.Frontend,
+      ModuleType.Blinks,
+      ModuleType.OpenOcean,
+    ],
     [AppEco.Polkadot]: [ModuleType.Frontend],
     [AppEco.Others]: [ModuleType.Frontend],
     [AppEco.Ton]: [ModuleType.Frontend],
