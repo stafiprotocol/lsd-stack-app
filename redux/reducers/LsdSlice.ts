@@ -3,7 +3,6 @@ import { AppThunk } from 'redux/store';
 import { setSubmitLoadingParams } from './AppSlice';
 import {
   createWeb3,
-  fetchTransactionReceipt,
   fetchTransactionReceiptWithWeb3,
   getEthWeb3,
   isMetaMaskCancelError,
@@ -15,8 +14,6 @@ import {
   TRANSACTION_FAILED_MESSAGE,
 } from 'constants/common';
 import snackbarUtil from 'utils/snackbarUtils';
-import { createPublicClient, createWalletClient, custom } from 'viem';
-import { isDev } from 'config/common';
 import { sleep } from 'utils/commonUtils';
 
 export interface LsdTokenInWhiteListInfo {

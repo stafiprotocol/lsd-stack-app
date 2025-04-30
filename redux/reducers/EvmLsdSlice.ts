@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getFactoryContract } from 'config/eth/contract';
 import { getEvmFactoryAbi } from 'config/evm';
 import {
   CANCELLED_ERR_MESSAGE1,
