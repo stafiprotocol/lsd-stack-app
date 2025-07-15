@@ -286,7 +286,7 @@ const ParameterPage = () => {
             </div>
 
             <div className="mt-[.15rem] bg-color-bg3 rounded-[.12rem] py-[.24rem] px-[.24rem] text-[.16rem] leading-[.32rem] text-text2 max-h-[5.6rem] overflow-y-auto">
-              Owner Address: sets the owner of the LRT network being created.
+              Owner Address: sets the owner of the LSD network being created.
               <br />
               <br />
               Owner Permissions:
