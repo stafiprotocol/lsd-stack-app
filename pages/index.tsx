@@ -188,7 +188,11 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
         onClosePopup();
         dispatch(setAppEco(eco));
         setTimeout(() => {
-          router.push(eco.toLowerCase());
+          let path = eco.toLowerCase();
+          if (eco === AppEco.Sol) {
+            path += '?net=mainnet';
+          }
+          router.push(path);
         }, 100);
       }}
     >

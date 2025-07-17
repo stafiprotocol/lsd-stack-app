@@ -7,12 +7,7 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from 'components/layout/Layout';
-import {
-  solanaDevConfig,
-  solanaProdConfig,
-  solanaRestEndpoint,
-  solanaWsEndpoint,
-} from 'config/sol';
+import { solanaDevConfig, solanaProdConfig } from 'config/sol';
 import { wagmiConfig } from 'config/walletConnect';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';

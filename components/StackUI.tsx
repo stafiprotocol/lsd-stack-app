@@ -145,7 +145,7 @@ export const StackUI = () => {
           <LsdCaseCardV2
             text="SOL LST"
             icon={solLstImg}
-            url={'/sol'}
+            url={'/sol?net=mainnet'}
             className="ml-[.32rem]"
           />
 
@@ -272,7 +272,11 @@ const EcoItem = ({ eco, onClosePopup }: EcoItemProps) => {
         onClosePopup();
         dispatch(setAppEco(eco));
         setTimeout(() => {
-          router.push(eco.toLowerCase());
+          let path = eco.toLowerCase();
+          if (eco === AppEco.Sol) {
+            path += '?net=mainnet';
+          }
+          router.push(path);
         }, 100);
       }}
     >

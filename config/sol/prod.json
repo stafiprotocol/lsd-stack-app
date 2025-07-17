@@ -1,10 +1,8 @@
 {
   "programs": {
     "lsdProgramId": "7uiNquueex2fEJnHVozT1KbrzJTDVzoadJCCAcGjnSnM",
-    "stackProgramId": "4xn1RYMaxDDaUguDzKWLzTTvkBaUMDK4YaPFNSDHYzZM",
-    "tokenMetaplexProgramId": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+    "stackProgramId": "4xn1RYMaxDDaUguDzKWLzTTvkBaUMDK4YaPFNSDHYzZM"
   },
   "explorer": "https://explorer.solana.com",
-  "restEndpoint": "https://mainnet.helius-rpc.com/?api-key=6b1dfd5a-104e-49bb-8935-0b0614427f0a",
-  "wsEndpoint": "wss://solana-dev-wss.stafi.io"
+  "restEndpoint": "https://mainnet.helius-rpc.com/?api-key=6b1dfd5a-104e-49bb-8935-0b0614427f0a"
 }

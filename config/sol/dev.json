@@ -1,10 +1,8 @@
 {
   "programs": {
     "lsdProgramId": "8ufkkVBM6s52WRnhdF2yUCu1eNPnS123SoVKv8wyBFAp",
-    "stackProgramId": "CG8rBZDZEPmBPJS24gAwRaZSWDWTCEKihYA9WW3F4Bfm",
-    "tokenMetaplexProgramId": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+    "stackProgramId": "CG8rBZDZEPmBPJS24gAwRaZSWDWTCEKihYA9WW3F4Bfm"
   },
   "explorer": "https://explorer.solana.com",
-  "restEndpoint": "https://solana-dev-rpc.stafi.io",
-  "wsEndpoint": "wss://solana-dev-wss.stafi.io"
+  "restEndpoint": "https://solana-dev-rpc.stafi.io"
 }

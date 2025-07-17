@@ -10,10 +10,6 @@ export const solanaRestEndpoint = isDev()
   ? devConfig.restEndpoint
   : prodConfig.restEndpoint;
 
-export const solanaWsEndpoint = isDev()
-  ? devConfig.wsEndpoint
-  : prodConfig.wsEndpoint;
-
 export const solanaExplorer = isDev()
   ? devConfig.explorer
   : prodConfig.explorer;
