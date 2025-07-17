@@ -92,11 +92,11 @@ const ReviewPage = () => {
                     value={deployInfo.lsdTokenMint.toString()}
                   />
                   <DeployInfoItem
-                    name="Stack Contract address"
+                    name="Stack Contract"
                     value={deployInfo.stack.toString()}
                   />
                   <DeployInfoItem
-                    name="Stake Manager address"
+                    name="Stake Manager"
                     value={router.query.stakeManagerAddress as string}
                   />
                 </div>
@@ -116,7 +116,9 @@ const ReviewPage = () => {
                   height=".56rem"
                   onClick={() => {
                     router.push(
-                      `/sol/module?stakeManagerAddress=${router.query.stakeManagerAddress}`
+                      `/sol/module?stakeManagerAddress=${
+                        router.query.stakeManagerAddress
+                      }${isSolMainnet ? '&net=mainnet' : ''}`
                     );
                   }}
                   disabled={!deployInfo}
