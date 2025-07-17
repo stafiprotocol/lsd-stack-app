@@ -64,7 +64,8 @@ export const solanaInitializeStakeManager =
       lsdProgramId: string;
       stackProgramId: string;
     },
-    onSuccess: (stakeManagerAddress: string) => void
+    onSuccess: (stakeManagerAddress: string) => void,
+    isSolMainnet?: boolean
   ): AppThunk =>
   async (dispatch, getState) => {
     if (!userPublicKey) {
@@ -354,7 +355,7 @@ export const solanaInitializeStakeManager =
           status: 'success',
           modalOpened: true,
           txHash: txid,
-          explorerUrl: getSolanaScanTxUrl(txid),
+          explorerUrl: getSolanaScanTxUrl(txid, isSolMainnet),
         })
       );
       onSuccess(stakeManagerPubkey.toString());

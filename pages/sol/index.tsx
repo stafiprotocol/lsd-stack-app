@@ -151,8 +151,13 @@ const ParameterPage = () => {
         connection,
         solanaPrograms,
         (stakeManagerAddress) => {
-          router.push(`/sol/review?stakeManagerAddress=${stakeManagerAddress}`);
-        }
+          let path = `/sol/review?stakeManagerAddress=${stakeManagerAddress}`;
+          if (isSolMainnet) {
+            path += '&net=mainnet';
+          }
+          router.push(path);
+        },
+        isSolMainnet
       )
     );
   };

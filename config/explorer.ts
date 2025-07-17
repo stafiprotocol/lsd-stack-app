@@ -120,8 +120,11 @@ export function getCosmosExplorerAccountUrl(
   return `${getCosmosExplorerUrl(tokenName)}/account/${account}`;
 }
 
-export function getSolanaScanTxUrl(txHash: string | undefined) {
-  if (isDev()) {
+export function getSolanaScanTxUrl(
+  txHash: string | undefined,
+  isSolMainnet?: boolean
+) {
+  if (!isSolMainnet) {
     return `${solanaExplorer}/tx/${txHash}?cluster=custom&customUrl=https%3A%2F%2Fsolana-dev-rpc.stafi.io`;
   }
   return `${solanaExplorer}/tx/${txHash}`;
