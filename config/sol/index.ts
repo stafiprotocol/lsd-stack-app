@@ -17,3 +17,6 @@ export const solanaWsEndpoint = isDev()
 export const solanaExplorer = isDev()
   ? devConfig.explorer
   : prodConfig.explorer;
+
+export const solanaDevConfig = devConfig;
+export const solanaProdConfig = prodConfig;

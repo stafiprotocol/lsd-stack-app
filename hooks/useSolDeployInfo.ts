@@ -1,7 +1,7 @@
 import { AnchorProvider, Program, setProvider } from '@coral-xyz/anchor';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { solanaPrograms } from 'config/sol';
+import { solanaDevConfig, solanaProdConfig } from 'config/sol';
 import { IDL, LsdProgram } from 'config/sol/idl/lsd_program';
 import { useCallback, useState } from 'react';
 import { useAppSelector } from './common';
@@ -15,7 +15,10 @@ export interface SolDeployInfo {
   validators: PublicKey[];
 }
 
-export const useSolDeployInfo = (stakeManagerAddress: string) => {
+export const useSolDeployInfo = (
+  stakeManagerAddress: string,
+  isSolMainnet?: boolean
+) => {
   const { metaMaskAccount } = useAppSelector((state) => state.wallet);
 
   const [deployInfo, setDeployInfo] = useState<SolDeployInfo | undefined>(
@@ -27,6 +30,9 @@ export const useSolDeployInfo = (stakeManagerAddress: string) => {
   const wallet = useAnchorWallet();
 
   const fetchDeployInfo = useCallback(async () => {
+    const solanaPrograms = isSolMainnet
+      ? solanaProdConfig.programs
+      : solanaDevConfig.programs;
     try {
       if (!wallet) {
         return;
@@ -56,8 +62,9 @@ export const useSolDeployInfo = (stakeManagerAddress: string) => {
       setFetchLoading(false);
     } catch (err: any) {
       console.error(err);
+      setDeployInfo(undefined);
     }
-  }, [stakeManagerAddress, connection, wallet]);
+  }, [stakeManagerAddress, connection, wallet, isSolMainnet]);
 
   useDebouncedEffect(
     () => {

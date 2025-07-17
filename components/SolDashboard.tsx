@@ -10,7 +10,7 @@ import { PublicKey } from '@solana/web3.js';
 import classNames from 'classnames';
 import { getSolanaScanAccountUrl } from 'config/explorer';
 import { robotoBold, robotoSemiBold } from 'config/font';
-import { solanaPrograms } from 'config/sol';
+import { solanaDevConfig, solanaProdConfig } from 'config/sol';
 import { IDL, LsdProgram } from 'config/sol/idl/lsd_program';
 import { useDebouncedEffect } from 'hooks/useDebouncedEffect';
 import { useUserAddress } from 'hooks/useUserAddress';
@@ -38,38 +38,50 @@ import { RemoveSolValidatorModal } from './modal/sol/RemoveSolValidatorModal';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { PrimaryLoading } from './common/PrimaryLoading';
 import { UpdateSolRateChangeLimitModal } from './modal/sol/UpdateSolRateChangeLimitModal';
+import { useRouter } from 'next/router';
 
 export const SolDashboard = () => {
+  const router = useRouter();
+
   const { publicKey } = useWallet();
   const { connection } = useConnection();
 
+  const isSolMainnet = router.query.net === 'mainnet';
+
   const listQuery: UseQueryResult<string[] | undefined> = useQuery({
-    queryKey: ['GetSolDashboardList', publicKey?.toString()],
+    queryKey: ['GetSolDashboardList', publicKey?.toString(), router.query.net],
     enabled: !!publicKey?.toString(),
     queryFn: async () => {
       if (!publicKey) {
         return;
       }
+      const solanaPrograms = isSolMainnet
+        ? solanaProdConfig.programs
+        : solanaDevConfig.programs;
       let stakeManagerSeed;
       let i = 0;
       let stakeManagerPubkey;
       let stakeManagerAddresses = [];
-      while (true) {
-        stakeManagerSeed = `stake_manager_seed_${i}`;
-        stakeManagerPubkey = await PublicKey.createWithSeed(
-          publicKey,
-          stakeManagerSeed,
-          new PublicKey(solanaPrograms.lsdProgramId)
-        );
+      try {
+        while (true) {
+          stakeManagerSeed = `stake_manager_seed_${i}`;
+          stakeManagerPubkey = await PublicKey.createWithSeed(
+            publicKey,
+            stakeManagerSeed,
+            new PublicKey(solanaPrograms.lsdProgramId)
+          );
 
-        const existAccountInfo = await connection.getAccountInfo(
-          stakeManagerPubkey
-        );
-        if (!existAccountInfo) {
-          break;
+          const existAccountInfo = await connection.getAccountInfo(
+            stakeManagerPubkey
+          );
+          if (!existAccountInfo) {
+            break;
+          }
+          stakeManagerAddresses.push(stakeManagerPubkey.toString());
+          i++;
         }
-        stakeManagerAddresses.push(stakeManagerPubkey.toString());
-        i++;
+      } catch (err: any) {
+        console.log(err);
       }
 
       return stakeManagerAddresses;
@@ -136,6 +148,8 @@ interface DashboardInfo {
 }
 
 const DashboardItem = (props: { address: string }) => {
+  const router = useRouter();
+
   const { address } = props;
   const userAddress = useUserAddress(AppEco.Sol);
   const wallet = useAnchorWallet();
@@ -159,7 +173,12 @@ const DashboardItem = (props: { address: string }) => {
   const [removeValidatorModalOpen, setRemoveValidatorModalOpen] =
     useState(false);
 
+  const isSolMainnet = router.query.net === 'mainnet';
+
   const updateData = useCallback(async () => {
+    const solanaPrograms = isSolMainnet
+      ? solanaProdConfig.programs
+      : solanaDevConfig.programs;
     try {
       if (!wallet) {
         return;

@@ -3,6 +3,7 @@ import { Skeleton } from '@mui/material';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import classNames from 'classnames';
 import { CustomButton } from 'components/common/CustomButton';
+import { EmptyContent } from 'components/common/EmptyContent';
 import { TipBar } from 'components/common/TipBar';
 import { LrtDeployReadyModal } from 'components/modal/LrtDeployReadyModal';
 import { getDocHost } from 'config/common';
@@ -23,8 +24,11 @@ const ReviewPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const isSolMainnet = router.query.net === 'mainnet';
+
   const { fetchLoading, deployInfo } = useSolDeployInfo(
-    router.query.stakeManagerAddress as string
+    router.query.stakeManagerAddress as string,
+    isSolMainnet
   );
   const [readyModalOpened, setReadyModalOpened] = useState(false);
 
@@ -68,7 +72,9 @@ const ReviewPage = () => {
               )}
 
               {!fetchLoading && !deployInfo && (
-                <div className="mt-[.32rem] w-[5.47rem] mx-auto">Empty</div>
+                <div className="mt-[.32rem] w-[5.47rem] mx-auto">
+                  <EmptyContent />
+                </div>
               )}
 
               {!fetchLoading && deployInfo && (

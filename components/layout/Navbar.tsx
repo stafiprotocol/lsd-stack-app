@@ -30,10 +30,15 @@ import ethereumLogo from 'public/images/ethereum.png';
 import LogoLabelBgImg from 'public/images/logo_label_bg.svg';
 import LogoTextImg from 'public/images/logo_text.svg';
 import neutronLogo from 'public/images/neutron.png';
-import solanaLogo from 'public/images/solana.svg';
+import solanaLogo from 'public/images/eco/solana.svg';
+import solanaTestLogo from 'public/images/eco/solana_test.svg';
 import tonLogo from 'public/images/ton.svg';
 import { useMemo } from 'react';
-import { setBackRoute, setCreationStepInfo } from 'redux/reducers/AppSlice';
+import {
+  setAppEco,
+  setBackRoute,
+  setCreationStepInfo,
+} from 'redux/reducers/AppSlice';
 import {
   connectKeplrAccount,
   disconnectWallet,
@@ -42,6 +47,7 @@ import { RootState } from 'redux/store';
 import { getEcoTokenIcon } from 'utils/iconUtils';
 import { getShortAddress } from 'utils/stringUtils';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { Icomoon } from 'components/icon/Icomoon';
 
 const Navbar = () => {
   const router = useRouter();
@@ -287,20 +293,26 @@ const Navbar = () => {
 };
 
 const UserInfo = () => {
+  const router = useRouter();
+
   const dispatch = useAppDispatch();
-  const { appEco } = useAppSelector((state: RootState) => {
-    return {
-      appEco: state.app.appEco,
-    };
-  });
+  const { appEco } = useAppSelector((state: RootState) => state.app);
   const userAddress = useUserAddress(appEco);
   const { disconnectAsync } = useDisconnect();
   const { disconnect: solDisconnect } = useWallet();
   const [tonConnectUI] = useTonConnectUI();
 
+  const isSolMainnet =
+    router.pathname.startsWith('/sol') && router.query.net === 'mainnet';
+
   const addressPopupState = usePopupState({
     variant: 'popover',
     popupId: 'address',
+  });
+
+  const envPopupState = usePopupState({
+    variant: 'popover',
+    popupId: 'env',
   });
 
   const getLogo = () => {
@@ -312,7 +324,7 @@ const UserInfo = () => {
       case AppEco.Cosmos:
         return neutronLogo;
       case AppEco.Sol:
-        return solanaLogo;
+        return isSolMainnet ? solanaLogo : solanaTestLogo;
       case AppEco.Ton:
         return tonLogo;
     }
@@ -325,6 +337,8 @@ const UserInfo = () => {
         return 'Ethereum';
       case AppEco.Cosmos:
         return 'Neutron';
+      case AppEco.Sol:
+        return 'Solana';
     }
     return '';
   };
@@ -347,6 +361,7 @@ const UserInfo = () => {
         className={classNames(
           'items-center pl-[.04rem] pr-[.12rem] rounded-l-[.6rem] cursor-pointer flex'
         )}
+        {...(appEco === AppEco.Sol ? bindTrigger(envPopupState) : {})}
       >
         <div className="w-[.34rem] h-[.34rem] relative">
           <Image
@@ -363,9 +378,11 @@ const UserInfo = () => {
           {getTitle()}
         </div>
 
-        {/* <div className="ml-[.12rem]">
-          <Icomoon icon="arrow-down" size=".1rem" color="#848B97" />
-        </div> */}
+        {appEco === AppEco.Sol && (
+          <div className="ml-[.12rem]">
+            <Icomoon icon="arrow-down" size=".1rem" color="#848B97" />
+          </div>
+        )}
       </div>
 
       <div
@@ -454,6 +471,108 @@ const UserInfo = () => {
           >
             <div className="ml-[.12rem] text-color-text1 text-[.16rem]">
               Disconnect
+            </div>
+          </div>
+        </div>
+      </Popover>
+
+      <Popover
+        {...bindPopover(envPopupState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        elevation={0}
+        sx={{
+          marginTop: '.15rem',
+          '& .MuiPopover-paper': {
+            background: '#ffffff80',
+            border: '0.01rem solid #FFFFFF',
+            backdropFilter: 'blur(.4rem)',
+            borderRadius: '.3rem',
+          },
+          '& .MuiTypography-root': {
+            padding: '0px',
+          },
+          '& .MuiBox-root': {
+            padding: '0px',
+          },
+        }}
+      >
+        <div className={classNames('p-[.16rem] w-[2.4rem]')}>
+          <div>
+            <div
+              className="cursor-pointer flex items-center justify-between"
+              onClick={() => {
+                const { net } = router.query;
+                if (net === 'mainnet') {
+                  envPopupState.close();
+                  return;
+                }
+                router.replace(
+                  {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      net: 'mainnet',
+                    },
+                  },
+                  undefined,
+                  { scroll: false }
+                );
+                envPopupState.close();
+              }}
+            >
+              <div className="flex items-center">
+                <div className="w-[.28rem] h-[.28rem] relative rounded-full overflow-hidden">
+                  <Image src={solanaLogo} alt="logo" layout="fill" />
+                </div>
+
+                <div className="ml-[.12rem] text-color-text1 text-[.16rem]">
+                  Solana Mainnet
+                </div>
+              </div>
+            </div>
+
+            <div className="my-[.16rem] h-[0.01rem] bg-color-divider1" />
+          </div>
+
+          <div>
+            <div
+              className="cursor-pointer flex items-center justify-between"
+              onClick={() => {
+                const { net } = router.query;
+                if (net === 'testnet') {
+                  envPopupState.close();
+                  return;
+                }
+                router.replace(
+                  {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      net: 'testnet',
+                    },
+                  },
+                  undefined,
+                  { scroll: false }
+                );
+                envPopupState.close();
+              }}
+            >
+              <div className="flex items-center">
+                <div className="w-[.28rem] h-[.28rem] relative rounded-full overflow-hidden">
+                  <Image src={solanaTestLogo} alt="logo" layout="fill" />
+                </div>
+
+                <div className="ml-[.12rem] text-color-text1 text-[.16rem]">
+                  Solana Testnet
+                </div>
+              </div>
             </div>
           </div>
         </div>

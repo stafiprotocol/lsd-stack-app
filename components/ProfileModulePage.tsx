@@ -17,17 +17,24 @@ import { openLink } from 'utils/commonUtils';
 import { PrimaryLoading } from './common/PrimaryLoading';
 import { modularConfigs } from 'config/modular';
 import { ExternalModuleTableItem } from './ExternalModuleTableItem';
+import { useRouter } from 'next/router';
 
 interface Props {
   eco: AppEco;
 }
 
 export const ProfileModulePage = (props: Props) => {
+  const router = useRouter();
+
   const { eco } = props;
   const userAddress = useUserAddress(eco);
   const [evmLsdTokenConfig, setEvmLsdTokenConfig] =
     useState<EvmLsdTokenConfig>();
-  const { lsdHistoryList } = useModuleList(eco, evmLsdTokenConfig);
+  const { lsdHistoryList } = useModuleList(
+    eco,
+    evmLsdTokenConfig,
+    router.query.net + ''
+  );
   // console.log({ lsdHistoryList });
 
   useEffect(() => {

@@ -9,11 +9,12 @@ import { PublicKey, Transaction, TransactionResponse } from '@solana/web3.js';
 import { CustomButton } from 'components/common/CustomButton';
 import { InputErrorTip } from 'components/common/InputErrorTip';
 import { InputItem } from 'components/common/InputItem';
-import { solanaPrograms } from 'config/sol';
+import { solanaDevConfig, solanaProdConfig } from 'config/sol';
 import { IDL, LsdProgram } from 'config/sol/idl/lsd_program';
 import { useUserAddress } from 'hooks/useUserAddress';
 import { AppEco } from 'interfaces/common';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import CloseImg from 'public/images/close.svg';
 import { useEffect, useMemo, useState } from 'react';
 import { sleep } from 'utils/commonUtils';
@@ -37,6 +38,8 @@ export const UpdateSolMinDepositModal = ({
   onConnectWallet,
   onRefresh,
 }: Props) => {
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('');
 
@@ -44,6 +47,9 @@ export const UpdateSolMinDepositModal = ({
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const { sendTransaction } = useWallet();
+
+  const isSolMainnet =
+    router.pathname.startsWith('/sol') && router.query.net === 'mainnet';
 
   useEffect(() => {
     setValue('');
@@ -66,6 +72,9 @@ export const UpdateSolMinDepositModal = ({
       onConnectWallet();
       return;
     }
+    const solanaPrograms = isSolMainnet
+      ? solanaProdConfig.programs
+      : solanaDevConfig.programs;
 
     setLoading(true);
 

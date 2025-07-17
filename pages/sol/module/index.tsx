@@ -11,8 +11,11 @@ const LrtModulePage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
+  const isSolMainnet = router.query.net === 'mainnet';
+
   const { fetchLoading, deployInfo } = useSolDeployInfo(
-    router.query.stakeManagerAddress as string
+    router.query.stakeManagerAddress as string,
+    isSolMainnet
   );
   const [readyModalOpened, setReadyModalOpened] = useState(false);
 

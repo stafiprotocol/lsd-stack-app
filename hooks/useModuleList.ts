@@ -32,6 +32,7 @@ import {
   metadataDictionaryValue,
   toMetadataKey,
 } from 'config/ton/wrappers/lsdTokenMaster';
+import { useRouter } from 'next/router';
 
 export interface LsdHistoryItem {
   tokenAddress: string;
@@ -40,7 +41,8 @@ export interface LsdHistoryItem {
 
 export function useModuleList(
   eco: AppEco,
-  evmLsdTokenConfig?: EvmLsdTokenConfig
+  evmLsdTokenConfig?: EvmLsdTokenConfig,
+  net?: string
 ) {
   const { connection } = useConnection();
   const userAddress = useUserAddress(eco);
@@ -351,6 +353,7 @@ export function useModuleList(
       updateNeurtonList,
       updateSolList,
       updateTonList,
+      net,
     ],
     1000
   );

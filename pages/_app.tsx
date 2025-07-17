@@ -7,7 +7,12 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from 'components/layout/Layout';
-import { solanaRestEndpoint, solanaWsEndpoint } from 'config/sol';
+import {
+  solanaDevConfig,
+  solanaProdConfig,
+  solanaRestEndpoint,
+  solanaWsEndpoint,
+} from 'config/sol';
 import { wagmiConfig } from 'config/walletConnect';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
@@ -64,6 +69,11 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page: any) => page);
 
+  const router = useRouter();
+
+  const isSolMainnet =
+    router.pathname.startsWith('/sol') && router.query.net === 'mainnet';
+
   const [host, setHost] = useState(
     typeof window !== 'undefined' ? window.location.origin : ''
   );
@@ -118,10 +128,14 @@ const MyAppWrapper = ({ Component, pageProps }: any) => {
           >
             <QueryClientProvider client={queryClient}>
               <ConnectionProvider
-                endpoint={solanaRestEndpoint}
-                config={{
-                  wsEndpoint: solanaWsEndpoint,
-                }}
+                endpoint={
+                  isSolMainnet
+                    ? solanaProdConfig.restEndpoint
+                    : solanaDevConfig.restEndpoint
+                }
+                // config={{
+                //   wsEndpoint: solanaWsEndpoint,
+                // }}
               >
                 <WalletProvider wallets={[]} autoConnect>
                   <WalletModalProvider>

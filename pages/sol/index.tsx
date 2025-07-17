@@ -10,6 +10,7 @@ import { ConfirmModal, ParamItem } from 'components/modal/ConfirmModal';
 import { getDocHost } from 'config/common';
 import { getEthereumChainId } from 'config/eth/env';
 import { getLrtFactoryContract } from 'config/lrt/contract';
+import { solanaDevConfig, solanaProdConfig } from 'config/sol';
 import { SOL_CREATION_STEPS } from 'constants/common';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import Image from 'next/image';
@@ -51,6 +52,9 @@ const ParameterPage = () => {
     'Connect Wallet' | 'Switch Network' | 'Submit'
   >('Connect Wallet');
   const [submittable, setSubmittable] = useState(false);
+
+  const isSolMainnet =
+    router.pathname.startsWith('/sol') && router.query.net === 'mainnet';
 
   useEffect(() => {
     (async () => {
@@ -134,6 +138,10 @@ const ParameterPage = () => {
       return;
     }
 
+    const solanaPrograms = isSolMainnet
+      ? solanaProdConfig.programs
+      : solanaDevConfig.programs;
+
     setConfirmModalOpened(false);
 
     dispatch(
@@ -141,7 +149,7 @@ const ParameterPage = () => {
         userPublicKey,
         new PublicKey(validatorAddress),
         connection,
-        sendTransaction,
+        solanaPrograms,
         (stakeManagerAddress) => {
           router.push(`/sol/review?stakeManagerAddress=${stakeManagerAddress}`);
         }

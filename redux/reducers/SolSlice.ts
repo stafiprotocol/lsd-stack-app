@@ -19,7 +19,6 @@ import {
   TransactionResponse,
 } from '@solana/web3.js';
 import { getSolanaScanTxUrl } from 'config/explorer';
-import { solanaPrograms } from 'config/sol';
 import {
   CANCELLED_MESSAGE,
   INSUFFICIENT_FEE_MESSAGE,
@@ -61,7 +60,10 @@ export const solanaInitializeStakeManager =
     userPublicKey: PublicKey,
     validatorPublicKey: PublicKey,
     connection: Connection,
-    sendTransaction: WalletAdapterProps['sendTransaction'],
+    solanaPrograms: {
+      lsdProgramId: string;
+      stackProgramId: string;
+    },
     onSuccess: (stakeManagerAddress: string) => void
   ): AppThunk =>
   async (dispatch, getState) => {
@@ -196,6 +198,7 @@ export const solanaInitializeStakeManager =
         .digest();
       // console.log(bf);
       const methodData = bf.subarray(0, 8);
+      //@ts-ignore
       const data = Buffer.concat([methodData]);
 
       const instruction = new TransactionInstruction({
@@ -259,6 +262,7 @@ export const solanaInitializeStakeManager =
       transaction.add(instruction);
 
       // Add metadata
+      /*
       {
         const metadataData = {
           name: 'Solana Training Token',
@@ -306,6 +310,7 @@ export const solanaInitializeStakeManager =
 
         // transaction.add(createMetadataAccountInstruction);
       }
+        */
 
       // const txid = await sendTransaction(transaction, connection, {
       //   skipPreflight: true,
@@ -316,6 +321,7 @@ export const solanaInitializeStakeManager =
       if (!txid) {
         throw new Error(TRANSACTION_FAILED_MESSAGE);
       }
+      console.log({ txid });
 
       // console.log(
       //   `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
