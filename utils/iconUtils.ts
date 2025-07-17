@@ -14,7 +14,7 @@ import EcoEthImg from 'public/images/eco/eth.png';
 import EcoEvmImg from 'public/images/eco/evm.png';
 import EcoLrtImg from 'public/images/eco/lrt.png';
 import EcoSelectedImg from 'public/images/eco/selected.svg';
-import EcoSolanaImg from 'public/images/eco/solana.png';
+import EcoSolanaImg from 'public/images/eco/solana.svg';
 import EcoTonImg from 'public/images/eco/ton.svg';
 
 export function getEcoTokenIcon(eco: AppEco | null) {

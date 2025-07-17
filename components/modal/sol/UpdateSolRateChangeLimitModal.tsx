@@ -67,7 +67,7 @@ export const UpdateSolRateChangeLimitModal = ({
     if (!userAddress) {
       return [false, 'Connect Wallet'];
     }
-    if (!value || Number(value) === 0 || valueTooLarge) {
+    if (!value || valueTooLarge) {
       return [true, 'Submit'];
     }
     return [false, 'Submit'];

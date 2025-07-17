@@ -88,14 +88,22 @@ const Navbar = () => {
       if (router.pathname.startsWith('/eth-case')) {
         router.push('/eth-case/profile');
       } else {
-        router.push(`/${appEco.toLowerCase()}/profile`);
+        let path = `/${appEco.toLowerCase()}/profile`;
+        if (appEco === AppEco.Sol && router.query.net === 'mainnet') {
+          path += '?net=mainnet';
+        }
+        router.push(path);
       }
     }
   };
 
   const clickDeploy = () => {
     if (appEco) {
-      router.push(`/${appEco.toLowerCase()}`);
+      let path = `/${appEco.toLowerCase()}`;
+      if (appEco === AppEco.Sol && router.query.net === 'mainnet') {
+        path += '?net=mainnet';
+      }
+      router.push(path);
     }
   };
 
@@ -524,7 +532,9 @@ const UserInfo = () => {
                   undefined,
                   { scroll: false }
                 );
-                envPopupState.close();
+                setTimeout(() => {
+                  envPopupState.close();
+                }, 100);
               }}
             >
               <div className="flex items-center">
@@ -536,6 +546,10 @@ const UserInfo = () => {
                   Solana Mainnet
                 </div>
               </div>
+
+              {isSolMainnet && (
+                <Icomoon icon="checked-circle" size=".16rem" color="#5A5DE0" />
+              )}
             </div>
 
             <div className="my-[.16rem] h-[0.01rem] bg-color-divider1" />
@@ -561,7 +575,9 @@ const UserInfo = () => {
                   undefined,
                   { scroll: false }
                 );
-                envPopupState.close();
+                setTimeout(() => {
+                  envPopupState.close();
+                }, 100);
               }}
             >
               <div className="flex items-center">
@@ -573,6 +589,10 @@ const UserInfo = () => {
                   Solana Testnet
                 </div>
               </div>
+
+              {!isSolMainnet && (
+                <Icomoon icon="checked-circle" size=".16rem" color="#5A5DE0" />
+              )}
             </div>
           </div>
         </div>

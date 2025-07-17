@@ -321,7 +321,7 @@ export const solanaInitializeStakeManager =
       if (!txid) {
         throw new Error(TRANSACTION_FAILED_MESSAGE);
       }
-      console.log({ txid });
+      // console.log({ txid });
 
       // console.log(
       //   `View on explorer: https://explorer.solana.com/tx/${txid}?cluster=custom`
