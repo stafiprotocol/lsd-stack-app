@@ -53,11 +53,12 @@ import Link from 'next/link';
 import { LsdCaseCardV2 } from 'components/common/LsdCaseCardV2';
 import { StackUI } from 'components/StackUI';
 import { ModularUI } from 'components/ModularUI';
+import { VaultUI } from 'components/VaultUI';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
 
-  const [tab, setTab] = useState<'stack' | 'modular'>('stack');
+  const [tab, setTab] = useState<'stack' | 'modular' | 'vault'>('stack');
 
   useEffect(() => {
     dispatch(setAppEco(null));
@@ -97,6 +98,19 @@ const HomePage = () => {
             >
               Modular
             </div>
+
+            <div
+              className={classNames(
+                robotoSemiBold.className,
+                ' px-[.3rem] rounded-[.4rem] flex items-center cursor-pointer',
+                tab === 'vault' ? 'text-blue bg-bgPageDark' : 'text-text1'
+              )}
+              onClick={() => {
+                setTab('vault');
+              }}
+            >
+              Vault
+            </div>
           </div>
         </div>
       </div>
@@ -104,6 +118,8 @@ const HomePage = () => {
       {tab === 'stack' && <StackUI />}
 
       {tab === 'modular' && <ModularUI />}
+
+      {tab === 'vault' && <VaultUI />}
     </div>
   );
 };
