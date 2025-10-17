@@ -73,3 +73,10 @@ export const LRT_CREATION_STEPS = [
 export const SOL_CREATION_STEPS = ['SOL Eco', 'Parameters', 'Deploy', 'Module'];
 
 export const TON_CREATION_STEPS = ['TON Eco', 'Parameters', 'Deploy', 'Module'];
+
+export const ULST_CREATION_STEPS = [
+  'EVM Eco',
+  'Parameters',
+  'Deploy',
+  'Module',
+];

@@ -75,5 +75,6 @@ export const modularConfigs = {
     [AppEco.Polkadot]: [ModuleType.Frontend],
     [AppEco.Others]: [ModuleType.Frontend],
     [AppEco.Ton]: [ModuleType.Frontend],
+    [AppEco.Ulst]: [ModuleType.Frontend],
   },
 };

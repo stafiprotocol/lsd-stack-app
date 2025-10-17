@@ -2,6 +2,7 @@ import { isDev } from './common';
 import { getCosmosExplorerUrl, neutronChainConfig } from './cosmos/chain';
 import { evmLsdTokens } from './evm';
 import { solanaExplorer } from './sol';
+import { ulstConfig } from './ulst';
 
 export function getEtherScanUrl() {
   if (isDev()) {
@@ -37,6 +38,8 @@ export function getEvmScanTxUrl(symbol: string, txHash: string | undefined) {
       return `https://seitrace.com/tx/${txHash}?chain=atlantic-2`;
     }
     return `https://seitrace.com/tx/${txHash}?chain=pacific-1`;
+  } else if (symbol === 'ULST') {
+    return `${ulstConfig.explorerUrl}/tx/${txHash}`;
   } else {
     const matchedToken =
       evmLsdTokens.find((item) => item.symbol === symbol) || evmLsdTokens[0];
@@ -53,6 +56,8 @@ export function getEvmScanAccountUrl(
       return `https://seitrace.com/address/${address}?chain=atlantic-2`;
     }
     return `https://seitrace.com/address/${address}?chain=pacific-1`;
+  } else if (symbol === 'ULST') {
+    return `${ulstConfig.explorerUrl}/address/${address}`;
   } else {
     const matchedToken =
       evmLsdTokens.find((item) => item.symbol === symbol) || evmLsdTokens[0];

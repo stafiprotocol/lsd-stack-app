@@ -1,0 +1,21 @@
+{
+  "symbol": "ULST",
+  "chainId": 11155111,
+  "chainName": "Ethereum Sepolia",
+  "rpc": "https://ethereum-sepolia-rpc.publicnode.com",
+  "explorerUrl": "https://sepolia.etherscan.io",
+  "icon": "/images/tokens/ulst.svg",
+  "factoryContract": "0xC0Edb65Ae025705A5098ab804DdeD9422B5845B3",
+  "govInstantManagerAddress": "0xc79Ea989155BBdD9b7778EB288c193f058efDaA9",
+  "govOracleAddress": "0x048725C72AAd330Dd397F75B449E8EB3E92E17F9",
+  "stableCoins": [
+    {
+      "name": "USDC",
+      "address": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+    },
+    {
+      "name": "PYUSD",
+      "address": "0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9"
+    }
+  ]
+}

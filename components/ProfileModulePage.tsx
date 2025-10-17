@@ -18,6 +18,7 @@ import { PrimaryLoading } from './common/PrimaryLoading';
 import { modularConfigs } from 'config/modular';
 import { ExternalModuleTableItem } from './ExternalModuleTableItem';
 import { useRouter } from 'next/router';
+import { ulstConfig } from 'config/ulst';
 
 interface Props {
   eco: AppEco;
@@ -38,10 +39,23 @@ export const ProfileModulePage = (props: Props) => {
   // console.log({ lsdHistoryList });
 
   useEffect(() => {
-    if (evmLsdTokens.length > 0) {
-      setEvmLsdTokenConfig(evmLsdTokens[0]);
+    if (eco === AppEco.Ulst) {
+      setEvmLsdTokenConfig({
+        chainId: ulstConfig.chainId,
+        chainName: ulstConfig.chainName,
+        explorerUrl: ulstConfig.explorerUrl,
+        factoryContract: ulstConfig.factoryContract,
+        icon: ulstConfig.icon,
+        rpc: ulstConfig.rpc,
+        symbol: ulstConfig.symbol,
+        validatorExplorerUrl: '',
+      });
+    } else {
+      if (evmLsdTokens.length > 0) {
+        setEvmLsdTokenConfig(evmLsdTokens[0]);
+      }
     }
-  }, []);
+  }, [eco]);
 
   const popupState = usePopupState({
     variant: 'popover',

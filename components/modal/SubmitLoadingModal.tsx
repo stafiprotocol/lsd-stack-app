@@ -6,8 +6,10 @@ import {
   getNeutronExplorerTxUrl,
   getEtherScanTxUrl,
   getTonScanTxUrl,
+  getEvmScanTxUrl,
 } from 'config/explorer';
 import { roboto } from 'config/font';
+import { ulstConfig } from 'config/ulst';
 import { useAppDispatch, useAppSelector } from 'hooks/common';
 import { AppEco } from 'interfaces/common';
 import Image from 'next/image';
@@ -137,6 +139,11 @@ export const SubmitLoadingModal = () => {
                   ? getNeutronExplorerTxUrl(submitLoadingParams.txHash)
                   : appEco === AppEco.Ton
                   ? getTonScanTxUrl(submitLoadingParams.txHash)
+                  : appEco === AppEco.Ulst
+                  ? getEvmScanTxUrl(
+                      ulstConfig.symbol,
+                      submitLoadingParams.txHash
+                    )
                   : getEtherScanTxUrl(submitLoadingParams.txHash))
               }
               target="_blank"

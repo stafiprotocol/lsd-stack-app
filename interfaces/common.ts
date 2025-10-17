@@ -6,6 +6,7 @@ export enum AppEco {
   Polkadot = 'Polkadot',
   Sol = 'Sol',
   Ton = 'TON',
+  Ulst = 'ULST',
   Others = 'Others',
 }
 

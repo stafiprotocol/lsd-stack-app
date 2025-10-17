@@ -10,7 +10,7 @@ import { openLink } from 'utils/commonUtils';
 interface Props {
   open: boolean;
   close: () => void;
-  lsdTokenConfig: EvmLsdTokenConfig;
+  lsdTokenConfig?: EvmLsdTokenConfig;
   lsdTokenName: string;
   relayType: 'standard' | 'customize';
 }

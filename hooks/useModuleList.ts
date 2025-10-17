@@ -33,6 +33,7 @@ import {
   toMetadataKey,
 } from 'config/ton/wrappers/lsdTokenMaster';
 import { useRouter } from 'next/router';
+import { getUlstFactoryAbi, getUlstLsdTokenAbi } from 'config/ulst';
 
 export interface LsdHistoryItem {
   tokenAddress: string;
@@ -159,6 +160,50 @@ export function useModuleList(
         return (async () => {
           const lsdTokenContract = new web3.eth.Contract(
             getLsdTokenContractAbi(),
+            tokenAddress
+          );
+          const tokenSymbol = await lsdTokenContract.methods.symbol().call();
+          return tokenSymbol;
+        })();
+      });
+
+      const symbols = await Promise.all(requests);
+
+      const resList: LsdHistoryItem[] = [];
+      lsdTokensOfCreater?.forEach((tokenAddress: string, index: number) => {
+        if (tokenAddress && symbols[index]) {
+          resList.push({
+            tokenAddress: tokenAddress,
+            tokenName: symbols[index] || '',
+          });
+        }
+      });
+      setLsdHistoryList(resList);
+      console.log({ resList });
+    } catch (err: any) {
+      console.log({ err });
+    }
+  }, [userAddress, evmLsdTokenConfig]);
+
+  const updateUlstList = useCallback(async () => {
+    try {
+      if (!userAddress || !evmLsdTokenConfig) {
+        setLsdHistoryList([]);
+        return;
+      }
+      const web3 = getWeb3(evmLsdTokenConfig.rpc);
+      const contract = new web3.eth.Contract(
+        getUlstFactoryAbi(),
+        evmLsdTokenConfig.factoryContract
+      );
+      const lsdTokensOfCreater = await contract.methods
+        .lsdTokensOfCreater(userAddress)
+        .call();
+
+      const requests = lsdTokensOfCreater?.map((tokenAddress: string) => {
+        return (async () => {
+          const lsdTokenContract = new web3.eth.Contract(
+            getUlstLsdTokenAbi(),
             tokenAddress
           );
           const tokenSymbol = await lsdTokenContract.methods.symbol().call();
@@ -343,6 +388,8 @@ export function useModuleList(
         updateSolList();
       } else if (eco === AppEco.Ton) {
         updateTonList();
+      } else if (eco === AppEco.Ulst) {
+        updateUlstList();
       }
     },
     [
@@ -353,6 +400,7 @@ export function useModuleList(
       updateNeurtonList,
       updateSolList,
       updateTonList,
+      updateUlstList,
       net,
     ],
     1000

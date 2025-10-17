@@ -26,6 +26,7 @@ import atomLstImg from 'public/images/lst/atom.svg';
 import customLstImg from 'public/images/lst/custom.svg';
 import dotLstImg from 'public/images/lst/dot.svg';
 import ethLstImg from 'public/images/lst/eth.svg';
+import ulstLstImg from 'public/images/lst/ulst.svg';
 import moreLstImg from 'public/images/lst/more.svg';
 import moveLstImg from 'public/images/lst/move.png';
 import solLstImg from 'public/images/lst/sol.svg';
@@ -160,6 +161,13 @@ export const StackUI = () => {
             text="TON LST"
             icon={tonLstImg}
             url={'/ton'}
+            className="ml-[.32rem]"
+          />
+
+          <LsdCaseCardV2
+            text="ULST"
+            icon={ulstLstImg}
+            url={'/ulst'}
             className="ml-[.32rem]"
           />
 

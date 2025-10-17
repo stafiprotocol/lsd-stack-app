@@ -7,6 +7,7 @@ import lrtReducer from './reducers/LrtSlice';
 import cosmosLsdReducer from './reducers/CosmosLsdSlice';
 import solReducer from './reducers/SolSlice';
 import tokenReducer from './reducers/TokenSlice';
+import ulstReducer from './reducers/UlstSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     cosmosLsd: cosmosLsdReducer,
     sol: solReducer,
     token: tokenReducer,
+    ulst: ulstReducer,
   },
 });
 

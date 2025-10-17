@@ -8,6 +8,8 @@ import bnbStakeManagerAbi from './abi/bnbStakeManager.json';
 import stakeHubAbi from './abi/stakeHub.json';
 import devConfig from './dev.json';
 import prodConfig from './prod.json';
+import ulstStakeManagerAbi from '../ulst/abi/stakeManager.json';
+import ulstFactoryAbi from '../ulst/abi/factory.json';
 
 export const evmLsdTokens: EvmLsdTokenConfig[] = isDev()
   ? devConfig.lsdTokens
@@ -16,6 +18,8 @@ export const evmLsdTokens: EvmLsdTokenConfig[] = isDev()
 export const getEvmFactoryAbi = (symbol?: string) => {
   if (symbol === 'BNB') {
     return bnbFactoryAbi as AbiItem[];
+  } else if (symbol === 'ULST') {
+    return ulstFactoryAbi as AbiItem[];
   }
   return factoryAbi as AbiItem[];
 };
@@ -23,6 +27,8 @@ export const getEvmFactoryAbi = (symbol?: string) => {
 export const getEvmStakeManagerAbi = (symbol?: string) => {
   if (symbol === 'BNB') {
     return bnbStakeManagerAbi as AbiItem[];
+  } else if (symbol === 'ULST') {
+    return ulstStakeManagerAbi as AbiItem[];
   }
   return stakeManagerAbi as AbiItem[];
 };

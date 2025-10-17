@@ -48,6 +48,7 @@ import { getEcoTokenIcon } from 'utils/iconUtils';
 import { getShortAddress } from 'utils/stringUtils';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { Icomoon } from 'components/icon/Icomoon';
+import { ulstConfig } from 'config/ulst';
 
 const Navbar = () => {
   const router = useRouter();
@@ -216,6 +217,7 @@ const Navbar = () => {
             {appEco === AppEco.Eth ||
             appEco === AppEco.Sol ||
             appEco === AppEco.Lrt ||
+            appEco === AppEco.Ulst ||
             appEco === AppEco.Ton ? (
               <div>
                 Welcome to StaFi LSAAS platform, all parameters shown are
@@ -617,7 +619,8 @@ const ConnectButton = () => {
     if (
       appEco === AppEco.Eth ||
       appEco === AppEco.Evm ||
-      appEco === AppEco.Lrt
+      appEco === AppEco.Lrt ||
+      appEco === AppEco.Ulst
     ) {
       // console.log({ connectors });
       const metamaskConnector = connectors.find((c) => c.id === 'injected');
@@ -628,6 +631,8 @@ const ConnectButton = () => {
         let chainId;
         if (appEco === AppEco.Eth || appEco === AppEco.Lrt) {
           chainId = getEthereumChainId();
+        } else if (appEco === AppEco.Ulst) {
+          chainId = ulstConfig.chainId;
         } else {
           const { token } = router.query;
           const matchedLsdToken = evmLsdTokens.find(
