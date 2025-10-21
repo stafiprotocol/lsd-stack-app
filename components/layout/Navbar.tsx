@@ -117,6 +117,8 @@ const Navbar = () => {
       return `${getDocHost()}/architecture_el_lrt/`;
     } else if (appEco === AppEco.Ton) {
       return `${getDocHost()}/architecture_ton_lsd/`;
+    } else if (appEco === AppEco.Ulst) {
+      return `${getDocHost()}/architecture_ulst/`;
     } else {
       return getDocHost();
     }
