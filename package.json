@@ -2,7 +2,7 @@
   "name": "lsd-stack-app",
   "version": "0.1.0",
   "scripts": {
-    "dev": "NEXT_PUBLIC_ENV=dev next dev -p 5001",
+    "dev": "NEXT_PUBLIC_ENV=dev next dev -p 5002",
     "build:dev": "NEXT_PUBLIC_ENV=dev next build",
     "build": "NEXT_PUBLIC_ENV=production next build",
     "start": "next start -p 5002"

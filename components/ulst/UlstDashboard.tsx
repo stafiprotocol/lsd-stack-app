@@ -14,7 +14,7 @@ import Link from 'next/link';
 import cup from 'public/images/cup.svg';
 import edit from 'public/images/edit.svg';
 import { useCallback, useEffect, useState } from 'react';
-import { formatNumber } from 'utils/numberUtils';
+import { chainAmountToHuman, formatNumber } from 'utils/numberUtils';
 import snackbarUtil from 'utils/snackbarUtils';
 import { formatDuration } from 'utils/timeUtils';
 import { getWeb3 } from 'utils/web3Utils';
@@ -24,7 +24,6 @@ import { DataLoading } from '../common/DataLoading';
 import { EmptyContent } from '../common/EmptyContent';
 import { Icomoon } from '../icon/Icomoon';
 import { UpdateEvmFactoryFeeModal } from '../modal/evm/UpdateEvmFactoryFeeModal';
-import { UpdateEvmMinDepositModal } from '../modal/evm/UpdateEvmMinDepositModal';
 import { UpdateEvmPlatformFeeModal } from '../modal/evm/UpdateEvmPlatformFeeModal';
 import { getInjectedConnector } from 'utils/commonUtils';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
@@ -36,6 +35,7 @@ import {
   ulstConfig,
 } from 'config/ulst';
 import { EnableUnstakeModal } from './EnableUnstakeModal';
+import { UpdateMinStakeModal } from './UpdateMinStakeModal';
 
 export const UlstDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -231,7 +231,7 @@ const DashboardItem = (props: {
         eraSeconds,
         unbondingDuration,
         formatMinStakeAmount: formatNumber(
-          formatEther(BigInt(minStakeAmount)).toString(),
+          chainAmountToHuman(minStakeAmount + '', 6).toString(),
           {
             decimals: 6,
             fixedDecimals: false,
@@ -636,7 +636,7 @@ const DashboardItem = (props: {
         }}
       />
 
-      <UpdateEvmMinDepositModal
+      <UpdateMinStakeModal
         contractAddress={dashboardInfo?._stakeManager || ''}
         lsdTokenConfig={lsdTokenConfig}
         placeholder={dashboardInfo ? dashboardInfo.formatMinStakeAmount : ''}
