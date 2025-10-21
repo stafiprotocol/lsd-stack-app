@@ -240,7 +240,7 @@ const Navbar = () => {
                 Current liquid staking supports chains like SEI, BNB. We&apos;ll
                 support more in the future. Please check the{' '}
                 <a
-                  href={`${getDocHost()}/architecture__evm_lsd/`}
+                  href={`${getDocHost()}/architecture_evm_lsd/`}
                   target="_blank"
                   className="underline text-text1"
                 >
