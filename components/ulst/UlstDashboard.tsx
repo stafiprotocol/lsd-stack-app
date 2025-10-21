@@ -35,6 +35,7 @@ import {
   getUlstStakeManagerAbi,
   ulstConfig,
 } from 'config/ulst';
+import { EnableUnstakeModal } from './EnableUnstakeModal';
 
 export const UlstDashboard = () => {
   const { metaMaskAccount } = useWalletAccount();
@@ -132,6 +133,7 @@ interface DashboardInfo {
   unbondingDuration: string;
   formatMinStakeAmount: string;
   latestEra: string;
+  isUnstakePaused: boolean;
 }
 
 const DashboardItem = (props: {
@@ -152,9 +154,7 @@ const DashboardItem = (props: {
   const [platformFeeModalOpen, setPlatformFeeModalOpen] = useState(false);
   const [stackFeeModalOpen, setStackFeeModalOpen] = useState(false);
   const [minDepositModalOpen, setMinDepositModalOpen] = useState(false);
-  const [addValidatorModalOpen, setAddValidatorModalOpen] = useState(false);
-  const [removeValidatorModalOpen, setRemoveValidatorModalOpen] =
-    useState(false);
+  const [enableUnstakeModalOpen, setEnableUnstakeModalOpen] = useState(false);
 
   const updateData = useCallback(async () => {
     try {
@@ -199,6 +199,9 @@ const DashboardItem = (props: {
         .minStakeAmount()
         .call();
       const latestEra = await stakeManagerContract.methods.latestEra().call();
+      const isUnstakePaused = await stakeManagerContract.methods
+        .isUnstakePaused()
+        .call();
 
       setDashboardInfo({
         symbol: tokenSymbol,
@@ -235,6 +238,7 @@ const DashboardItem = (props: {
           }
         ),
         latestEra,
+        isUnstakePaused,
       });
     } catch (err: any) {
       console.log({ err });
@@ -488,6 +492,26 @@ const DashboardItem = (props: {
               <Image src={edit} layout="fill" alt="icon" />
             </div>
           </div>
+
+          <div
+            className="mt-[.24rem] cursor-pointer flex items-center justify-between"
+            onClick={() => {
+              if (dashboardInfo?._admin !== metaMaskAccount) {
+                snackbarUtil.error(
+                  'Please use the owner address to update parameters.'
+                );
+                return;
+              }
+              settingsPopupState.close();
+              setEnableUnstakeModalOpen(true);
+            }}
+          >
+            <div className="text-color-text2 text-[.14rem]">Enable Unstake</div>
+
+            <div className="w-[.13rem] h-[.13rem] relative">
+              <Image src={edit} layout="fill" alt="icon" />
+            </div>
+          </div>
         </div>
       </Popover>
 
@@ -621,6 +645,20 @@ const DashboardItem = (props: {
           setMinDepositModalOpen(false);
         }}
         onConnectWallet={connectWallet}
+        onRefresh={() => {
+          updateData();
+        }}
+      />
+
+      <EnableUnstakeModal
+        lsdTokenConfig={lsdTokenConfig}
+        onConnectWallet={connectWallet}
+        open={enableUnstakeModalOpen}
+        close={() => {
+          setEnableUnstakeModalOpen(false);
+        }}
+        contractAddress={dashboardInfo?._stakeManager || ''}
+        placeholder={dashboardInfo ? dashboardInfo.isUnstakePaused : false}
         onRefresh={() => {
           updateData();
         }}
