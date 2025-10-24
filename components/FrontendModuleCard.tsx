@@ -14,6 +14,7 @@ import { saveModuleToDb } from 'utils/dbUtils';
 import { CustomButton } from './common/CustomButton';
 import { ModuleStatePanel } from './ModuleStatePanel';
 import { getTonStackAppUrl } from 'config/ton';
+import { getUlstStackAppUrl } from 'config/ulst';
 
 interface Props {
   eco: AppEco;
@@ -69,6 +70,8 @@ export const FrontendModuleCard = (props: Props) => {
             openLink(getEthStackAppUrl());
           } else if (eco === AppEco.Ton) {
             openLink(getTonStackAppUrl());
+          } else if (eco === AppEco.Ulst) {
+            openLink(getUlstStackAppUrl());
           } else {
             openLink('https://docs.stafi.io/lsaas/modules/frontend/');
           }
@@ -97,7 +100,11 @@ export const FrontendModuleCard = (props: Props) => {
         className="mb-[.24rem]"
         type="stroke"
         onClick={() => {
-          openLink('https://docs.stafi.io/lsaas/modules/frontend/');
+          if (eco === AppEco.Ulst) {
+            openLink('https://docs.stafi.io/lsaas/develop_ulst/app/');
+          } else {
+            openLink('https://docs.stafi.io/lsaas/modules/frontend/');
+          }
         }}
       >
         Tutorial

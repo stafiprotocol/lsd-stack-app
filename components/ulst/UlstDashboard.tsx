@@ -75,7 +75,7 @@ export const UlstDashboard = () => {
               address={address}
               lsdTokenConfig={{
                 chainId: ulstConfig.chainId,
-                symbol: ulstConfig.symbol,
+                symbol: 'U',
                 rpc: ulstConfig.rpc,
                 explorerUrl: ulstConfig.explorerUrl,
                 validatorExplorerUrl: '',

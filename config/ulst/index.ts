@@ -19,3 +19,7 @@ export const getUlstStakeManagerAbi = () => {
 export const getUlstLsdTokenAbi = () => {
   return lsdTokenAbi as AbiItem[];
 };
+
+export const getUlstStackAppUrl = () => {
+  return 'https://test-ulst-app.stafi.io';
+};
