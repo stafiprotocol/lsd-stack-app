@@ -58,6 +58,8 @@ export const Layout = (props: React.PropsWithChildren) => {
       dispatch(setAppEco(AppEco.Ton));
     } else if (router.pathname.includes('ulst')) {
       dispatch(setAppEco(AppEco.Ulst));
+    } else if (router.pathname.includes('mon')) {
+      dispatch(setAppEco(AppEco.Mon));
     } else {
       dispatch(setAppEco(AppEco.Eth));
     }

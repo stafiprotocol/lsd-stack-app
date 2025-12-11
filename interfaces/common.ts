@@ -7,6 +7,7 @@ export enum AppEco {
   Sol = 'Sol',
   Ton = 'TON',
   Ulst = 'ULST',
+  Mon = 'MON',
   Others = 'Others',
 }
 

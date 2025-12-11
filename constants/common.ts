@@ -80,3 +80,10 @@ export const ULST_CREATION_STEPS = [
   'Deploy',
   'Module',
 ];
+
+export const MON_CREATION_STEPS = [
+  'Monad Eco',
+  'Parameters',
+  'Deploy',
+  'Module',
+];

@@ -27,6 +27,7 @@ import customLstImg from 'public/images/lst/custom.svg';
 import dotLstImg from 'public/images/lst/dot.svg';
 import ethLstImg from 'public/images/lst/eth.svg';
 import ulstLstImg from 'public/images/lst/ulst.svg';
+import monLstImg from 'public/images/lst/mon.svg';
 import moreLstImg from 'public/images/lst/more.svg';
 import moveLstImg from 'public/images/lst/move.png';
 import solLstImg from 'public/images/lst/sol.svg';
@@ -169,6 +170,13 @@ export const StackUI = () => {
             icon={ulstLstImg}
             url={'/ulst'}
             className="ml-[.32rem]"
+          />
+
+          <LsdCaseCardV2
+            text="MON"
+            icon={monLstImg}
+            className="ml-[.32rem]"
+            disabled
           />
 
           <LsdCaseCardV2

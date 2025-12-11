@@ -1,0 +1,21 @@
+{
+  "symbol": "ULST",
+  "chainId": 10143,
+  "chainName": "Monad",
+  "rpc": "https://mainnet-rpc.monad.xyz",
+  "explorerUrl": "https://monad-testnet.socialscan.io",
+  "icon": "/images/tokens/ulst.svg",
+  "factoryContract": "0xba2ae6c8cddd628a087d7e43c1ba9844c5bf9638",
+  "govInstantManagerAddress": "0xc79Ea989155BBdD9b7778EB288c193f058efDaA9",
+  "govOracleAddress": "0x048725C72AAd330Dd397F75B449E8EB3E92E17F9",
+  "stableCoins": [
+    {
+      "name": "USDC",
+      "address": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"
+    },
+    {
+      "name": "PYUSD",
+      "address": "0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9"
+    }
+  ]
+}

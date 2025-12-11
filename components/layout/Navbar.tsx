@@ -33,6 +33,7 @@ import neutronLogo from 'public/images/neutron.png';
 import solanaLogo from 'public/images/eco/solana.svg';
 import solanaTestLogo from 'public/images/eco/solana_test.svg';
 import tonLogo from 'public/images/ton.svg';
+import monadLogo from 'public/images/lst/mon.svg';
 import { useMemo } from 'react';
 import {
   setAppEco,
@@ -220,6 +221,7 @@ const Navbar = () => {
             appEco === AppEco.Sol ||
             appEco === AppEco.Lrt ||
             appEco === AppEco.Ulst ||
+            appEco === AppEco.Mon ||
             appEco === AppEco.Ton ? (
               <div>
                 Welcome to StaFi LSAAS platform, all parameters shown are
@@ -339,6 +341,8 @@ const UserInfo = () => {
         return isSolMainnet ? solanaLogo : solanaTestLogo;
       case AppEco.Ton:
         return tonLogo;
+      case AppEco.Mon:
+        return monadLogo;
     }
     return ethereumLogo;
   };
@@ -351,6 +355,8 @@ const UserInfo = () => {
         return 'Neutron';
       case AppEco.Sol:
         return 'Solana';
+      case AppEco.Mon:
+        return 'Monad';
     }
     return '';
   };

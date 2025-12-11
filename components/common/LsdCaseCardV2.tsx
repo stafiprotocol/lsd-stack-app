@@ -17,17 +17,19 @@ interface LsdCaseCardProps {
   isComing?: boolean;
   isKarak?: boolean;
   isBlank?: boolean;
+  disabled?: boolean;
 }
 
 export const LsdCaseCardV2 = (props: LsdCaseCardProps) => {
-  const { icon, text, url, className, isComing, isKarak, isBlank } = props;
+  const { icon, text, url, className, isComing, isKarak, isBlank, disabled } =
+    props;
 
   return (
     <Link href={url || ''} target={isBlank ? '_blank' : '_self'}>
       <div
         className={classNames(
           'group  flex flex-col items-center',
-          isComing ? 'cursor-default ' : 'cursor-pointer ',
+          disabled || isComing ? 'cursor-default ' : 'cursor-pointer ',
           isComing ? 'opacity-50' : '',
           className || ''
         )}
